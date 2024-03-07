@@ -1,0 +1,10 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ICL7662CBA-T")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Power/ICL7662CBA-T/ICL7662CBA-T.kicad_sym")(options "")(descr ""))
+  (lib (name "TPS54331D")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Power/TPS54331D/TPS54331D.kicad_sym")(options "")(descr ""))
+  (lib (name "ESP32-WROOM-32E__4MB_HIGH_TEMP_")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/MCU/ESP32-WROOM-32E__4MB_HIGH_TEMP_/ESP32-WROOM-32E__4MB_HIGH_TEMP_.kicad_sym")(options "")(descr ""))
+  (lib (name "DC-005-5A-2.0")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Jack/DC-005-5A-2.0/DC-005-5A-2.0.kicad_sym")(options "")(descr ""))
+  (lib (name "SS34")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Diode/SS34/SS34.kicad_sym")(options "")(descr ""))
+  (lib (name "TAJA105K016RNJ")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Tantalum/TAJA105K016RNJ/TAJA105K016RNJ.kicad_sym")(options "")(descr ""))
+  (lib (name "TAJA106K016RNJ")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Tantalum/TAJA106K016RNJ/TAJA106K016RNJ.kicad_sym")(options "")(descr ""))
+)
