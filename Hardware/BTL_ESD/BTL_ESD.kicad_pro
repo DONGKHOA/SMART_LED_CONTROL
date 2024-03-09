@@ -345,15 +345,19 @@
     ],
     [
       "5e78f83c-f202-4ca3-bd35-bb95a1f1b22b",
-      "current_supply"
+      "CURRENT_SUPPLY"
     ],
     [
       "c3280f20-486c-46c2-9703-f7181f16559f",
-      "measure"
+      "MEASURE"
     ],
     [
       "5a62b24e-983b-422f-a5b4-3f2d2f2b7ed3",
-      "TTL"
+      "USB_TTL"
+    ],
+    [
+      "aa65e15e-8b54-480e-8def-56214b53193f",
+      "CONTROL_LED"
     ]
   ],
   "text_variables": {}
