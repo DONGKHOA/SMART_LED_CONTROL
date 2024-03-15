@@ -13,4 +13,6 @@
   (lib (name "SRD-05VDC-SL-C")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Relay/SRD-05VDC-SL-C/SRD-05VDC-SL-C.kicad_sym")(options "")(descr ""))
   (lib (name "MCP6002-E_SN")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Op_Amp/MCP6002-E_SN/MCP6002-E_SN.kicad_sym")(options "")(descr ""))
   (lib (name "EVM_3E")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Trimmer/EVM-3E/EVM_3E.kicad_sym")(options "")(descr ""))
+  (lib (name "BZT52C3V3-7-F")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Diode/BZT52C3V3-7-F/BZT52C3V3-7-F.kicad_sym")(options "")(descr ""))
+  (lib (name "uart")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/UART/uart.kicad_sym")(options "")(descr ""))
 )

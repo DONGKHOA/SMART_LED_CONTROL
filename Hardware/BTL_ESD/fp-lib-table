@@ -17,4 +17,6 @@
   (lib (name "MCP6002-E_SN")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Op_Amp/MCP6002-E_SN.pretty")(options "")(descr ""))
   (lib (name "footprints")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Trimmer/EVM-3E/footprints.pretty")(options "")(descr ""))
   (lib (name "L8D43")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Inductor/L8D43.pretty")(options "")(descr ""))
+  (lib (name "BZT52C3V3-7-F")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Diode/BZT52C3V3-7-F.pretty")(options "")(descr ""))
+  (lib (name "UART")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/UART.pretty")(options "")(descr ""))
 )

@@ -1215,7 +1215,7 @@
   (symbol (lib_id "SS34:SS34") (at 134.62 93.98 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 06e92c44-d797-48c1-abca-eb2f3641bc94)
-    (property "Reference" "D10" (at 137.16 92.3925 90)
+    (property "Reference" "D11" (at 137.16 92.3925 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "SS34" (at 137.16 94.9325 90)
@@ -1235,7 +1235,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "D10") (unit 1)
+          (reference "D11") (unit 1)
         )
       )
     )
@@ -1244,7 +1244,7 @@
   (symbol (lib_id "power:+5V") (at 139.7 82.55 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 17db1525-e7f0-4b1c-aed9-12e13bcaab34)
-    (property "Reference" "#PWR078" (at 139.7 86.36 0)
+    (property "Reference" "#PWR081" (at 139.7 86.36 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 139.7 77.47 0)
@@ -1260,7 +1260,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "#PWR078") (unit 1)
+          (reference "#PWR081") (unit 1)
         )
       )
     )
@@ -1269,7 +1269,7 @@
   (symbol (lib_id "power:GND") (at 139.7 121.92 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 3013b8ad-5cd6-42e8-b6b3-f66de99aa003)
-    (property "Reference" "#PWR079" (at 139.7 128.27 0)
+    (property "Reference" "#PWR082" (at 139.7 128.27 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 139.7 127 0)
@@ -1285,7 +1285,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "#PWR079") (unit 1)
+          (reference "#PWR082") (unit 1)
         )
       )
     )
@@ -1328,16 +1328,16 @@
     (property "Reference" "RV1" (at 185.42 95.5068 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "665V" (at 185.42 98.0468 0)
+    (property "Value" "470V" (at 185.42 98.0468 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Varistor:RV_Disc_D21.5mm_W4.3mm_P10mm" (at 181.102 96.52 90)
+    (property "Footprint" "Varistor:RV_Disc_D12mm_W3.9mm_P7.5mm" (at 181.102 96.52 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 182.88 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "URL" "https://www.thegioiic.com/tu-chong-set-varistor-420l40-665v" (at 182.88 96.52 0)
+    (property "URL" "https://www.thegioiic.com/tu-chong-set-varistor-14d471k-470v" (at 182.88 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid fbb3f9ba-1030-416b-a334-d368d2d12b02))
@@ -1354,7 +1354,7 @@
   (symbol (lib_id "Device:R_US") (at 125.73 110.49 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8052b240-07c4-44d5-bca4-f8d723a332ba)
-    (property "Reference" "R30" (at 125.73 104.14 90)
+    (property "Reference" "R31" (at 125.73 104.14 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "1k/1%" (at 125.73 106.68 90)
@@ -1374,7 +1374,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "R30") (unit 1)
+          (reference "R31") (unit 1)
         )
       )
     )
@@ -1415,7 +1415,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 93.98 105.41 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a4299da0-13a9-42dc-8ec9-f6b35a8ccb59)
-    (property "Reference" "R29" (at 93.98 99.06 90)
+    (property "Reference" "R30" (at 93.98 99.06 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "220/1%" (at 93.98 101.6 90)
@@ -1435,7 +1435,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "R29") (unit 1)
+          (reference "R30") (unit 1)
         )
       )
     )
@@ -1444,7 +1444,7 @@
   (symbol (lib_id "power:+3V3") (at 86.36 102.87 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b0ee7a9b-f96b-4cb8-9a94-ee648389c7e9)
-    (property "Reference" "#PWR077" (at 86.36 106.68 0)
+    (property "Reference" "#PWR080" (at 86.36 106.68 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 86.36 97.79 0)
@@ -1460,7 +1460,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/aa65e15e-8b54-480e-8def-56214b53193f"
-          (reference "#PWR077") (unit 1)
+          (reference "#PWR080") (unit 1)
         )
       )
     )
