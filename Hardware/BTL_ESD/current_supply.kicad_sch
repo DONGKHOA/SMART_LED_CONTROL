@@ -555,7 +555,7 @@
   (symbol (lib_id "Device:R_US") (at 102.87 111.76 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 01950467-ee4a-49de-a45d-5e81c28c42a1)
-    (property "Reference" "R20" (at 102.87 105.41 90)
+    (property "Reference" "R21" (at 102.87 105.41 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "100k/1%" (at 102.87 107.95 90)
@@ -575,7 +575,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/5e78f83c-f202-4ca3-bd35-bb95a1f1b22b"
-          (reference "R20") (unit 1)
+          (reference "R21") (unit 1)
         )
       )
     )
@@ -634,7 +634,7 @@
   (symbol (lib_id "Device:R_US") (at 120.65 68.58 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 17fe5766-fc54-4fd4-aa66-62c6dd6c4a1b)
-    (property "Reference" "R22" (at 120.65 62.23 90)
+    (property "Reference" "R23" (at 120.65 62.23 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "100k/1%" (at 120.65 64.77 90)
@@ -654,7 +654,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/5e78f83c-f202-4ca3-bd35-bb95a1f1b22b"
-          (reference "R22") (unit 1)
+          (reference "R23") (unit 1)
         )
       )
     )
@@ -688,7 +688,7 @@
   (symbol (lib_id "Device:R_US") (at 134.62 68.58 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7df44b21-af8e-4cea-8720-4268ba189dcd)
-    (property "Reference" "R23" (at 134.62 62.23 90)
+    (property "Reference" "R24" (at 134.62 62.23 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "100k/1%" (at 134.62 64.77 90)
@@ -708,7 +708,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/5e78f83c-f202-4ca3-bd35-bb95a1f1b22b"
-          (reference "R23") (unit 1)
+          (reference "R24") (unit 1)
         )
       )
     )
@@ -746,7 +746,7 @@
   (symbol (lib_id "Device:R_US") (at 134.62 111.76 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b109f13f-9f96-4cd9-bd88-23a09e549deb)
-    (property "Reference" "R24" (at 134.62 105.41 90)
+    (property "Reference" "R25" (at 134.62 105.41 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "200k/1%" (at 134.62 107.95 90)
@@ -766,7 +766,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/5e78f83c-f202-4ca3-bd35-bb95a1f1b22b"
-          (reference "R24") (unit 1)
+          (reference "R25") (unit 1)
         )
       )
     )
@@ -835,7 +835,7 @@
   (symbol (lib_id "Device:R_US") (at 104.14 68.58 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cb9ac717-371d-424c-8ca2-b39920e77327)
-    (property "Reference" "R21" (at 104.14 62.23 90)
+    (property "Reference" "R22" (at 104.14 62.23 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "100k/1%" (at 104.14 64.77 90)
@@ -855,7 +855,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/5e78f83c-f202-4ca3-bd35-bb95a1f1b22b"
-          (reference "R21") (unit 1)
+          (reference "R22") (unit 1)
         )
       )
     )

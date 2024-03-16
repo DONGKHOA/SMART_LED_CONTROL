@@ -913,7 +913,7 @@
   (symbol (lib_id "Connector:Conn_01x08_Socket") (at 173.99 74.93 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 41e66d63-57ac-40e8-9c41-d9d773c70d0e)
-    (property "Reference" "J3" (at 175.26 74.93 0)
+    (property "Reference" "J4" (at 175.26 74.93 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Socket_TFT_1" (at 175.26 77.47 0)
@@ -939,7 +939,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "J3") (unit 1)
+          (reference "J4") (unit 1)
         )
       )
     )
@@ -977,7 +977,7 @@
   (symbol (lib_id "Device:R_US") (at 74.93 73.66 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6209751c-3f0a-4914-9f2b-190dc989d13d)
-    (property "Reference" "R18" (at 74.93 67.31 90)
+    (property "Reference" "R19" (at 74.93 67.31 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "1k/1%" (at 74.93 69.85 90)
@@ -997,7 +997,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "R18") (unit 1)
+          (reference "R19") (unit 1)
         )
       )
     )
@@ -1031,7 +1031,7 @@
   (symbol (lib_id "Device:R_US") (at 88.9 59.69 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a3dd7392-c895-40c8-9fd1-f2bf23d37542)
-    (property "Reference" "R19" (at 91.44 58.42 0)
+    (property "Reference" "R20" (at 91.44 58.42 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "10k/1%" (at 91.44 60.96 0)
@@ -1051,7 +1051,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "R19") (unit 1)
+          (reference "R20") (unit 1)
         )
       )
     )
@@ -1162,7 +1162,7 @@
   (symbol (lib_id "Connector:Conn_01x06_Socket") (at 219.71 72.39 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fd6e63d1-3fa8-4705-bcd9-d0fd2130e3b6)
-    (property "Reference" "J4" (at 220.98 72.39 0)
+    (property "Reference" "J5" (at 220.98 72.39 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Socket_TFT_2" (at 220.98 74.93 0)
@@ -1186,7 +1186,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "J4") (unit 1)
+          (reference "J5") (unit 1)
         )
       )
     )

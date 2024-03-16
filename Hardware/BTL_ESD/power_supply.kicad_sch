@@ -3523,30 +3523,6 @@
     )
   )
 
-  (symbol (lib_id "Mechanical:MountingHole") (at 161.29 146.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid 7bc56871-ca87-4765-a266-ff0518479c76)
-    (property "Reference" "H4" (at 163.83 144.78 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "BoreHole" (at 163.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad_TopBottom" (at 161.29 146.05 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "~" (at 161.29 146.05 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (instances
-      (project "BTL_ESD"
-        (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/fb6de343-a930-422d-a1ac-a921f45011d1"
-          (reference "H4") (unit 1)
-        )
-      )
-    )
-  )
-
   (symbol (lib_id "Device:C_Small") (at 140.97 38.1 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7ef84130-cac7-4cb6-b18f-6f93d417f5c4)

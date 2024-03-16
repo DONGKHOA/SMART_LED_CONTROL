@@ -1279,7 +1279,7 @@
   (symbol (lib_id "Device:R_Variable_US") (at 101.6 97.79 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f7750e22-e891-4144-8a4c-2df410fe25fe)
-    (property "Reference" "R25" (at 105.41 96.4819 0)
+    (property "Reference" "R26" (at 105.41 96.4819 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "GL5528 " (at 105.41 99.0219 0)
@@ -1299,7 +1299,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/c3280f20-486c-46c2-9703-f7181f16559f"
-          (reference "R25") (unit 1)
+          (reference "R26") (unit 1)
         )
       )
     )
