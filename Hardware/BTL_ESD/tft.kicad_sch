@@ -1006,7 +1006,7 @@
   (symbol (lib_id "power:GND") (at 88.9 85.09 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 90833a5f-f96b-44af-9d07-2f9e2d437dcb)
-    (property "Reference" "#PWR054" (at 88.9 91.44 0)
+    (property "Reference" "#PWR055" (at 88.9 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 88.9 90.17 0)
@@ -1022,7 +1022,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "#PWR054") (unit 1)
+          (reference "#PWR055") (unit 1)
         )
       )
     )
@@ -1060,7 +1060,7 @@
   (symbol (lib_id "power:+5V") (at 116.84 80.01 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b8ff91bc-8aa9-427d-9e77-40f3fa83c084)
-    (property "Reference" "#PWR055" (at 116.84 83.82 0)
+    (property "Reference" "#PWR056" (at 116.84 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 116.84 74.93 0)
@@ -1076,7 +1076,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "#PWR055") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
@@ -1085,7 +1085,7 @@
   (symbol (lib_id "power:GND") (at 116.84 95.25 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid bdb08068-118a-4e59-a7a3-4ceb12ff8a99)
-    (property "Reference" "#PWR056" (at 116.84 101.6 0)
+    (property "Reference" "#PWR057" (at 116.84 101.6 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 116.84 100.33 0)
@@ -1101,7 +1101,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "#PWR056") (unit 1)
+          (reference "#PWR057") (unit 1)
         )
       )
     )
@@ -1137,7 +1137,7 @@
   (symbol (lib_id "power:+3V3") (at 88.9 53.34 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f3f404fb-d7ef-4840-9eca-058b09be3e6c)
-    (property "Reference" "#PWR053" (at 88.9 57.15 0)
+    (property "Reference" "#PWR054" (at 88.9 57.15 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (at 88.9 48.26 0)
@@ -1153,7 +1153,7 @@
     (instances
       (project "BTL_ESD"
         (path "/ce4779b4-6d78-42e3-84df-0a4e77629b0f/06edfd9a-10e3-4294-8775-983c56efee5c"
-          (reference "#PWR053") (unit 1)
+          (reference "#PWR054") (unit 1)
         )
       )
     )
