@@ -1,0 +1,3 @@
+Libs/App/GUI/Icon/Src/icon_check.o: ../Libs/App/GUI/Icon/Src/icon_check.c \
+ D:/BTL_ESD/Firmware/STM32/Libs/App/GUI/Icon/icon.h
+D:/BTL_ESD/Firmware/STM32/Libs/App/GUI/Icon/icon.h:
