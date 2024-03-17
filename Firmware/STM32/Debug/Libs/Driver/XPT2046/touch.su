@@ -1,6 +1,0 @@
-../Libs/Driver/XPT2046/touch.c:23:16:SpiTransfer	32	static
-../Libs/Driver/XPT2046/touch.c:32:13:DrawCross	16	static
-../Libs/Driver/XPT2046/touch.c:40:13:GetPointRaw	72	static
-../Libs/Driver/XPT2046/touch.c:124:6:TouchIsTouched	16	static
-../Libs/Driver/XPT2046/touch.c:130:6:TouchGetCalibratedPoint	40	static
-../Libs/Driver/XPT2046/touch.c:174:6:TouchCalibrate	72	static
