@@ -9,7 +9,7 @@
 #define CS_ON								(HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET))
 #define CS_OFF 								(HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET))
 #define TOUCH_IRQ_PORT						GPIOA
-#define TOUCH_IRQ_PIN						GPIO_PIN_8
+#define TOUCH_IRQ_PIN						GPIO_PIN_1
 
 extern SPI_HandleTypeDef hspi2;
 
