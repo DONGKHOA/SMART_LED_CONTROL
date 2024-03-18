@@ -13,14 +13,14 @@
 #include "esp_err.h"
 
 #include "wifi.h"
-#include 
 
 static uint8_t 			ssid[32] = "Khoa";
 static uint8_t 			pass[32] = "17042021";
 
 void app_main(void)
 {
-    WIFI_Station_Init(ssid, pass);
+    WIFI_Scan();
+    // WIFI_Station_Init(ssid, pass);
     while (1)
     {
         
