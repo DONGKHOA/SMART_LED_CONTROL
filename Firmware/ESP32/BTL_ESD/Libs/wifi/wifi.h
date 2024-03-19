@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define SCAN_LIST_SIZE 10
+
 typedef enum
 {
     CONNECT_OK = 1,
@@ -11,7 +12,8 @@ typedef enum
     UNEXPECTED_EVENT,
 }WIFI_Status_t;
 
-uint8_t WIFI_Station_Init(uint8_t *ssid, uint8_t *password);
+void WIFI_Sta_Init(void);
 void WIFI_Scan(void);
+WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
 
 #endif

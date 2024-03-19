@@ -1,39 +1,47 @@
-// #include <stdbool.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
+#include "main.h"
 
-// #include "freertos/FreeRTOS.h"
-// #include "freertos/task.h"
-// #include "freertos/semphr.h"
+static TaskHandle_t connectWifi_task;
 
-// #include "esp_system.h"
-// #include "esp_event.h"
-// #include "esp_log.h"
-// #include "esp_err.h"
+static uint8_t is_init = 0;
 
-// #include "wifi.h"
-// #include "nvs_rw.h"
+// static uint8_t 			ssid[32] = "Khoa";
+// static uint8_t 			pass[32] = "17042021";
 
-// // static uint8_t 			ssid[32] = "Khoa";
-// // static uint8_t 			pass[32] = "17042021";
-
-// // static uint8_t 			ssid[32] = "TheCupsCoffee";
-// // static uint8_t 			pass[32] = "Thecups2022";
+static uint8_t 			ssid[32] = "TheCupsCoffee";
+static uint8_t 			pass[32] = "Thecups2022";
 
 // static uint8_t 			ssid[32] = "KEYBOX KAFE";
 // static uint8_t 			pass[32] = "xincamon";
-// void app_main(void)
-// {
-//     NVS_Init();
-//     WIFI_Scan();
-//     WIFI_Station_Init(ssid, pass);
-//     while (1)
-//     {
-        
-//     }
+
+void startConnectWifiTask(void *arg)
+{
+    WIFI_Sta_Init();
+    while (1)
+    {
+        WIFI_Scan();
+        if (is_init == 0)
+        {
+            if (WIFI_Connect(ssid, pass) == CONNECT_OK)
+            {
+                is_init = 1;
+            }
+        }
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+    }
     
-// }
+}
+
+void app_main(void)
+{
+    NVS_Init();
+    xTaskCreate(startConnectWifiTask, 
+            "Wifi connect", 
+            1024 * 3, 
+            NULL, 
+            10, 
+            &connectWifi_task);
+    
+}
 
 /* UART asynchronous example, that uses separate RX and TX tasks
 
@@ -42,7 +50,7 @@
    Unless required by applicable law or agreed to in writing, this
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
-*/
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
@@ -93,3 +101,5 @@ void app_main(void)
     init();
     xTaskCreate(rx_task, "uart_rx_task", 1024 * 2, NULL, configMAX_PRIORITIES - 1, NULL);
 }
+
+*/
