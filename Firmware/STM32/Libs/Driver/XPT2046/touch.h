@@ -2,7 +2,7 @@
  * touch.h
  *
  *  Created on: Mar 17, 2024
- *      Author: thanh
+ *      Author: dongkhoa
  */
 
 #ifndef DRIVER_XPT2046_TOUCH_H_

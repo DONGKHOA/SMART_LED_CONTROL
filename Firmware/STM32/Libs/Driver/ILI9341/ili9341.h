@@ -2,14 +2,13 @@
  * ili9341.h
  *
  *  Created on: Mar 16, 2024
- *      Author: thanh
+ *      Author: dongkhoa
  */
 
 #ifndef DRIVER_ILI9341_ILI9341_H_
 #define DRIVER_ILI9341_ILI9341_H_
 
 #include <stdint.h>
-#include <stdbool.h>
 
 #define ILI9341_RST_PORT           	GPIOA
 #define ILI9341_RST_PIN             GPIO_PIN_3

@@ -3,5 +3,11 @@
     "idf.openOcdConfigs": [
         "board/esp32-wrover-kit-3.3v.cfg"
     ],
-    "idf.port": "/dev/ttyUSB0"
+    "idf.port": "/dev/ttyUSB0",
+    "cmake.sourceDirectory": "D:/BTL_ESD/Firmware/ESP32/BTL_ESD",
+    "files.associations": {
+        "graphics.h": "c",
+        "ili9341.h": "c",
+        "stdbool.h": "c"
+    }
 }

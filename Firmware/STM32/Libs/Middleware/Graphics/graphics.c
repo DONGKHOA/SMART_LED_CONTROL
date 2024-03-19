@@ -1,9 +1,7 @@
-#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <limits.h>
 #include "graphics.h"
-#include "ili9341.h"
 
 #define DEGREES_IN_RAD 57.2958f
 

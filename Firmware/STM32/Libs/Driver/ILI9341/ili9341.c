@@ -1,7 +1,6 @@
 #include "ili9341.h"
-
-#include <stddef.h>
 #include "stm32f1xx_hal.h"
+#include <stdbool.h>
 
 #define DMA_BUFFER_SIZE 			64U
 
