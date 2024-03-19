@@ -11,12 +11,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define ILI9341_RST_PORT           	GPIOB
-#define ILI9341_RST_PIN             GPIO_PIN_8
-#define ILI9341_DC_PORT             GPIOB
-#define ILI9341_DC_PIN              GPIO_PIN_7
-#define ILI9341_CS_PORT             GPIOB
-#define ILI9341_CS_PIN              GPIO_PIN_9
+#define ILI9341_RST_PORT           	GPIOA
+#define ILI9341_RST_PIN             GPIO_PIN_3
+#define ILI9341_DC_PORT             GPIOA
+#define ILI9341_DC_PIN              GPIO_PIN_2
+#define ILI9341_CS_PORT             GPIOA
+#define ILI9341_CS_PIN              GPIO_PIN_4
 #define ILI9341_LCD_WIDTH           240U
 #define ILI9341_LCD_HEIGHT          320U
 

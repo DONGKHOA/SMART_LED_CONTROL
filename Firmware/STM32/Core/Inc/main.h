@@ -57,6 +57,18 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TFT_IRQ_Pin GPIO_PIN_1
+#define TFT_IRQ_GPIO_Port GPIOA
+#define TFT_DC_RS_Pin GPIO_PIN_2
+#define TFT_DC_RS_GPIO_Port GPIOA
+#define TFT_RESET_Pin GPIO_PIN_3
+#define TFT_RESET_GPIO_Port GPIOA
+#define SPI1_CS_Pin GPIO_PIN_4
+#define SPI1_CS_GPIO_Port GPIOA
+#define SPI2_CS_Pin GPIO_PIN_12
+#define SPI2_CS_GPIO_Port GPIOB
+#define TFT_BL_Pin GPIO_PIN_10
+#define TFT_BL_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
