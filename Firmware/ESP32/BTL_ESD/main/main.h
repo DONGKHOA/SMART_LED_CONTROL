@@ -75,5 +75,4 @@ static inline void createMainTask(void)
                 &connectWifi_task);
 }
 
-
 #endif /* MAIN_H */

@@ -52,6 +52,9 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
+/**
+ * The function `WIFI_Sta_Init` initializes the WiFi station interface.
+ */
 void WIFI_Sta_Init(void)
 {
     esp_netif_init();
@@ -60,6 +63,9 @@ void WIFI_Sta_Init(void)
     assert(sta_netif);
 }
 
+/**
+ * The function WIFI_Scan scans for nearby WiFi access points and logs information about them.
+ */
 void WIFI_Scan(void)
 {
     wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
@@ -86,6 +92,23 @@ void WIFI_Scan(void)
 
 }
 
+/**
+ * The function `WIFI_Connect` attempts to connect to a WiFi network using the provided SSID and
+ * password, handling authentication modes and event notifications.
+ * 
+ * @param ssid The `ssid` parameter in the `WIFI_Connect` function is a pointer to an array of
+ * characters representing the SSID (Service Set Identifier) of the Wi-Fi network you want to connect
+ * to. The SSID is essentially the name of the Wi-Fi network.
+ * @param password The code you provided is a function `WIFI_Connect` that attempts to connect to a
+ * WiFi network using the provided SSID and password. The function initializes the WiFi configuration,
+ * sets up event handlers, and then tries to connect to the network.
+ * 
+ * @return The function `WIFI_Connect` returns a value of type `WIFI_Status_t`, which is an enumeration
+ * type. The possible return values are:
+ * - `CONNECT_OK` if the connection to the Wi-Fi network was successful.
+ * - `CONNECT_FAIL` if the connection to the Wi-Fi network failed.
+ * - `UNEXPECTED_EVENT` if an unexpected event occurred during the connection process.
+ */
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
 {
     esp_wifi_stop();

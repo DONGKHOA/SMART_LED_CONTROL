@@ -3,6 +3,14 @@
 static esp_err_t err;
 static const char *TAG = "NVS";
 
+/**
+ * The function `NVS_Init` initializes the NVS (Non-Volatile Storage) and handles cases where the NVS
+ * partition needs to be erased and reinitialized.
+ * 
+ * @return The function `NVS_Init()` is returning an `esp_err_t` type, which is typically used in ESP32
+ * development for error handling. In this case, the function is returning `ESP_OK` if the
+ * initialization of the NVS (Non-Volatile Storage) is successful.
+ */
 esp_err_t NVS_Init()
 {
     err = nvs_flash_init();
@@ -15,6 +23,13 @@ esp_err_t NVS_Init()
     return ESP_OK;
 }
 
+/**
+ * The function `NVS_Open` opens a Non-Volatile Storage (NVS) handle for reading and writing.
+ * 
+ * @param my_handle The `my_handle` parameter in the `NVS_Open` function is a pointer to a variable of
+ * type `nvs_handle_t`. This pointer is used to store the handle to the Non-Volatile Storage (NVS) that
+ * is opened in the function. By passing a pointer to `n
+ */
 void NVS_Open(nvs_handle_t *my_handle)
 {
     ESP_LOGI(TAG, "\nOpening Non-Volatile Storage (NVS) handle... ");
