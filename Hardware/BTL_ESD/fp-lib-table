@@ -19,4 +19,8 @@
   (lib (name "L8D43")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Inductor/L8D43.pretty")(options "")(descr ""))
   (lib (name "BZT52C3V3-7-F")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Diode/BZT52C3V3-7-F.pretty")(options "")(descr ""))
   (lib (name "UART")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/UART.pretty")(options "")(descr ""))
+  (lib (name "MKDS1_2-3")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Jack/MKDS1_2-3.pretty")(options "")(descr ""))
+  (lib (name "SRA-05VDC-CL")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Relay/SRA-05VDC-CL.pretty")(options "")(descr ""))
+  (lib (name "PC817X2NIP0F")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Opto/PC817X2NIP0F.pretty")(options "")(descr ""))
+  (lib (name "MOV-14D471K")(type "KiCad")(uri "D:/BTL_ESD/Hardware/Lib/Varistor/MOV-14D471K.pretty")(options "")(descr ""))
 )

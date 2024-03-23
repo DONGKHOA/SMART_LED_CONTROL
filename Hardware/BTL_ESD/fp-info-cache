@@ -1,4 +1,4 @@
-22675735801899455
+22684291351374553
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -62824,6 +62824,13 @@ SOIC127P599X175-8N
 0
 8
 8
+MKDS1_2-3
+PHOENIX_MKDS1_2-3.81
+
+
+0
+2
+2
 MMBT2222A
 SOT103P240X110-3N
 
@@ -62831,6 +62838,20 @@ SOT103P240X110-3N
 0
 3
 3
+MOV-14D471K
+MOV07D471K
+
+
+0
+2
+2
+MOV-14D471K
+MOV14D471K
+<b>MOV-14D471K</b><br>
+
+0
+2
+2
 MS-22D18G2ROHS
 SW_MS-22D18G2ROHS
 
@@ -66622,6 +66643,13 @@ Oscillator
 Oscillator_SeikoEpson_SG-8002DC
 8-lead dip package, row spacing 7.62 mm (300 mils)
 DIL DIP PDIP 2.54mm 7.62mm 300mil
+0
+4
+4
+PC817X2NIP0F
+SOT254P975X400-4N
+
+
 0
 4
 4
@@ -85840,6 +85868,13 @@ SC70-6
 0
 6
 6
+SRA-05VDC-CL
+RELAY_SRA-05VDC-CL
+
+
+0
+5
+5
 SRD-05VDC-SL-C
 RELAY_SRD-05VDC-SL-C
 

@@ -8,6 +8,8 @@
     "files.associations": {
         "graphics.h": "c",
         "ili9341.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "uart_driver.h": "c",
+        "main.h": "c"
     }
 }

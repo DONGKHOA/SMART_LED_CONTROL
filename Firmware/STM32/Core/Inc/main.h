@@ -67,8 +67,6 @@ void Error_Handler(void);
 #define SPI1_CS_GPIO_Port GPIOA
 #define SPI2_CS_Pin GPIO_PIN_12
 #define SPI2_CS_GPIO_Port GPIOB
-#define TFT_BL_Pin GPIO_PIN_10
-#define TFT_BL_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
