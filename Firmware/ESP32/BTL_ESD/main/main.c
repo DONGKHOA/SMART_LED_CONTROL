@@ -1,13 +1,28 @@
 #include "main.h"
 
+// Variable Handle
+
+static int16_t data_uart_position = 0;
+static uint8_t data[32];
+static heading_data_t flag = HEADING_DUMMY;
+
 static uint8_t 			ssid[32] = "BK21";
 static uint8_t 			pass[32] = "18072003";
 static uint8_t is_init = 0;
+
+// Task Handle
 
 TaskHandle_t connectWifi_task;
 TaskHandle_t uart_rx_task;
 TaskHandle_t uart_tx_task;
 
+// Queue Handle
+
+static QueueHandle_t queue_uart_data;
+
+// EventGroup Handle
+
+EventGroupHandle_t event_uart_heading;
 
 void startConnectWifiTask(void *arg)
 {
@@ -21,43 +36,62 @@ void startConnectWifiTask(void *arg)
                 is_init = 1;
             }
         }
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        vTaskDelay(2 / portTICK_PERIOD_MS);
     }
     
 }
 
-void tx_task(void *arg)
+void startUartTxTask(void *arg)
 {
-    while (1) {
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+    while (1) 
+    {
+        vTaskDelay(2 / portTICK_PERIOD_MS);
     }
 }
 
 
-void rx_task(void *arg)
+void startUartRxTask(void *arg)
 {
-    static const char *RX_TASK_TAG = "RX_TASK";
-    esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
-    uint8_t* data = (uint8_t*) malloc(RX_BUF_SIZE + 1);
-    while (1) {
-        const int rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
-        if (rxBytes > 0) {
-            data[rxBytes] = 0;
-            ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-            ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+    uint8_t buf_temp[RX_BUF_SIZE + 1];
+
+    while (1) 
+    {
+        uint8_t rxBytes = uart_read_bytes(UART_NUM_1, &buf_temp, 
+                            RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
+        
+        while (rxBytes >= 0)
+        {
+            if (data_uart_position == -1)
+            {
+                flag = buf_temp[rxBytes];
+                rxBytes--;
+                data_uart_position++;
+                continue;
+            }
+            
+            data[data_uart_position] = buf_temp[rxBytes];
+            rxBytes--;
+            data_uart_position++;
         }
+        
+        if (data[data_uart_position] == '\n')
+        {
+            data[data_uart_position] = '\0';
+            data_uart_position = 0;
+            checkHeadingData(flag);
+            xQueueSend(queue_uart_data, (void *)&data, 0);
+        }
+        
         vTaskDelay(1 / portTICK_PERIOD_MS);
     }
-    free(data);
 }
 
 void app_main(void)
 {
-    NVS_Init();
-    WIFI_Sta_Init();
-    uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN, 
-                    115200, UART_DATA_8_BITS,
-                    UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE, 
-                    UART_STOP_BITS_1);
+    initMain();
+    queue_uart_data = xQueueCreate(RX_BUF_SIZE + 1, sizeof(uint8_t));
+    data_uart_position = -1;
+    event_uart_heading = xEventGroupCreate();
     createMainTask();
+    
 }
