@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stddef.h>
 #include <string.h>
 #include "esp_wifi.h"
 #include "esp_system.h"
@@ -22,6 +19,7 @@
 #include "mqtt_client_tcp.h"
 
 static const char *TAG = "MQTT";
+static char data [10];
 
 /*
  * @brief Event handler registered to receive MQTT events
@@ -36,6 +34,7 @@ static const char *TAG = "MQTT";
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
 {
     ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%" PRIi32 "", base, event_id);
+
     esp_mqtt_event_handle_t event = event_data;
 
     switch ((esp_mqtt_event_id_t)event_id) 
@@ -51,12 +50,25 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-            printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
-            printf("DATA=%.*s\r\n", event->data_len, event->data);
+            printf("TOPIC=%.*s\n", event->topic_len, event->topic);
+            sprintf(data ,"%.*s\n", event->data_len, event->data);
             break;
         default:
             ESP_LOGI(TAG, "Other event id:%d", event->event_id);
             break;
+    }
+}
+
+void mqtt_app_get_data(MQTT_Client_Data_t *MQTT_Client)
+{
+    for (uint8_t i = 0; i < 10; i++)
+    {
+        MQTT_Client->data[i] = data[i];
+        if (data[i] == '\n')
+        {
+            break;
+        }
+        
     }
 }
 

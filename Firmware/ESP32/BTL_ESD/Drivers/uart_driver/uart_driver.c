@@ -71,8 +71,8 @@ void uartDriverInit(uart_port_t uart_port, gpio_num_t tx_pin, gpio_num_t rx_pin,
  * array (string) that contains the data to be sent via UART (Universal Asynchronous
  * Receiver-Transmitter).
  */
-void uartSendData(uart_port_t uart_port, const char* data)
+void uartSendData(uart_port_t uart_port, volatile uint8_t* data)
 {
-    const int len = strlen(data);
-    uart_write_bytes(uart_port, data, len);
+    const int len = strlen((char *)data);
+    uart_write_bytes(uart_port, (const void *) data, len);
 }

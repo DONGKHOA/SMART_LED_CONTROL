@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define SCAN_LIST_SIZE 10
+#define SCAN_LIST_SIZE 20
 
 typedef enum
 {
@@ -12,8 +12,10 @@ typedef enum
     UNEXPECTED_EVENT,
 }WIFI_Status_t;
 
+extern uint8_t ssid_name[32 * SCAN_LIST_SIZE];
+
 void WIFI_Sta_Init(void);
-void WIFI_Scan(void);
+uint8_t WIFI_Scan(void);
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
 
 #endif

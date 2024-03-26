@@ -10,6 +10,10 @@
         "ili9341.h": "c",
         "stdbool.h": "c",
         "uart_driver.h": "c",
-        "main.h": "c"
-    }
+        "main.h": "c",
+        "mqtt_client_tcp.h": "c"
+    },
+    "cSpell.words": [
+        "MQTT"
+    ]
 }

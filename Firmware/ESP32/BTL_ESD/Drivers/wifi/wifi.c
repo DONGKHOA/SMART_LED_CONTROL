@@ -19,10 +19,12 @@
 #define WIFI_CONNECTED_BIT  BIT0
 #define WIFI_FAIL_BIT       BIT1
 #define MAXIMUM_RETRY       10
+#define TAG "WIFI CONNECT"
 
 static uint8_t s_retry_num = 0;
 static EventGroupHandle_t s_wifi_event_group;
-static const char *TAG = "wifi station";
+
+uint8_t ssid_name[32 * SCAN_LIST_SIZE];
 
 static void event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
@@ -52,6 +54,16 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
+static void store_ssid_wifi(const uint8_t * ssid, uint8_t * memory, uint8_t index)
+{
+    for (uint8_t i = 0; i < 32; i++)
+    {
+        *(memory + (32 * index) + i) = *(ssid + i);
+        if (*(ssid + i) == '\0')
+            break;        
+    }
+}
+
 /**
  * The function `WIFI_Sta_Init` initializes the WiFi station interface.
  */
@@ -66,7 +78,7 @@ void WIFI_Sta_Init(void)
 /**
  * The function WIFI_Scan scans for nearby WiFi access points and logs information about them.
  */
-void WIFI_Scan(void)
+uint8_t WIFI_Scan(void)
 {
     wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
     esp_wifi_init(&config);
@@ -84,12 +96,13 @@ void WIFI_Scan(void)
     esp_wifi_scan_get_ap_num(&ap_count);
 
     ESP_LOGI(TAG, "Total APs scanned = %u", ap_count);
-    for (int i = 0; (i < SCAN_LIST_SIZE) && (i < ap_count); i++) {
+    for (uint8_t i = 0; (i < SCAN_LIST_SIZE) && (i < ap_count); i++) 
+    {
+        store_ssid_wifi(ap_info[i].ssid, ssid_name, i);
         ESP_LOGI(TAG, "SSID \t\t%s", ap_info[i].ssid);
-        ESP_LOGI(TAG, "RSSI \t\t%d", ap_info[i].rssi);
         ESP_LOGI(TAG, "Channel \t\t%d\n", ap_info[i].primary);
     }
-
+    return ap_count;
 }
 
 /**
