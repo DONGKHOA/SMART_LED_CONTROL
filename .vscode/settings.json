@@ -1,7 +1,8 @@
 {
     "idf.adapterTargetName": "esp32",
     "idf.openOcdConfigs": [
-        "board/esp32-wrover-kit-3.3v.cfg"
+        "interface/ftdi/esp32_devkitj_v1.cfg",
+        "target/esp32.cfg"
     ],
     "idf.port": "/dev/ttyUSB0",
     "cmake.sourceDirectory": "D:/BTL_ESD/Firmware/ESP32/BTL_ESD",
@@ -11,7 +12,8 @@
         "stdbool.h": "c",
         "uart_driver.h": "c",
         "main.h": "c",
-        "mqtt_client_tcp.h": "c"
+        "mqtt_client_tcp.h": "c",
+        "stdint.h": "c"
     },
     "cSpell.words": [
         "MQTT"

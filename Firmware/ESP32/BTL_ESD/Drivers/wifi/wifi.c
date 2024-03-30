@@ -1,3 +1,7 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "wifi.h"
 #include "nvs_rw.h"
 
@@ -16,15 +20,30 @@
 #include "lwip/netdb.h"
 #include "lwip/dns.h"
 
+/*********************
+ *      DEFINES
+ *********************/
+
 #define WIFI_CONNECTED_BIT  BIT0
 #define WIFI_FAIL_BIT       BIT1
 #define MAXIMUM_RETRY       10
-#define TAG "WIFI CONNECT"
+#define TAG                 "WIFI CONNECT"
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
 
 static uint8_t s_retry_num = 0;
+
+static uint16_t volatile id = 0;    //id of ssid & pass
+static nvs_handle_t volatile ssid_nvs[LIMIT_STORE_WIFI];
+static nvs_handle_t volatile pass_nvs[LIMIT_STORE_WIFI];
+
 static EventGroupHandle_t s_wifi_event_group;
 
-uint8_t ssid_name[32 * SCAN_LIST_SIZE];
+/**********************
+ *   STATIC FUNCTIONS
+ **********************/
 
 static void event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
@@ -54,15 +73,9 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
-static void store_ssid_wifi(const uint8_t * ssid, uint8_t * memory, uint8_t index)
-{
-    for (uint8_t i = 0; i < 32; i++)
-    {
-        *(memory + (32 * index) + i) = *(ssid + i);
-        if (*(ssid + i) == '\0')
-            break;        
-    }
-}
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 /**
  * The function `WIFI_Sta_Init` initializes the WiFi station interface.
@@ -76,9 +89,16 @@ void WIFI_Sta_Init(void)
 }
 
 /**
- * The function WIFI_Scan scans for nearby WiFi access points and logs information about them.
+ * The function `WIFI_Scan` scans for nearby WiFi access points and retrieves their SSID names.
+ * 
+ * @param ssid_name The function `WIFI_Scan` scans for available WiFi access points and retrieves their
+ * SSID names. The SSID names are stored in the `ssid_name` parameter, which is a pointer to a uint8_t
+ * array where the SSID names will be written.
+ * 
+ * @return The function `WIFI_Scan` returns the total number of access points (APs) scanned and found
+ * during the Wi-Fi scanning process.
  */
-uint8_t WIFI_Scan(void)
+uint8_t WIFI_Scan(uint8_t * ssid_name)
 {
     wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
     esp_wifi_init(&config);
@@ -96,12 +116,30 @@ uint8_t WIFI_Scan(void)
     esp_wifi_scan_get_ap_num(&ap_count);
 
     ESP_LOGI(TAG, "Total APs scanned = %u", ap_count);
+
+    uint16_t ssid_name_pos = 0;
+    uint8_t buffer[32];
+
     for (uint8_t i = 0; (i < SCAN_LIST_SIZE) && (i < ap_count); i++) 
     {
-        store_ssid_wifi(ap_info[i].ssid, ssid_name, i);
+        uint16_t temp_pos = 0;
+        sprintf((char *)buffer, "%s\r", ap_info[i].ssid);
+
+        while (buffer[temp_pos] != '\r')
+        {
+            *(ssid_name + ssid_name_pos) = buffer[temp_pos];
+            ssid_name_pos++;
+            temp_pos++;
+        }
+        
+        *(ssid_name + ssid_name_pos) = '\r';
+
         ESP_LOGI(TAG, "SSID \t\t%s", ap_info[i].ssid);
         ESP_LOGI(TAG, "Channel \t\t%d\n", ap_info[i].primary);
     }
+
+    *(ssid_name + ssid_name_pos) = '\0';
+
     return ap_count;
 }
 
@@ -201,4 +239,21 @@ WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password)
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
         return UNEXPECTED_EVENT;
     }
+}
+
+uint16_t WIFI_Scan_NVS(void)
+{
+    id = 0;
+    char key[32];
+    // sprintf(key, "%d ssid", id);
+    // while (nvs_get_str(ssid_nvs[id], key, ))
+    // {
+        
+    // }
+    return 0;
+}
+
+void WIFI_Store_NVS(uint8_t * ssid, uint8_t *password)
+{
+
 }

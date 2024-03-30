@@ -1,9 +1,22 @@
 #ifndef WIFI_H_
 #define WIFI_H_
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdint.h>
 
-#define SCAN_LIST_SIZE 20
+/*********************
+ *      DEFINES
+ *********************/
+
+#define SCAN_LIST_SIZE      20
+#define LIMIT_STORE_WIFI    10
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 typedef enum
 {
@@ -12,10 +25,14 @@ typedef enum
     UNEXPECTED_EVENT,
 }WIFI_Status_t;
 
-extern uint8_t ssid_name[32 * SCAN_LIST_SIZE];
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void WIFI_Sta_Init(void);
-uint8_t WIFI_Scan(void);
+uint8_t WIFI_Scan(uint8_t * ssid_name);
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
+uint16_t WIFI_Scan_NVS(void);
+void WIFI_Store_NVS(uint8_t * ssid, uint8_t *password);
 
 #endif

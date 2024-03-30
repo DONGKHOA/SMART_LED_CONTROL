@@ -34,63 +34,86 @@
 
 #define MAIN_TAG    "Main"
 
+// IO UART
 #define TXD_PIN     (GPIO_NUM_17)
 #define RXD_PIN     (GPIO_NUM_16)
+
 #define STACK_SIZE  1024
 
-// EVENT UART RX BIT
-#define CONNECT_WIFI_BIT    (1 << 0)
-#define SSID_WIFI_BIT       (1 << 1)
-#define PASSWORD_WIFI_BIT   (1 << 2)
-#define NUMBER_OFF_SSID     (1 << 3)
-#define STATE_LED           (1 << 4)
-#define AUTO_LED            (1 << 5)
+// UART RX EVENT 
+#define ON_WIFI_BIT                         (1 << 0)
+#define OFF_WIFI_BIT                        (1 << 1)
+#define CONNECT_WIFI_BIT                    (1 << 2)
+#define CONNECT_MQTT_BIT                    (1 << 3)
+#define MQTT_PUBLISH_BIT                    (1 << 4)
+#define MQTT_SUBSCRIBE_BIT                  (1 << 5)
 
-// EVENT UART TX BIT
-
-#define SSID_WIFI_SCAN_BIT      (1 << 0)
-#define CONTROL_LED_MQTT_BIT    (1 << 1)
+// UART TX EVENT 
+#define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
+#define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
+#define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
+#define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)
+#define REFLECT_CONNECT_MQTT_BIT                (1 << 4)
+#define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 5)
+#define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 6)
 
 /**********************
  *      TYPEDEFS
  **********************/
 
-typedef enum
+typedef enum 
 {
-    HEADING_DUMMY = 0X00,
-    HEADING_SSID,
-    HEADING_PASSWORD,
+    HEADING_ON_WIFI = 0x01,
+    HEADING_OFF_WIFI,
     HEADING_CONNECT_WIFI,
-    HEADING_NUMBER_OFF_SSID,
-    HEADING_STATE_LED,
-    HEADING_ILLUMINANCE,
-    HEADING_AUTO_LED,
-} heading_data_t;
+    HEADING_CONNECT_MQTT,
+    HEADING_MQTT_PUBLISH,
+    HEADING_MQTT_SUBSCRIBE,
+} uart_rx_heading_t;
 
 typedef enum
 {
-    STATE_ON_WIFI,
-    STATE_OFF_WIFI,
-} wifi_state_t;
+    HEADING_SEND_NUMBER_WIFI_SCAN = 0x01,
+    HEADING_SEND_NAME_WIFI_SCAN,
+    HEADING_SEND_CONNECT_WIFI_SUCCESSFUL,
+    HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL,
+    HEADING_REFLECT_CONNECT_MQTT,
+    HEADING_SEND_CONNECT_MQTT_SUCCESSFUL,
+    HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL,
+} uart_tx_heading_t;
+
+typedef enum
+{
+    CONNECTED_WIFI,
+    DISCONNECTED_WIFI,
+    CONNECTED_MQTT,
+    DISCONNECTED_MQTT,
+} state_connect_network_t;
 
 /*********************
  *  EXTERN VARIABLE
  *********************/
 
+extern TaskHandle_t wifiScan_task;
+extern TaskHandle_t wifiConnect_task;
+extern TaskHandle_t mqttConnect_task;
 extern TaskHandle_t mqttControlData_task;
-extern TaskHandle_t connectWifi_task;
 extern TaskHandle_t uart_rx_task;
 extern TaskHandle_t uart_tx_task;
+
 extern EventGroupHandle_t event_uart_rx_heading;
+extern EventGroupHandle_t event_uart_tx_heading;
 
 /*********************
  * ENTRY TASK FUNCTION
  *********************/
 
-extern void startConnectWifiTask(void *arg);
+extern void startWifiScan(void *arg);
+extern void startWifiConnectTask(void *arg);
+extern void startMQTTConnectTask(void * arg);
+extern void startMQTTControlDataTask(void *arg);
 extern void startUartTxTask(void *arg);
 extern void startUartRxTask(void *arg);
-extern void startMQTTControlDataTask(void *arg);
 
 /*********************
  *   INLINE FUNCTION
@@ -105,6 +128,12 @@ static inline void initMain(void)
                     UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE, 
                     UART_STOP_BITS_1);
     // mqtt_app_start(&mqtt_client_0, url_mqtt);
+}
+
+static inline void initServices(void)
+{
+    event_uart_rx_heading = xEventGroupCreate();
+    event_uart_tx_heading = xEventGroupCreate();
 }
 
 static inline void createMainTask(void)
@@ -123,14 +152,29 @@ static inline void createMainTask(void)
                 9, 
                 &uart_rx_task);
 
-    xTaskCreate(startConnectWifiTask, 
+    xTaskCreate(startWifiScan, 
+                "Wifi scan", 
+                STACK_SIZE * 3, 
+                NULL, 
+                7, 
+                &wifiScan_task);
+
+    xTaskCreate(startWifiConnectTask, 
                 "Wifi connect", 
                 STACK_SIZE * 3, 
                 NULL, 
+                6, 
+                &wifiConnect_task);
+
+    xTaskCreate(startMQTTConnectTask, 
+                "Mqtt connect", 
+                STACK_SIZE * 3, 
+                NULL, 
                 5, 
-                &connectWifi_task);
+                &mqttConnect_task);
+
     xTaskCreate(startMQTTControlDataTask, 
-                "Wifi connect", 
+                "Mqtt control", 
                 STACK_SIZE * 3, 
                 NULL, 
                 4, 
@@ -138,36 +182,59 @@ static inline void createMainTask(void)
  
 }
 
-static inline void checkHeadingData(heading_data_t heading)
+static inline void checkingHeadingRxData(uint8_t heading)
 {
     switch (heading)
     {
+    case HEADING_OFF_WIFI:
+        xEventGroupClearBits(event_uart_rx_heading, ON_WIFI_BIT);
+        xEventGroupSetBits(event_uart_rx_heading, OFF_WIFI_BIT);
+        break;
+
+    case HEADING_ON_WIFI:
+        xEventGroupClearBits(event_uart_rx_heading, OFF_WIFI_BIT);
+        xEventGroupSetBits(event_uart_rx_heading, ON_WIFI_BIT);
+        break;
+
     case HEADING_CONNECT_WIFI:
         xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_BIT);
         break;
-    case HEADING_DUMMY:
-        ESP_LOGI(MAIN_TAG, "HEADING DUMMY");
+    case HEADING_CONNECT_MQTT:
+        xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
         break;
+    
+    case HEADING_MQTT_PUBLISH:
+        xEventGroupSetBits(event_uart_rx_heading, MQTT_PUBLISH_BIT);
+        break;
+
+    case HEADING_MQTT_SUBSCRIBE:
+        xEventGroupSetBits(event_uart_rx_heading, MQTT_SUBSCRIBE_BIT);
+        break;
+    
     default:
         ESP_LOGE(MAIN_TAG, "HEADING ERROR");
         break;
     }
 }
 
-/*********************
- *   STATIC FUNCTION
- *********************/
-
-static void get_ssid_scan(uint8_t *ssid, uint8_t *memory, uint8_t index)
+static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t pass)
 {
     uint8_t i = 0;
-    while (i <= 32)
+    uint8_t position = 0;
+
+    for (; *(data + i) != '\r'; i++)
     {
-        *(ssid + i) = *(memory + (32 * index) + i);
-        if (*(ssid + i) == '\0')
-            break;  
-        i++;
+        *(ssid + position) = *(data + i);
     }
-    
+
+    *(ssid + position) = '\0';
+    position = 0;
+
+    for (; *(data + i) != '\n'; i++)
+    {
+        *(pass + position) = *(data + i);
+    }
+    *(pass + position) = '\0';
 }
+
 #endif /* MAIN_H */

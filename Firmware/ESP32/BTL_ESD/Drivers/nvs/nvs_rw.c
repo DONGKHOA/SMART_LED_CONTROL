@@ -1,3 +1,8 @@
+#include "esp_system.h"
+#include "esp_log.h"
+#include "nvs_flash.h"
+#include "nvs.h"
+
 #include "nvs_rw.h"
 
 static esp_err_t err;
@@ -11,7 +16,7 @@ static const char *TAG = "NVS";
  * development for error handling. In this case, the function is returning `ESP_OK` if the
  * initialization of the NVS (Non-Volatile Storage) is successful.
  */
-esp_err_t NVS_Init()
+esp_err_t NVS_Init(void)
 {
     err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -24,123 +29,95 @@ esp_err_t NVS_Init()
 }
 
 /**
- * The function `NVS_Open` opens a Non-Volatile Storage (NVS) handle for reading and writing.
+ * The function `NVS_WriteString` writes a string value to a non-volatile storage (NVS) with error
+ * handling.
  * 
- * @param my_handle The `my_handle` parameter in the `NVS_Open` function is a pointer to a variable of
- * type `nvs_handle_t`. This pointer is used to store the handle to the Non-Volatile Storage (NVS) that
- * is opened in the function. By passing a pointer to `n
+ * @param name The `name` parameter in the `NVS_WriteString` function is used to specify the namespace
+ * under which the key-value pair will be stored in the Non-Volatile Storage (NVS) system. It helps in
+ * organizing and accessing data within the NVS.
+ * @param key The `key` parameter in the `NVS_WriteString` function is a unique identifier for the data
+ * you want to store in the Non-Volatile Storage (NVS). It is used to retrieve the stored data later
+ * when needed.
+ * @param stringVal The `stringVal` parameter in the `NVS_WriteString` function is the string value
+ * that you want to write to the Non-Volatile Storage (NVS) under the specified key. This function
+ * opens an NVS handle, sets the string value associated with the given key, commits the changes
+ * 
+ * @return The function `NVS_WriteString` is returning an `esp_err_t` type, which is the error code
+ * indicating the success or failure of the operation.
  */
-void NVS_Open(nvs_handle_t *my_handle)
+esp_err_t NVS_WriteString(const char* name, const char* key, 
+                            const char* stringVal)
 {
-    ESP_LOGI(TAG, "\nOpening Non-Volatile Storage (NVS) handle... ");
-    err = nvs_open("storage", NVS_READWRITE, my_handle);
-    if (err != ESP_OK)
+    nvs_handle_t nvsHandle;
+    esp_err_t retVal;
+ 
+    retVal = nvs_open(name, NVS_READWRITE, &nvsHandle);
+    if(retVal != ESP_OK)
     {
-        ESP_LOGE(TAG, "Error (%s) opening NVS handle!\n", esp_err_to_name(err));
+        ESP_LOGE("NVS", "Error (%s) opening NVS handle for Write", esp_err_to_name(retVal));
     }
     else
     {
-        ESP_LOGI(TAG, "Done\n");
-    }  
+        printf("opening NVS Write handle Done \r\n");
+        retVal = nvs_set_str(nvsHandle, key, stringVal);
+        if(retVal != ESP_OK)
+        {
+            ESP_LOGE("NVS", "Error (%s) Can not write/set value: %s", esp_err_to_name(retVal), stringVal);
+        }
+ 
+        retVal = nvs_commit(nvsHandle);
+        if(retVal != ESP_OK)
+        {
+            ESP_LOGE("NVS", "Error (%s) Can not commit - write", esp_err_to_name(retVal));
+        }
+        else
+        {
+            ESP_LOGI("NVS", "Write Commit Done!");
+        }
+       
+    }
+
+    nvs_close(nvsHandle);
+    return retVal;
 }
 
-void NVS_Read(nvs_handle_t *my_handle, TYPE_Data_t type, int64_t *data)
+esp_err_t NVS_Read_String(const char* name, const char* key, char* savedData)
 {
-    ESP_LOGI(TAG, "Reading data from NVS ... ");
-    switch (type)
+    nvs_handle_t nvsHandle;
+    esp_err_t retVal;
+    uint8_t len = 32;
+
+    ESP_LOGW("NVS", "Show Value-> name: %s, key: %s, len: %d", name, key, len);
+ 
+    retVal = nvs_open(name, NVS_READWRITE, &nvsHandle);
+    if(retVal != ESP_OK)
     {
-    case UNSIGNED_INTEGER_8:
-        err = nvs_get_u8(*my_handle, "NVS_user", (uint8_t *)data);
-        break;
-
-    case UNSIGNED_INTEGER_16:
-        err = nvs_get_u16(*my_handle, "NVS_user", (uint16_t *)data);
-        break;
-
-    case UNSIGNED_INTEGER_32:
-        err = nvs_get_u32(*my_handle, "NVS_user", (uint32_t *)data);
-        break;
-        
-    case UNSIGNED_INTEGER_64:
-        err = nvs_get_u64(*my_handle, "NVS_user", (uint64_t *)data);
-        break;
-
-    case SIGNED_INTEGER_8:
-        err = nvs_get_i8(*my_handle, "NVS_user", (int8_t *)data);
-        break;
-
-    case SIGNED_INTEGER_16:
-        err = nvs_get_i16(*my_handle, "NVS_user", (int16_t *)data);
-        break;
-
-    case SIGNED_INTEGER_32:
-        err = nvs_get_i32(*my_handle, "NVS_user", (int32_t *)data);
-        break;
-        
-    default:
-        err = nvs_get_i64(*my_handle, "NVS_user", data);
-        break;
+        ESP_LOGE("NVS", "Error (%s) opening NVS handle for Write", esp_err_to_name(retVal));
     }
-
-    switch (err) {
-        case ESP_OK:
-            ESP_LOGI(TAG, "Done\n");
-            break;
-        case ESP_ERR_NVS_NOT_FOUND:
-            ESP_LOGE(TAG, "The value is not initialized yet!\n");
-            break;
-        default :
-            ESP_LOGE(TAG, "Error (%s) reading!\n", esp_err_to_name(err));
-    }
-}
-
-void NVS_Write(nvs_handle_t *my_handle, TYPE_Data_t type, int64_t *data)
-{
-    ESP_LOGI(TAG, "Updating data in NVS ... ");
-    switch (type)
+    else
     {
-    case UNSIGNED_INTEGER_8:
-        err = nvs_set_u8(*my_handle, "NVS_user", (uint8_t)*data);
-        break;
+        printf("opening NVS Read handle Done \r\n");
+        retVal = nvs_get_str(nvsHandle, key, savedData, &len);
+        if(retVal == ESP_OK)
+        {
+            ESP_LOGW("NVS", "*****(%s) Can read/get value: %s", esp_err_to_name(retVal), savedData);
+        }
+        else
+        {
+            ESP_LOGE("NVS", "Error (%s) Can not read/get value: %s", esp_err_to_name(retVal), savedData);
+        }
 
-    case UNSIGNED_INTEGER_16:
-        err = nvs_set_u16(*my_handle, "NVS_user", (uint16_t)*data);
-        break;
-
-    case UNSIGNED_INTEGER_32:
-        err = nvs_set_u32(*my_handle, "NVS_user", (uint32_t)*data);
-        break;
-        
-    case UNSIGNED_INTEGER_64:
-        err = nvs_set_u64(*my_handle, "NVS_user", (uint64_t)*data);
-        break;
-
-    case SIGNED_INTEGER_8:
-        err = nvs_set_i8(*my_handle, "NVS_user", (int8_t)*data);
-        break;
-
-    case SIGNED_INTEGER_16:
-        err = nvs_set_i16(*my_handle, "NVS_user", (int16_t)*data);
-        break;
-
-    case SIGNED_INTEGER_32:
-        err = nvs_set_i32(*my_handle, "NVS_user", (int32_t)*data);
-        break;
-        
-    default:
-        err = nvs_set_i64(*my_handle, "NVS_user", *data);
-        break;
+        retVal = nvs_commit(nvsHandle);
+        if(retVal != ESP_OK)
+        {
+            ESP_LOGE("NVS", "Error (%s) Can not commit - read", esp_err_to_name(retVal));
+        }
+        else
+        {
+            ESP_LOGI("NVS", "Read Commit Done!");
+        }
     }
-    printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-
-    // Commit written value.
-    // After setting any values, nvs_commit() must be called to ensure changes are written
-    // to flash storage. Implementations may write to storage at other times,
-    // but this is not guaranteed.
-    ESP_LOGI(TAG, "Committing updates in NVS ... ");
-    err = nvs_commit(*my_handle);
-    printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-
-    // Close
-    nvs_close(*my_handle);
+ 
+    nvs_close(nvsHandle);
+    return retVal;
 }
