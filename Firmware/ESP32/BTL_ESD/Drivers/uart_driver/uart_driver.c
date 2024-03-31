@@ -10,6 +10,10 @@
 
 #include "uart_driver.h"
 
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
+
 /**
  * The function initializes a UART driver with specified configurations such as baud rate, data bits,
  * parity, flow control, and stop bits.

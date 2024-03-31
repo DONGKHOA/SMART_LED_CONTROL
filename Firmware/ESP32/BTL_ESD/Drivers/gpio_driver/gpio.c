@@ -1,4 +1,12 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "gpio.h"
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 /**
  * The function `GPIO_Input_Init` initializes a GPIO pin as an input with optional pull-up or pull-down

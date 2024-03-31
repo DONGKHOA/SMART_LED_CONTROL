@@ -1,3 +1,7 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <string.h>
 #include "esp_wifi.h"
 #include "esp_system.h"
@@ -18,8 +22,21 @@
 
 #include "mqtt_client_tcp.h"
 
-static const char *TAG = "MQTT";
+/*********************
+ *      DEFINES
+ *********************/
+
+#define TAG  "MQTT"
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
+
 static char data [10];
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 /*
  * @brief Event handler registered to receive MQTT events
