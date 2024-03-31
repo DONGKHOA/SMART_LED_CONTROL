@@ -16,6 +16,10 @@
         "stdint.h": "c"
     },
     "cSpell.words": [
-        "MQTT"
+        "Authmode",
+        "LOGI",
+        "LOGW",
+        "MQTT",
+        "netif"
     ]
 }

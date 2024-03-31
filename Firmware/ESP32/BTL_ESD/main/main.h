@@ -41,12 +41,13 @@
 #define STACK_SIZE  1024
 
 // UART RX EVENT 
-#define ON_WIFI_BIT                         (1 << 0)
-#define OFF_WIFI_BIT                        (1 << 1)
-#define CONNECT_WIFI_BIT                    (1 << 2)
-#define CONNECT_MQTT_BIT                    (1 << 3)
-#define MQTT_PUBLISH_BIT                    (1 << 4)
-#define MQTT_SUBSCRIBE_BIT                  (1 << 5)
+#define ON_WIFI_BIT                             (1 << 0)
+#define OFF_WIFI_BIT                            (1 << 1)
+#define CONNECT_WIFI_RX_BIT                     (1 << 2)
+#define CONNECT_WIFI_SCAN_BIT                   (1 << 3)
+#define CONNECT_MQTT_BIT                        (1 << 4)
+#define MQTT_PUBLISH_BIT                        (1 << 5)
+#define MQTT_SUBSCRIBE_BIT                      (1 << 6)
 
 // UART TX EVENT 
 #define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
@@ -122,7 +123,7 @@ extern void startUartRxTask(void *arg);
 static inline void initMain(void)
 {
     NVS_Init();
-    WIFI_Sta_Init();
+    WIFI_StaInit();
     uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN, 
                     115200, UART_DATA_8_BITS,
                     UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE, 
@@ -138,19 +139,19 @@ static inline void initServices(void)
 
 static inline void createMainTask(void)
 {
-    xTaskCreate(startUartTxTask, 
-                "uart_tx_task", 
-                STACK_SIZE * 2, 
-                NULL, 
-                8, 
-                &uart_tx_task);
-
     xTaskCreate(startUartRxTask, 
                 "uart_rx_task", 
                 STACK_SIZE * 3, 
                 NULL, 
                 9, 
                 &uart_rx_task);
+
+    xTaskCreate(startUartTxTask, 
+                "uart_tx_task", 
+                STACK_SIZE * 2, 
+                NULL, 
+                8, 
+                &uart_tx_task);
 
     xTaskCreate(startWifiScan, 
                 "Wifi scan", 
@@ -197,7 +198,7 @@ static inline void checkingHeadingRxData(uint8_t heading)
         break;
 
     case HEADING_CONNECT_WIFI:
-        xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_BIT);
+        xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
         break;
     case HEADING_CONNECT_MQTT:
         xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
@@ -210,14 +211,10 @@ static inline void checkingHeadingRxData(uint8_t heading)
     case HEADING_MQTT_SUBSCRIBE:
         xEventGroupSetBits(event_uart_rx_heading, MQTT_SUBSCRIBE_BIT);
         break;
-    
-    default:
-        ESP_LOGE(MAIN_TAG, "HEADING ERROR");
-        break;
     }
 }
 
-static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t pass)
+static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t * pass)
 {
     uint8_t i = 0;
     uint8_t position = 0;
@@ -225,6 +222,7 @@ static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t pass)
     for (; *(data + i) != '\r'; i++)
     {
         *(ssid + position) = *(data + i);
+        position++;
     }
 
     *(ssid + position) = '\0';
@@ -233,8 +231,38 @@ static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t pass)
     for (; *(data + i) != '\n'; i++)
     {
         *(pass + position) = *(data + i);
+        position++;
     }
     *(pass + position) = '\0';
+}
+
+static inline int8_t matchingWIFIScan(uint8_t * data, uint8_t * ssid, uint8_t *pass)
+{
+    uint16_t i = 1;
+    uint8_t position;
+    uint8_t data_temp[32];
+    
+    while (*(data + i - 1) != '\0')
+    {
+        position = 1;
+        data_temp[position - 1] = *(data + i - 1);
+        while ((*(data + i) != '\r') && (*(data + i) != '\0'))
+        {
+            data_temp[position] = *(data + i);
+            i++;
+            position++;
+        }
+
+        i = i + 2;
+        data_temp[position] = '\0';
+
+        if (WIFI_ScanNVS(data_temp, pass) != -1)
+        {
+            memcpy(ssid, data_temp, strlen((char *)data_temp) + 1);
+            return 1;
+        }
+    }
+    return -1;
 }
 
 #endif /* MAIN_H */

@@ -29,10 +29,10 @@ typedef enum
  *   GLOBAL FUNCTIONS
  **********************/
 
-void WIFI_Sta_Init(void);
+void WIFI_StaInit(void);
 uint8_t WIFI_Scan(uint8_t * ssid_name);
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
-uint16_t WIFI_Scan_NVS(void);
-void WIFI_Store_NVS(uint8_t * ssid, uint8_t *password);
+int8_t WIFI_ScanNVS(uint8_t * ssid, uint8_t * pass);
+void WIFI_StoreNVS(uint8_t * ssid, uint8_t *password);
 
 #endif

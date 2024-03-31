@@ -1,5 +1,5 @@
 esp_idf:
-	. $HOME/esp/esp-idf/export.sh
+	. $$HOME/esp/esp-idf/export.sh
 
 build_pr:
 	idf.py build

@@ -1,3 +1,7 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "esp_system.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
@@ -5,8 +9,15 @@
 
 #include "nvs_rw.h"
 
-static esp_err_t err;
-static const char *TAG = "NVS";
+/*********************
+ *      DEFINES
+ *********************/
+
+#define TAG "NVS"
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 /**
  * The function `NVS_Init` initializes the NVS (Non-Volatile Storage) and handles cases where the NVS
@@ -18,14 +29,14 @@ static const char *TAG = "NVS";
  */
 esp_err_t NVS_Init(void)
 {
-    err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    esp_err_t retVal = nvs_flash_init();
+    if (retVal == ESP_ERR_NVS_NO_FREE_PAGES || retVal == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         // NVS partition was truncated and needs to be erased
         // Retry nvs_flash_init
         nvs_flash_erase();
-        err = nvs_flash_init();
+        retVal = nvs_flash_init();
     }
-    return ESP_OK;
+    return retVal;
 }
 
 /**
@@ -81,11 +92,32 @@ esp_err_t NVS_WriteString(const char* name, const char* key,
     return retVal;
 }
 
-esp_err_t NVS_Read_String(const char* name, const char* key, char* savedData)
+/**
+ * The function `NVS_ReadString` reads a string value from non-volatile storage using the ESP-IDF NVS
+ * API.
+ * 
+ * @param name The `name` parameter in the `NVS_ReadString` function is used to specify the namespace
+ * within the Non-Volatile Storage (NVS) where the data is stored. It is a string that identifies the
+ * specific namespace to access the stored data.
+ * @param key The `key` parameter in the `NVS_ReadString` function is used to specify the key
+ * associated with the data you want to read from the Non-Volatile Storage (NVS). This key is used to
+ * uniquely identify the data stored in the NVS. When calling `nvs_get_str
+ * @param savedData The `savedData` parameter in the `NVS_ReadString` function is a pointer to a
+ * character array where the retrieved string data will be stored. The function will read a string
+ * value associated with the provided `key` from the Non-Volatile Storage (NVS) and store it in the
+ * @param len The `len` parameter in the `NVS_ReadString` function represents the length of the
+ * `savedData` buffer that is passed as an argument. This parameter specifies the maximum number of
+ * characters that can be stored in the `savedData` buffer when reading a string value from the
+ * Non-Volatile
+ * 
+ * @return The function `NVS_ReadString` returns an `esp_err_t` value, which is the error code
+ * indicating the success or failure of the operation.
+ */
+esp_err_t NVS_ReadString(const char* name, const char* key, 
+                            char* savedData, uint8_t len)
 {
     nvs_handle_t nvsHandle;
     esp_err_t retVal;
-    uint8_t len = 32;
 
     ESP_LOGW("NVS", "Show Value-> name: %s, key: %s, len: %d", name, key, len);
  
@@ -97,7 +129,7 @@ esp_err_t NVS_Read_String(const char* name, const char* key, char* savedData)
     else
     {
         printf("opening NVS Read handle Done \r\n");
-        retVal = nvs_get_str(nvsHandle, key, savedData, &len);
+        retVal = nvs_get_str(nvsHandle, key, savedData, (size_t *)&len);
         if(retVal == ESP_OK)
         {
             ESP_LOGW("NVS", "*****(%s) Can read/get value: %s", esp_err_to_name(retVal), savedData);
