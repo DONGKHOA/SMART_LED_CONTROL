@@ -90,6 +90,7 @@ void startWifiConnectTask(void *arg)
             getSSID_PASS((uint8_t *)data_uart, (uint8_t *)ssid, (uint8_t *)pass);
             if (WIFI_Connect((uint8_t *)ssid, (uint8_t *)pass) == CONNECT_OK)
             {
+                WIFI_StoreNVS(ssid, pass);
                 xEventGroupSetBits(event_uart_tx_heading, 
                                         SEND_CONNECT_WIFI_SUCCESSFUL_BIT);
             }
@@ -120,18 +121,35 @@ void startMQTTConnectTask(void * arg)
 {
     while (1)
     {
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
+                                                CONNECT_MQTT_BIT,
+                                                pdTRUE, pdFALSE, 
+                                                portMAX_DELAY);
+        if (uxBits & CONNECT_MQTT_BIT)
+        {
+            /*
+                If the system is connected to wifi, mqtt connection is allowed
+                If the system is not connected to wifi, mqtt connection is not allowed
+            */
+            if (flag_connected_wifi == 1)
+            {
+                
+            }
+            else
+            {
+                xEventGroupSetBits(event_uart_tx_heading, 
+                                    REFUSE_CONNECT_MQTT_BIT);
+            }   
+        }   
     }
-    
 }
 
 void startMQTTControlDataTask(void *arg)
 {
     while (1)
     {
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
-    
 }
 
 void startUartTxTask(void *arg)
@@ -142,7 +160,7 @@ void startUartTxTask(void *arg)
                                                 SEND_NUMBER_WIFI_SCAN_BIT | 
                                                 SEND_CONNECT_WIFI_SUCCESSFUL_BIT |
                                                 SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT |
-                                                REFLECT_CONNECT_MQTT_BIT |
+                                                REFUSE_CONNECT_MQTT_BIT |
                                                 SEND_CONNECT_MQTT_SUCCESSFUL_BIT |
                                                 SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT,
                                                 pdTRUE, pdFALSE, 
@@ -174,8 +192,9 @@ void startUartTxTask(void *arg)
                 sprintf((char *)data_uart, "%d\n", HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL);
                 uartSendData(UART_NUM_1, data_uart);
                 break;
-            case REFLECT_CONNECT_MQTT_BIT:
-
+            case REFUSE_CONNECT_MQTT_BIT:
+                sprintf((char *)data_uart, "%d\n", HEADING_REFUSE_CONNECT_MQTT);
+                uartSendData(UART_NUM_1, data_uart);
                 break;
             
             case SEND_CONNECT_MQTT_SUCCESSFUL_BIT:

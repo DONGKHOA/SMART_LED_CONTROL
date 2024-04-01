@@ -70,6 +70,9 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             printf("TOPIC=%.*s\n", event->topic_len, event->topic);
             sprintf(data ,"%.*s\n", event->data_len, event->data);
             break;
+        case MQTT_EVENT_DISCONNECTED:
+            
+            break;
         default:
             ESP_LOGI(TAG, "Other event id:%d", event->event_id);
             break;

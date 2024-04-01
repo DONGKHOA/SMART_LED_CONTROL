@@ -46,17 +46,17 @@
 #define CONNECT_WIFI_RX_BIT                     (1 << 2)
 #define CONNECT_WIFI_SCAN_BIT                   (1 << 3)
 #define CONNECT_MQTT_BIT                        (1 << 4)
-#define MQTT_PUBLISH_BIT                        (1 << 5)
-#define MQTT_SUBSCRIBE_BIT                      (1 << 6)
 
 // UART TX EVENT 
 #define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)
-#define REFLECT_CONNECT_MQTT_BIT                (1 << 4)
+#define REFUSE_CONNECT_MQTT_BIT                (1 << 4)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 5)
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 6)
+#define MQTT_PUBLISH_BIT                        (1 << 7)
+#define MQTT_SUBSCRIBE_BIT                      (1 << 8)
 
 /**********************
  *      TYPEDEFS
@@ -68,8 +68,6 @@ typedef enum
     HEADING_OFF_WIFI,
     HEADING_CONNECT_WIFI,
     HEADING_CONNECT_MQTT,
-    HEADING_MQTT_PUBLISH,
-    HEADING_MQTT_SUBSCRIBE,
 } uart_rx_heading_t;
 
 typedef enum
@@ -78,9 +76,11 @@ typedef enum
     HEADING_SEND_NAME_WIFI_SCAN,
     HEADING_SEND_CONNECT_WIFI_SUCCESSFUL,
     HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL,
-    HEADING_REFLECT_CONNECT_MQTT,
+    HEADING_REFUSE_CONNECT_MQTT,
     HEADING_SEND_CONNECT_MQTT_SUCCESSFUL,
     HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL,
+    HEADING_MQTT_PUBLISH,
+    HEADING_MQTT_SUBSCRIBE,
 } uart_tx_heading_t;
 
 typedef enum
@@ -202,14 +202,6 @@ static inline void checkingHeadingRxData(uint8_t heading)
         break;
     case HEADING_CONNECT_MQTT:
         xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
-        break;
-    
-    case HEADING_MQTT_PUBLISH:
-        xEventGroupSetBits(event_uart_rx_heading, MQTT_PUBLISH_BIT);
-        break;
-
-    case HEADING_MQTT_SUBSCRIBE:
-        xEventGroupSetBits(event_uart_rx_heading, MQTT_SUBSCRIBE_BIT);
         break;
     }
 }
