@@ -66,6 +66,8 @@ void startWifiScan(void *arg)
         {
             esp_wifi_stop();
         }
+        
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 
@@ -86,11 +88,10 @@ void startWifiConnectTask(void *arg)
                                     -> store ssid & pass in nvs
                 - Connect unsuccessful -> set bit SEND_CONNECT_WIFI_UNSUCCESSFUL
             */
-
             getSSID_PASS((uint8_t *)data_uart, (uint8_t *)ssid, (uint8_t *)pass);
             if (WIFI_Connect((uint8_t *)ssid, (uint8_t *)pass) == CONNECT_OK)
             {
-                WIFI_StoreNVS(ssid, pass);
+                WIFI_StoreNVS((uint8_t *)ssid, (uint8_t *)pass);
                 xEventGroupSetBits(event_uart_tx_heading, 
                                         SEND_CONNECT_WIFI_SUCCESSFUL_BIT);
             }

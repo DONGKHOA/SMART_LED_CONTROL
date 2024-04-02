@@ -52,7 +52,7 @@
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)
-#define REFUSE_CONNECT_MQTT_BIT                (1 << 4)
+#define REFUSE_CONNECT_MQTT_BIT                 (1 << 4)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 5)
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 6)
 #define MQTT_PUBLISH_BIT                        (1 << 7)
@@ -68,6 +68,7 @@ typedef enum
     HEADING_OFF_WIFI,
     HEADING_CONNECT_WIFI,
     HEADING_CONNECT_MQTT,
+    HEADING_AUTO_LED,
 } uart_rx_heading_t;
 
 typedef enum
