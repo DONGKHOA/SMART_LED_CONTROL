@@ -19,6 +19,12 @@ typedef struct
 }MQTT_Client_Data_t;
 
 /**********************
+ *   EXTERN VARIABLE
+ **********************/
+
+extern int8_t state_connect_mqtt;
+
+/**********************
  *   GLOBAL FUNCTIONS
  **********************/
 

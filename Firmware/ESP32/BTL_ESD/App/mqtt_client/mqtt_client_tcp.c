@@ -29,6 +29,12 @@
 #define TAG  "MQTT"
 
 /**********************
+ *      VARIABLES
+ **********************/
+
+int8_t state_connect_mqtt = -1;
+
+/**********************
  *  STATIC VARIABLES
  **********************/
 
@@ -58,6 +64,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+            state_connect_mqtt = 0;
             break;
         case MQTT_EVENT_SUBSCRIBED:
             ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
@@ -71,7 +78,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             sprintf(data ,"%.*s\n", event->data_len, event->data);
             break;
         case MQTT_EVENT_DISCONNECTED:
-            
+            ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
+            state_connect_mqtt = -1;
             break;
         default:
             ESP_LOGI(TAG, "Other event id:%d", event->event_id);

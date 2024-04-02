@@ -57,6 +57,12 @@ void startWifiScan(void *arg)
                 xEventGroupSetBits(event_uart_rx_heading, 
                                     CONNECT_WIFI_SCAN_BIT);
             }
+
+            if (state_connected_wifi == -1)
+            {
+                xEventGroupSetBits(event_uart_rx_heading, 
+                                    HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL);
+            }
             
             xEventGroupSetBits(event_uart_tx_heading, 
                                     SEND_NUMBER_WIFI_SCAN_BIT);
@@ -134,7 +140,15 @@ void startMQTTConnectTask(void * arg)
             */
             if (flag_connected_wifi == 1)
             {
-                
+                char buffer_temp[16];
+                uint8_t i;
+                for (i = 0; data_uart[i] != '\n'; i++)
+                {
+                    buffer_temp[i] = (char)data_uart[i];
+                }
+                buffer_temp[i] = '\0';
+                sprintf(url_mqtt,"mqtt://%s:1883", buffer_temp);
+                mqtt_app_start(&mqtt_client_0, url_mqtt);
             }
             else
             {
@@ -149,7 +163,15 @@ void startMQTTControlDataTask(void *arg)
 {
     while (1)
     {
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        
+        if ()
+        {
+            
+        }
+        
+        esp_mqtt_client_publish(mqtt_client_0.client, "test", "123", 0, 1, 0);
+        esp_mqtt_client_subscribe(mqtt_client_0.client, "test_1", 0);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

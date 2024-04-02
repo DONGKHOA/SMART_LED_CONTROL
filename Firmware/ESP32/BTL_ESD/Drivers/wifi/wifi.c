@@ -34,6 +34,11 @@
 #define NUM_WIFI_KEY        "Num_ssid_key"
 #define SSID_NVS            "ssid_nvs"
 #define PASS_NVS            "pass_nvs"      
+/**********************
+ *     VARIABLES
+ **********************/
+
+int8_t state_connected_wifi = -1;
 
 /**********************
  *  STATIC VARIABLES
@@ -64,12 +69,14 @@ static void event_handler(void* arg, esp_event_base_t event_base,
         } 
         else 
         {
+            state_connected_wifi = -1;
             xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
         }
         ESP_LOGE(TAG,"connect to the AP fail");
     } 
     else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) 
     {
+        state_connected_wifi = 0;
         ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);

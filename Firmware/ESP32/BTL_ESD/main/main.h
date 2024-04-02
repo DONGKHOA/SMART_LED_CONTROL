@@ -46,6 +46,7 @@
 #define CONNECT_WIFI_RX_BIT                     (1 << 2)
 #define CONNECT_WIFI_SCAN_BIT                   (1 << 3)
 #define CONNECT_MQTT_BIT                        (1 << 4)
+#define MQTT_PUBLISH_BIT                        (1 << 5)
 
 // UART TX EVENT 
 #define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
@@ -55,8 +56,7 @@
 #define REFUSE_CONNECT_MQTT_BIT                 (1 << 4)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 5)
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 6)
-#define MQTT_PUBLISH_BIT                        (1 << 7)
-#define MQTT_SUBSCRIBE_BIT                      (1 << 8)
+#define MQTT_SUBSCRIBE_BIT                      (1 << 7)
 
 /**********************
  *      TYPEDEFS
@@ -68,7 +68,7 @@ typedef enum
     HEADING_OFF_WIFI,
     HEADING_CONNECT_WIFI,
     HEADING_CONNECT_MQTT,
-    HEADING_AUTO_LED,
+    HEADING_MQTT_PUBLISH,
 } uart_rx_heading_t;
 
 typedef enum
@@ -80,7 +80,6 @@ typedef enum
     HEADING_REFUSE_CONNECT_MQTT,
     HEADING_SEND_CONNECT_MQTT_SUCCESSFUL,
     HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL,
-    HEADING_MQTT_PUBLISH,
     HEADING_MQTT_SUBSCRIBE,
 } uart_tx_heading_t;
 

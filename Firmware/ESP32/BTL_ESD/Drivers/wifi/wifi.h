@@ -26,6 +26,12 @@ typedef enum
 }WIFI_Status_t;
 
 /**********************
+ *   EXTERN VARIABLE
+ **********************/
+
+extern int8_t state_connected_wifi;
+
+/**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
