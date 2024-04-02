@@ -9,7 +9,9 @@ HEADING | DATA | STOP |
 **Trong đó các phần được truyền như sau:**
 
 > HEADING: RX (ESP32) là TX (STM32) và ngược lại.
+> 
 > DATA: Có thể có hoặc không tùy vào loại HEADING
+> 
 > STOP: '\n'
 
 **HEADING bên ESP32:**
