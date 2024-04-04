@@ -161,17 +161,24 @@ void startMQTTConnectTask(void * arg)
 
 void startMQTTControlDataTask(void *arg)
 {
+    TickType_t xLastWakeTime;
+    const TickType_t xFrequency = 2000;
+    xLastWakeTime = xTaskGetTickCount();
+
     while (1)
     {
         
-        if ()
+        if (MQTT_app_get_event() == 1)
         {
-            
+            esp_mqtt_client_subscribe(mqtt_client_0.client, "test_1", 0);    
+        }
+        else
+        {
+            xEventGroupSetBits(event_uart_tx_heading, 
+                                HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL);
         }
         
-        esp_mqtt_client_publish(mqtt_client_0.client, "test", "123", 0, 1, 0);
-        esp_mqtt_client_subscribe(mqtt_client_0.client, "test_1", 0);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }
 

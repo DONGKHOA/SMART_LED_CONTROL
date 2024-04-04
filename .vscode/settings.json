@@ -21,5 +21,6 @@
         "LOGW",
         "MQTT",
         "netif"
-    ]
+    ],
+    "docwriter.style": "Doxygen"
 }

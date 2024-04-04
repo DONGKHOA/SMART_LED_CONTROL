@@ -19,16 +19,11 @@ typedef struct
 }MQTT_Client_Data_t;
 
 /**********************
- *   EXTERN VARIABLE
- **********************/
-
-extern int8_t state_connect_mqtt;
-
-/**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
-void mqtt_app_get_data(MQTT_Client_Data_t *MQTT_Client);
-void mqtt_app_start(MQTT_Client_Data_t *MQTT_Client, char *url);
+void MQTT_app_start(MQTT_Client_Data_t *MQTT_Client, char *url);
+int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client);
+int8_t MQTT_app_get_event(void);
 
 #endif
