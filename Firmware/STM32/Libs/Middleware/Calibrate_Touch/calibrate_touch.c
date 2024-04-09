@@ -23,7 +23,7 @@
  *
  */
 
-#include "calibrate.h"
+#include "calibrate_touch.h"
 
 int setCalibrationMatrix( POINT_T * displayPtr,
 						  POINT_T * screenPtr,

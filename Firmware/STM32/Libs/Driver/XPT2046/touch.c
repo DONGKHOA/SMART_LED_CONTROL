@@ -1,6 +1,6 @@
 #include "stm32f1xx_hal.h"
 #include "touch.h"
-#include "calibrate.h"
+#include "calibrate_touch.h"
 #include "graphics.h"
 
 #define COMMAND_READ_X             			0XD0
