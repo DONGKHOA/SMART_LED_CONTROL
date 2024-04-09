@@ -13,7 +13,7 @@
 #include "stm32f1xx_hal.h"
 #include "stdint.h"
 
-int read_adc (void);
+int16_t read_adc (void);
 
 /***********************************************************************/
 
