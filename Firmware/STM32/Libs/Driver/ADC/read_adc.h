@@ -12,8 +12,6 @@
 
 #include "stm32f1xx_hal.h"
 #include "stdint.h"
-#include "FreeRTOS.h"
-#include "task.h"
 
 int16_t read_adc ((ADC_HandleTypeDef hadc1);
 
