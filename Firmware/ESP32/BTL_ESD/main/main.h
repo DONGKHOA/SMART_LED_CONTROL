@@ -64,7 +64,7 @@
 
 typedef enum 
 {
-    HEADING_ON_WIFI = 0x01,
+    HEADING_ON_WIFI = '1',
     HEADING_OFF_WIFI,
     HEADING_CONNECT_WIFI,
     HEADING_CONNECT_MQTT,
@@ -73,7 +73,7 @@ typedef enum
 
 typedef enum
 {
-    HEADING_SEND_NUMBER_WIFI_SCAN = 0x01,
+    HEADING_SEND_NUMBER_WIFI_SCAN = '1',
     HEADING_SEND_NAME_WIFI_SCAN,
     HEADING_SEND_CONNECT_WIFI_SUCCESSFUL,
     HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL,
@@ -92,119 +92,8 @@ typedef enum
 } state_connect_network_t;
 
 /*********************
- *  EXTERN VARIABLE
- *********************/
-
-extern TaskHandle_t wifiScan_task;
-extern TaskHandle_t wifiConnect_task;
-extern TaskHandle_t mqttConnect_task;
-extern TaskHandle_t mqttControlData_task;
-extern TaskHandle_t uart_rx_task;
-extern TaskHandle_t uart_tx_task;
-
-extern EventGroupHandle_t event_uart_rx_heading;
-extern EventGroupHandle_t event_uart_tx_heading;
-
-/*********************
- * ENTRY TASK FUNCTION
- *********************/
-
-extern void startWifiScan(void *arg);
-extern void startWifiConnectTask(void *arg);
-extern void startMQTTConnectTask(void * arg);
-extern void startMQTTControlDataTask(void *arg);
-extern void startUartTxTask(void *arg);
-extern void startUartRxTask(void *arg);
-
-/*********************
  *   INLINE FUNCTION
  *********************/
-
-static inline void initMain(void)
-{
-    NVS_Init();
-    WIFI_StaInit();
-    uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN, 
-                    115200, UART_DATA_8_BITS,
-                    UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE, 
-                    UART_STOP_BITS_1);
-    // mqtt_app_start(&mqtt_client_0, url_mqtt);
-}
-
-static inline void initServices(void)
-{
-    event_uart_rx_heading = xEventGroupCreate();
-    event_uart_tx_heading = xEventGroupCreate();
-}
-
-static inline void createMainTask(void)
-{
-    xTaskCreate(startUartRxTask, 
-                "uart_rx_task", 
-                STACK_SIZE * 3, 
-                NULL, 
-                9, 
-                &uart_rx_task);
-
-    xTaskCreate(startUartTxTask, 
-                "uart_tx_task", 
-                STACK_SIZE * 2, 
-                NULL, 
-                8, 
-                &uart_tx_task);
-
-    xTaskCreate(startWifiScan, 
-                "Wifi scan", 
-                STACK_SIZE * 3, 
-                NULL, 
-                7, 
-                &wifiScan_task);
-
-    xTaskCreate(startWifiConnectTask, 
-                "Wifi connect", 
-                STACK_SIZE * 3, 
-                NULL, 
-                6, 
-                &wifiConnect_task);
-
-    xTaskCreate(startMQTTConnectTask, 
-                "Mqtt connect", 
-                STACK_SIZE * 3, 
-                NULL, 
-                5, 
-                &mqttConnect_task);
-
-    xTaskCreate(startMQTTControlDataTask, 
-                "Mqtt control", 
-                STACK_SIZE * 3, 
-                NULL, 
-                4, 
-                &mqttControlData_task);
- 
-}
-
-static inline void checkingHeadingRxData(uint8_t heading)
-{
-    switch (heading)
-    {
-    case HEADING_OFF_WIFI:
-        xEventGroupClearBits(event_uart_rx_heading, ON_WIFI_BIT);
-        xEventGroupSetBits(event_uart_rx_heading, OFF_WIFI_BIT);
-        break;
-
-    case HEADING_ON_WIFI:
-        xEventGroupClearBits(event_uart_rx_heading, OFF_WIFI_BIT);
-        xEventGroupSetBits(event_uart_rx_heading, ON_WIFI_BIT);
-        break;
-
-    case HEADING_CONNECT_WIFI:
-        xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
-        break;
-    case HEADING_CONNECT_MQTT:
-        xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
-        break;
-    }
-}
 
 static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t * pass)
 {

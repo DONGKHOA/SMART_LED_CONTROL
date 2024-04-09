@@ -129,7 +129,7 @@ int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client)
     else        return 1;
 }
 
-int8_t MQTT_app_get_event(void)
+int8_t MQTT_app_state_connect(void)
 {
     return state_connect_mqtt;
 }

@@ -24,6 +24,6 @@ typedef struct
 
 void MQTT_app_start(MQTT_Client_Data_t *MQTT_Client, char *url);
 int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client);
-int8_t MQTT_app_get_event(void);
+int8_t MQTT_app_state_connect(void);
 
 #endif
