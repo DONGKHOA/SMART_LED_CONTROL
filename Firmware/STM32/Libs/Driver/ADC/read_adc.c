@@ -10,7 +10,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-extern ADC_HandleTypeDef hadc1;
 
 int16_t read_adc(ADC_HandleTypeDef hadc1)
 {
