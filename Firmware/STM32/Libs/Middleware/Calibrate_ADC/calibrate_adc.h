@@ -8,6 +8,7 @@
 #ifndef MIDDLEWARE_CALIBRATE_ADC_CALIBRATE_ADC_H_
 #define MIDDLEWARE_CALIBRATE_ADC_CALIBRATE_ADC_H_
 /**************************************************/
-int calibrate_adc(int);
+#include "stdint.h"
+int16_t calibrate_adc(int);
 /**************************************************/
 #endif /* MIDDLEWARE_CALIBRATE_ADC_CALIBRATE_ADC_H_ */
