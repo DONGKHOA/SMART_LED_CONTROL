@@ -6,10 +6,11 @@
  */
 #include "read_adc.h"
 #include "stm32f1xx_hal.h"
+#include "stdint.h"
 
 extern ADC_HandleTypeDef hadc1;
 
-int read_adc (void)
+int16_t read_adc (void)
 {
     	HAL_ADC_Start(&hadc1);
 	HAL_Delay(50);
