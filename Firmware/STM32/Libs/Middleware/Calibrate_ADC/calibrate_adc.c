@@ -5,9 +5,10 @@
  *      Author: dongkhoa
  */
 #include "calibrate_adc.h"
+#include "stdint.h"
 
-int calibrate_adc(int var)
+int16_t calibrate_adc(int16_t var)
  {
-	int y = (float)var* 0.9769 + 157.13;
+	int16_t y = (float)var* 0.9769 + 157.13;
     	return y;
  }
