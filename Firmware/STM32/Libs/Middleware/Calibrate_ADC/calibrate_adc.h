@@ -9,6 +9,6 @@
 #define MIDDLEWARE_CALIBRATE_ADC_CALIBRATE_ADC_H_
 /**************************************************/
 #include "stdint.h"
-int16_t calibrate_adc(int);
+int16_t calibrate_adc(int16_t);
 /**************************************************/
 #endif /* MIDDLEWARE_CALIBRATE_ADC_CALIBRATE_ADC_H_ */
