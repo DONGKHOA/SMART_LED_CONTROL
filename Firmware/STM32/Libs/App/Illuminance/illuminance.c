@@ -5,9 +5,9 @@
  *      Author: dongkhoa
  */
 
-#include "illumi.h"
+#include "illuminance.h"
 
-float illumi_adc (float y)
+float illuminance (float y)
 {
 	float volt = (((float)y*3.3)/4096);
  	volt = volt/6;
