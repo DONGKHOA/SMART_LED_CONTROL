@@ -10,7 +10,11 @@
 
 /***********************************************************/
 
-float illuminance(float y);
+#include "stdint.h"
+
+float voltage_adc (int16_t y);
+float illuminance_adc (float volt);
+float illuminance_signal (float volt);
 
 /***********************************************************/
 

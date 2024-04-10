@@ -5,7 +5,6 @@
  *      Author: dongkhoa
  */
 #include "calibrate_adc.h"
-#include "stdint.h"
 
 int16_t calibrate_adc(int16_t var)
 {
