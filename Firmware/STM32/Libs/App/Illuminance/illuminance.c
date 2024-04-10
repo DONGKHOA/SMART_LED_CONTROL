@@ -5,7 +5,7 @@
  *      Author: dongkhoa
  */
 
-#include "illumi.h"
+#include "illuminance.h"
 
 float voltage_adc (int16_t y)
 {
