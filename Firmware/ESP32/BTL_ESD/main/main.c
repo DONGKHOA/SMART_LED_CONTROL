@@ -278,13 +278,18 @@ void startMQTTControlDataTask(void *arg)
     TickType_t xLastWakeTime;
     const TickType_t xFrequency = 2000;
     xLastWakeTime = xTaskGetTickCount();
+    uint8_t str[32];
 
     while (1)
     {
         printf("6\n");
         if (MQTT_app_state_connect() == 1)
         {
-            esp_mqtt_client_subscribe(mqtt_client_0.client, "test_1", 0);    
+            esp_mqtt_client_subscribe(mqtt_client_0.client, "button", 0);
+            esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
+            esp_mqtt_client_publish(mqtt_client_0.client, "lux", &str, 0, 1, 0);
+            esp_mqtt_client_publish(mqtt_client_0.client, "state_auto_stm32", &str, 0, 1, 0);
+            esp_mqtt_client_publish(mqtt_client_0.client, "state_led", &str, 0, 1, 0);
         }
         else
         {
