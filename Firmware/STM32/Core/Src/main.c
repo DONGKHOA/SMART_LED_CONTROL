@@ -120,7 +120,7 @@ int main(void)
 	GraphicsClear(BLACK);
 
 	HAL_Delay(1000);
-	GraphicsClear(BLUE);
+	GraphicsClear(GREEN);
 	HAL_Delay(1000);
 	GraphicsClear(WHITE);
 	HAL_Delay(1000);
