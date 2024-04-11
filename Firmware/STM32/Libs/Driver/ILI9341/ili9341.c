@@ -2,16 +2,13 @@
 #include "stm32f1xx_hal.h"
 #include <stdbool.h>
 
-#define DMA_BUFFER_SIZE 			64U
+
 
 extern SPI_HandleTypeDef hspi1;
-extern DMA_HandleTypeDef hdma_spi1_tx;
 
 static volatile bool txComplete;
 
 static void SetWindow(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd);
-static void WriteDataDMA(const void *data, uint16_t length);
-static void WaitForDMAWriteComplete(void);
 static void WriteCommand(uint8_t command);
 static void WriteData(uint8_t data);
 
@@ -24,12 +21,7 @@ static void WriteCommand(uint8_t command)
 static void WriteData(uint8_t data)
 {
 	HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
-	HAL_SPI_Transmit(&hspi1, &data, 1U, 100U);
-}
-
-void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
-{
-	txComplete = true;
+	HAL_SPI_Transmit(&hspi1, &data, 1U, 200U);
 }
 
 void ILI9341Reset(void)
@@ -166,108 +158,50 @@ void ILI9341Pixel(uint16_t x, uint16_t y, colour_t colour)
 	HAL_SPI_Transmit(&hspi1, (uint8_t *)&beColour, 2U, 100UL);
 }
 
+uint8_t SPI_Master_write_color(uint16_t color, uint16_t size)
+{
+	static uint8_t Byte[1024];
+	uint16_t index = 0;
+	for(uint16_t i = 0; i < size; i++)
+    {
+		Byte[index++] = (color >> 8) & 0xFF;
+		Byte[index++] = color & 0xFF;
+	}
+	HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
+	return HAL_SPI_Transmit(&hspi1, Byte, size*2, 200U);
+}
+
 void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData)
 {
 	uint16_t bytestToWrite;
 
 	SetWindow(x, y, x + width - 1U, y + height - 1U);
 	bytestToWrite = width * height * 2U;
-
-	WriteDataDMA(imageData, bytestToWrite);
-	WaitForDMAWriteComplete();
-}
-
-void ILI9341DrawMonoBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData, colour_t fgColour, colour_t bgColour)
-{
-	colour_t beFgColour = __builtin_bswap16(fgColour);
-	colour_t beBgColour = __builtin_bswap16(bgColour);
-	colour_t dmaBuffer[DMA_BUFFER_SIZE];
-	uint32_t totalBytesToWrite;
-	uint32_t bytesToWriteThisTime;
-	uint8_t mask = 0x80U;
-	uint16_t pixelsWritten = 0U;
-	uint8_t i;
-
-	SetWindow(x, y, x + width - 1U, y + height - 1U);
-	totalBytesToWrite = (uint32_t)width * (uint32_t)height * (uint32_t)sizeof(colour_t);
-	bytesToWriteThisTime = DMA_BUFFER_SIZE * (uint32_t)sizeof(colour_t);
-
-	while (totalBytesToWrite > 0UL)
-	{
-		if (totalBytesToWrite < bytesToWriteThisTime)
-		{
-			bytesToWriteThisTime = totalBytesToWrite;
-		}
-		totalBytesToWrite -= bytesToWriteThisTime;
-
-		for (i = 0U; i < bytesToWriteThisTime / 2UL; i++)
-		{
-			if ((mask & *imageData) == 0U)
-			{
-				dmaBuffer[i] = beFgColour;
-			}
-			else
-			{
-				dmaBuffer[i] = beBgColour;
-			}
-			pixelsWritten++;
-			mask >>= 1;
-			if (mask == 0U)
-			{
-				mask = 0x80U;
-				imageData++;
-			}
-
-			if (pixelsWritten % width == 0U && mask != 0x80U)
-			{
-				mask = 0x80U;
-				imageData++;
-			}
-		}
-
-		WriteDataDMA(&dmaBuffer, bytesToWriteThisTime);
-		WaitForDMAWriteComplete();
-	}
+	WriteData(bytestToWrite);
 }
 
 void ILI9341FilledRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, colour_t colour)
 {
-	colour_t dmaBuffer[DMA_BUFFER_SIZE];
-	uint8_t i;
-	uint32_t totalBytesToWrite;
-	uint32_t bytesToWriteThisTime;
-
-	for (i = 0U; i < DMA_BUFFER_SIZE; i++)
-	{
-		dmaBuffer[i] = __builtin_bswap16(colour);
-	}
-
 	SetWindow(x, y, x + width - 1U, y + height - 1U);
-	totalBytesToWrite = (uint32_t)width * (uint32_t)height * (uint32_t)sizeof(colour_t);
-	bytesToWriteThisTime = DMA_BUFFER_SIZE * (uint16_t)sizeof(colour_t);
-
-	while (totalBytesToWrite > 0UL)
-	{
-		if (totalBytesToWrite < bytesToWriteThisTime)
-		{
-			bytesToWriteThisTime = totalBytesToWrite;
-		}
-		totalBytesToWrite -= bytesToWriteThisTime;
-
-		WriteDataDMA(&dmaBuffer, bytesToWriteThisTime);
-		WaitForDMAWriteComplete();
-	}
+    for(int i = x; i < x + width -1; i++)
+    {
+        uint16_t size = height +2;
+        SPI_Master_write_color(colour, size);
+    }
 }
+//void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData) {
+//
+//    SetWindow(x, y, x + width - 1U, y + height - 1U);
+//
+//
+//    HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
+//
+//
+//    for (uint32_t i = x; i < x + width ; i += 2)
+//        uint16_t color = imageData;
+//
+//
+//        HAL_SPI_Transmit(&hspi1, (uint8_t*)color, sizeof(color), 200U);
+//    }
+//}
 
-static void WriteDataDMA(const void *data, uint16_t length)
-{
-	txComplete = false;
-	HAL_SPI_Transmit_DMA(&hspi1, (uint8_t *)data, length);
-}
-
-static void WaitForDMAWriteComplete(void)
-{
-	while (txComplete == false)
-	{
-	}
-}

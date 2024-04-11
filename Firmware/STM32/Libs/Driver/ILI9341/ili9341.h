@@ -1,14 +1,8 @@
-/*
- * ili9341.h
- *
- *  Created on: Mar 16, 2024
- *      Author: dongkhoa
- */
-
-#ifndef DRIVER_ILI9341_ILI9341_H_
-#define DRIVER_ILI9341_ILI9341_H_
+#ifndef INC_ILI9341_H_
+#define INC_ILI9341_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define ILI9341_RST_PORT           	GPIOA
 #define ILI9341_RST_PIN             GPIO_PIN_3
@@ -55,8 +49,7 @@ void ILI9341Reset(void);
 void ILI9341Init(void);
 void ILI9341Pixel(uint16_t x, uint16_t y, colour_t colour);
 void ILI9341FilledRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, colour_t colour);
-void ILI9341DrawMonoBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData, colour_t fgColour, colour_t bgColour);
 void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData);
 
 
-#endif /* DRIVER_ILI9341_ILI9341_H_ */
+#endif
