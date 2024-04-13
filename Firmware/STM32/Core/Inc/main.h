@@ -63,8 +63,6 @@ void Error_Handler(void);
 #define TFT_DC_RS_GPIO_Port GPIOA
 #define TFT_RESET_Pin GPIO_PIN_3
 #define TFT_RESET_GPIO_Port GPIOA
-#define SPI1_CS_Pin GPIO_PIN_4
-#define SPI1_CS_GPIO_Port GPIOA
 #define SPI2_CS_Pin GPIO_PIN_12
 #define SPI2_CS_GPIO_Port GPIOB
 
