@@ -1,10 +1,25 @@
 #ifndef APP_GUI_OBJECT_KEYPAD_H_
 #define APP_GUI_OBJECT_KEYPAD_H_
 
-#include <stdio.h>
+#include <stdint.h>
 #include "Icon/icon.h"
 #include "graphics.h"
 
+typedef enum {
+	NUM_0 = 0,
+	NUM_1,
+	NUM_2,
+	NUM_3,
+	NUM_4,
+	NUM_5,
+	NUM_6,
+	NUM_7,
+	NUM_8,
+	NUM_9,
+	NUM_x,
+	NUM_v,
+	NO_TOUCH,
+}key_character_t;
 
 __attribute__((always_inline)) inline void object_Keypad(void)
 {
@@ -33,4 +48,5 @@ __attribute__((always_inline)) inline void object_Keypad(void)
 	GraphicsColourBitmap(156, 263, 33, 33, icon_check);
 }
 
+key_character_t check_event_keypad(int16_t x, int16_t y);
 #endif

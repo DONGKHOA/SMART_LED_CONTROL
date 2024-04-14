@@ -24,6 +24,9 @@ static void WriteData(uint8_t data)
 	HAL_SPI_Transmit(&hspi1, &data, 1U, 200U);
 }
 
+/**
+ * The ILI9341Reset function resets the ILI9341 display by toggling the reset pin.
+ */
 void ILI9341Reset(void)
 {
 	HAL_GPIO_WritePin(ILI9341_RST_PORT, ILI9341_RST_PIN, GPIO_PIN_RESET);
@@ -144,6 +147,21 @@ static void SetWindow(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t 
 	HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
 }
 
+/**
+ * The ILI9341Pixel function sets a pixel at a specified x and y coordinate with a specified color on
+ * an ILI9341 LCD display.
+ * 
+ * @param x The x parameter represents the x-coordinate of the pixel on the ILI9341 LCD display where
+ * you want to set the color.
+ * @param y The `y` parameter represents the vertical coordinate of the pixel on the ILI9341 LCD
+ * display where you want to set the color.
+ * @param colour The `colour` parameter is a variable of type `colour_t`, which is likely a custom data
+ * type defined elsewhere in the codebase. It represents the color value that you want to set for a
+ * pixel at coordinates `(x, y)` on the ILI9341 LCD display.
+ * 
+ * @return If the condition `x >= ILI9341_LCD_WIDTH || y >= ILI9341_LCD_HEIGHT` is true, the function
+ * will return without executing any further code.
+ */
 void ILI9341Pixel(uint16_t x, uint16_t y, colour_t colour)
 {
 	colour_t beColour = __builtin_bswap16(colour);
@@ -183,6 +201,18 @@ void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t he
         HAL_SPI_Transmit(&hspi1, (uint8_t*)&color, sizeof(color), 200U);
     }
 }
+/**
+ * The ILI9341FilledRectangle function fills a rectangle on a display with a specified color.
+ * 
+ * @param x The x-coordinate of the top-left corner of the filled rectangle.
+ * @param y The `y` parameter represents the vertical position of the top-left corner of the filled
+ * rectangle on the display.
+ * @param width The width of the filled rectangle.
+ * @param height The `height` parameter represents the height of the filled rectangle in pixels.
+ * @param colour The `colour` parameter represents the color that will be used to fill the rectangle.
+ * It is of type `colour_t`, which is likely a custom data type defined elsewhere in the codebase to
+ * represent colors in a specific format (e.g., RGB565).
+ */
 void ILI9341FilledRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, colour_t colour)
 {
 	SetWindow(x, y, x + width - 1U, y + height - 1U);
