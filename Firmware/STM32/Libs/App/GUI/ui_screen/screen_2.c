@@ -10,8 +10,9 @@
 
 void screen_2(void)
 {
+	GraphicsClear(WHITE);
 	GraphicsColourBitmap(5, 7, 28, 23, icon_return);
-	GraphicsLargeString(71, 25, "Wi-Fi", BLACK);
+	GraphicsLargeString(80, 25, "Wi-Fi", BLACK);
 	GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
 	GraphicsHline(0, 240, 90, BLACK);
 	GraphicsLargeString(5, 92, "Wi-Fi Network", BLACK);

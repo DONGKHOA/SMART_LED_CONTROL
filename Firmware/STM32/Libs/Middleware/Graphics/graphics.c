@@ -685,8 +685,9 @@ void GraphicsRoundedRectangle(int16_t x, int16_t y, uint16_t width, uint16_t hei
 	}
 
 	GraphicsFilledRectangle(x + (int16_t)cornerRadius, y, width - (2 * cornerRadius), height, colour);
-	GraphicsFilledRectangle(x, y + (int16_t)cornerRadius, cornerRadius, height - (2 * cornerRadius), colour);
-	GraphicsFilledRectangle(x + width - (int16_t)cornerRadius, y + (int16_t)cornerRadius, cornerRadius, height - (2 * cornerRadius), colour);
+	GraphicsFilledRectangle(x , y + (int16_t)cornerRadius, cornerRadius + 1, height - (2 * cornerRadius) + 4, colour);
+	GraphicsFilledRectangle(x + width - (int16_t)cornerRadius, y + (int16_t)cornerRadius, cornerRadius , height - (2 * cornerRadius) + 4, colour);
+
 	GraphicsFilledSegment(x + (int16_t)cornerRadius, y + (int16_t)cornerRadius, cornerRadius, 270, 360, 15U, colour);
 	GraphicsFilledSegment(x + width - (int16_t)cornerRadius - 1, y + (int16_t)cornerRadius, cornerRadius, 0, 90, 15U, colour);
 	GraphicsFilledSegment(x + (int16_t)cornerRadius, y + height - (int16_t)cornerRadius - 1, cornerRadius, 180, 270, 15U, colour);
