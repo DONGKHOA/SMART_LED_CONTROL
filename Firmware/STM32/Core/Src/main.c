@@ -28,6 +28,13 @@
 #include "ili9341.h"
 #include "touch.h"
 #include "screen.h"
+
+#include "FreeRTOS.h"
+#include "event_groups.h"
+#include "task.h"
+#include "timers.h"
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -37,7 +44,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+static void Screen_Task( void *pvParameters );
+static void UartTx_Task( void *pvParameters );
+static void UartRx_Task( void *pvParameters );
+static void ADC_Task( void *pvParameters );
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -76,6 +86,8 @@ static void MX_ADC2_Init(void);
 /* USER CODE BEGIN 0 */
 int16_t x;
 int16_t y;
+static uint8_t screen_state_t = screen_current;
+typedef enum{0, 1, 2}	screen_state_t;
 /* USER CODE END 0 */
 
 /**
@@ -114,29 +126,20 @@ int main(void)
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   	GraphicsInit();
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
-	HAL_Delay(1000);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 0);
-	GraphicsClear(BLACK);
-
-	HAL_Delay(1000);
-	GraphicsClear(GREEN);
-	HAL_Delay(1000);
-	GraphicsClear(WHITE);
-	HAL_Delay(1000);
-	GraphicsClear(BLACK);
-	GraphicsFilledRectangle(0, 0, 50, 50, WHITE);
+  	xTaskCreate(Screen_Task, "Screen_Task",configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
+    xTaskCreate(UartTx_Task, "Transmit_Task",configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    xTaskCreate(UartRx_Task, "Receive_Task",configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    xTaskCreate(ADC_Task, "ADC_Task",configMINIMAL_STACK_SIZE, NULL, 1, NULL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+	vTaskStartScheduler();
+  while(1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-	  HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
@@ -303,7 +306,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
@@ -441,7 +444,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, TFT_DC_RS_Pin|TFT_RESET_Pin|SPI1_CS_Pin|GPIO_PIN_8, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, TFT_DC_RS_Pin|TFT_RESET_Pin|GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
@@ -455,8 +458,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(TFT_IRQ_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TFT_DC_RS_Pin TFT_RESET_Pin SPI1_CS_Pin */
-  GPIO_InitStruct.Pin = TFT_DC_RS_Pin|TFT_RESET_Pin|SPI1_CS_Pin;
+  /*Configure GPIO pins : TFT_DC_RS_Pin TFT_RESET_Pin */
+  GPIO_InitStruct.Pin = TFT_DC_RS_Pin|TFT_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
@@ -488,6 +491,93 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+static void Screen_Task( void *pvParameters )
+{
+	while(1)
+	{
+		/* viết 1 hàm tạo mảng lưu giá trị check_touch, nếu giá trị check được đúng với vị trí icon thì return
+		về các case để thực hiện */
+		switch(screen_current);
+		{
+		case 0: // Display screen 1 and check touch
+			if(x > 99 && x < 140 && y > 41 && y < 114)
+			{
+				/* transmit state on/off wifi, recieve number wifi from Esp32. Display screen 2 and if you have
+				choose one of some wifi on screen jump to case 3 display screen 3  */
+
+			}
+			if(x > 94 && x < 140 && y < 216 && y > 255)
+			{
+				// transmit MQTT and jump to screen 3 to connect MQTT
+			}
+			if(x > 90 && x < 140 && y > 129 && y < 177 ) // if you choose icon main
+			{
+				/*
+				 * checking wifi connected yet ?
+				 * if wifi is connected, jump to screen 4. if wifi is not connected, jump to screen 3
+				 */
+			}
+		case 1: // Display screen 2 and show wifis current
+			if(x > 34 && x < 204 && y > 117 && y < 142)
+			{
+				/*
+				 * frame 1, jump to screen 3
+				 */
+
+			}
+			if(x > 34 && x < 204 && y > 156 && y < 181)
+			{
+				/*
+				 * frame 2, jump to screen 3
+				 */
+			}
+			if(x > 34 && x < 204 && y > 195 && y < 220)
+			{
+				/*
+				 * frame 3, jump to screen 3
+				 */
+			}
+			if(x > 34 && x < 204 && y > 234 && y < 259)
+			{
+				/*
+				 * frame 4, jump to screen 3
+				 */
+			}
+			if(x > 34 && x < 204 && y > 273 && y < 298)
+			{
+				/*
+				 * frame 5, jump to screen 3
+				 */
+			}
+		case 2: // Display screen 3 and check touch number
+
+		}
+	}
+}
+
+static void UartTx_Task( void *pvParameters )
+{
+	while(1)
+	{
+
+	}
+}
+
+static void UartRx_Task( void *pvParameters )
+{
+	while(1)
+	{
+
+	}
+}
+
+static void ADC_Task( void *pvParameters )
+{
+	while(1)
+	{
+
+	}
+}
 
 /* USER CODE END 4 */
 

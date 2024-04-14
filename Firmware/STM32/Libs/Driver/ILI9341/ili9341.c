@@ -171,37 +171,27 @@ uint8_t SPI_Master_write_color(uint16_t color, uint16_t size)
 	return HAL_SPI_Transmit(&hspi1, Byte, size*2, 200U);
 }
 
-void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData)
-{
-	uint16_t bytestToWrite;
+void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData) {
 
-	SetWindow(x, y, x + width - 1U, y + height - 1U);
-	bytestToWrite = width * height * 2U;
-	WriteData(bytestToWrite);
+    SetWindow(x, y, x + width - 1U, y + height - 1U);
+
+    HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
+
+    for (uint32_t i = 0; i < width * height * 2; i += 2) {
+        uint16_t color = (imageData[i + 1] << 8) | imageData[i];
+
+        HAL_SPI_Transmit(&hspi1, (uint8_t*)&color, sizeof(color), 200U);
+    }
 }
-
 void ILI9341FilledRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, colour_t colour)
 {
 	SetWindow(x, y, x + width - 1U, y + height - 1U);
     for(int i = x; i < x + width -1; i++)
     {
-        uint16_t size = height +2;
+        uint16_t size = height + 2;
         SPI_Master_write_color(colour, size);
     }
 }
-//void ILI9341DrawColourBitmap(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *imageData) {
-//
-//    SetWindow(x, y, x + width - 1U, y + height - 1U);
-//
-//
-//    HAL_GPIO_WritePin(ILI9341_DC_PORT, ILI9341_DC_PIN, GPIO_PIN_SET);
-//
-//
-//    for (uint32_t i = x; i < x + width ; i += 2)
-//        uint16_t color = imageData;
-//
-//
-//        HAL_SPI_Transmit(&hspi1, (uint8_t*)color, sizeof(color), 200U);
-//    }
+
 //}
 
