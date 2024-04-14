@@ -1,0 +1,297 @@
+��ѥ��ɕ�bootloader[�ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:7172
+load:0x40078000,len:15540
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3904
+entry 0x40080640
+[0;32mI (31) boot: ESP-IDF v5.2.1-dirty 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time Apr 14 2024 16:10:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (36) boot: chip revision: v3.0[0m
+[0;32mI (40) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (44) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (49) boot.esp32: SPI Flash Size : 4MB[0m
+[0;32mI (53) boot: Enabling RNG early entropy source...[0m
+[0;32mI (59) boot: Partition Table:[0m
+[0;32mI (62) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (70) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (77) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (85) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (92) boot: End of partition table[0m
+[0;32mI (96) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=207d4h (133076) map[0m
+[0;32mI (150) esp_image: segment 1: paddr=000307fc vaddr=3ffb0000 size=03a3ch ( 14908) load[0m
+[0;32mI (156) esp_image: segment 2: paddr=00034240 vaddr=40080000 size=0bdd8h ( 48600) load[0m
+[0;32mI (175) esp_image: segment 3: paddr=00040020 vaddr=400d0020 size=76d18h (486680) map[0m
+[0;32mI (342) esp_image: segment 4: paddr=000b6d40 vaddr=4008bdd8 size=08f60h ( 36704) load[0m
+[0;32mI (367) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (367) boot: Disabling RNG early entropy source...[0m
+[0;32mI (379) cpu_start: Multicore app[0m
+[0;32mI (388) cpu_start: Pro cpu start user code[0m
+[0;32mI (388) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (388) cpu_start: Application information:[0m
+[0;32mI (391) cpu_start: Project name:     BTL_ESP[0m
+[0;32mI (396) cpu_start: App version:      eb71186-dirty[0m
+[0;32mI (401) cpu_start: Compile time:     Apr 14 2024 16:09:46[0m
+[0;32mI (407) cpu_start: ELF file SHA256:  dbbe1ceb8b825def...[0m
+[0;32mI (413) cpu_start: ESP-IDF:          v5.2.1-dirty[0m
+[0;32mI (419) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (423) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (428) cpu_start: Chip rev:         v3.0[0m
+[0;32mI (433) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (440) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (446) heap_init: At 3FFB7F48 len 000280B8 (160 KiB): DRAM[0m
+[0;32mI (452) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (459) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (465) heap_init: At 40094D38 len 0000B2C8 (44 KiB): IRAM[0m
+[0;32mI (473) spi_flash: detected chip: generic[0m
+[0;32mI (476) spi_flash: flash io: dio[0m
+[0;32mI (481) main_task: Started on CPU0[0m
+[0;32mI (485) main_task: Calling app_main()[0m
+[0;32mI (529) main_task: Returned from app_main()[0m
+I (530) wifi:wifi driver task: 3ffc287c, prio:23, stack:6656, core=0
+I (547) wifi:wifi firmware version: a9f5b59
+I (548) wifi:wifi certification version: v7.0
+I (548) wifi:config NVS flash: enabled
+I (548) wifi:config nano formating: disabled
+I (552) wifi:Init data frame dynamic rx buffer num: 32
+I (557) wifi:Init static rx mgmt buffer num: 5
+I (561) wifi:Init management short buffer num: 32
+I (565) wifi:Init dynamic tx buffer num: 32
+I (569) wifi:Init static rx buffer size: 1600
+I (573) wifi:Init static rx buffer num: 10
+I (577) wifi:Init dynamic rx buffer num: 32
+[0;32mI (582) wifi_init: rx ba win: 6[0m
+[0;32mI (585) wifi_init: tcpip mbox: 32[0m
+[0;32mI (589) wifi_init: udp mbox: 6[0m
+[0;32mI (593) wifi_init: tcp mbox: 6[0m
+[0;32mI (596) wifi_init: tcp tx win: 5744[0m
+[0;32mI (600) wifi_init: tcp rx win: 5744[0m
+[0;32mI (605) wifi_init: tcp mss: 1440[0m
+[0;32mI (609) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (613) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (619) phy_init: phy_version 4791,2c4672b,Dec 20 2023,16:06:06[0m
+I (703) wifi:mode : sta (b8:d6:1a:69:5f:38)
+I (704) wifi:enable tsf
+[0;32mI (3207) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (3209) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 19[0m
+[0;32mI (3211) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (3214) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (3220) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (3227) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (3233) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (3237) WIFI CONNECT: RSSI 		-74[0m
+[0;32mI (3241) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (3245) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (3251) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (3258) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (3264) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (3268) WIFI CONNECT: RSSI 		-75[0m
+[0;32mI (3272) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (3276) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (3282) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (3289) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (3295) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (3299) WIFI CONNECT: RSSI 		-75[0m
+[0;32mI (3303) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (3308) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (3314) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (3320) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (3326) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (3330) WIFI CONNECT: RSSI 		-76[0m
+[0;32mI (3334) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (3339) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (3345) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (3352) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (3358) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (3362) WIFI CONNECT: RSSI 		-76[0m
+5
+HieppayyoopayyooTHREE O'CLOCKThree o'clock
+[0;32mI (7873) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (7875) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 20[0m
+[0;32mI (7876) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (7881) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (7887) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (7893) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (7899) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (7904) WIFI CONNECT: RSSI 		-74[0m
+[0;32mI (7908) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (7912) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (7918) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (7925) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (7931) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (7935) WIFI CONNECT: RSSI 		-74[0m
+[0;32mI (7939) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (7943) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (7949) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (7956) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (7962) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (7966) WIFI CONNECT: RSSI 		-74[0m
+[0;32mI (7970) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (7974) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (7980) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (7987) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (7993) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (7997) WIFI CONNECT: RSSI 		-74[0m
+[0;32mI (8001) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (8005) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (8011) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (8018) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (8024) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (8028) WIFI CONNECT: RSSI 		-75[0m
+[0;32mI (8032) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (8037) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (8042) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (8049) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (8055) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (8059) WIFI CONNECT: RSSI 		-76[0m
+6
+THREE O'CLOCKThree o'clockpayyooHieppayyooTHREE O'CLOCK
+[0;32mI (12571) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (12573) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 23[0m
+[0;32mI (12574) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (12579) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (12585) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (12592) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (12598) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12602) WIFI CONNECT: RSSI 		-71[0m
+[0;32mI (12606) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (12611) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (12616) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (12623) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (12629) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12634) WIFI CONNECT: RSSI 		-71[0m
+[0;32mI (12638) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (12643) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (12648) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (12655) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (12661) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12666) WIFI CONNECT: RSSI 		-72[0m
+[0;32mI (12670) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (12674) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (12680) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (12687) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (12693) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12697) WIFI CONNECT: RSSI 		-78[0m
+[0;32mI (12701) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (12706) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (12712) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (12719) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (12725) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12729) WIFI CONNECT: RSSI 		-80[0m
+[0;32mI (12733) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (12738) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (12743) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (12750) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (12756) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (12761) WIFI CONNECT: RSSI 		-80[0m
+6
+THREE O'CLOCKpayyooThree o'clockpayyooThree o'clockHiep
+[0;32mI (17273) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (17275) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 20[0m
+[0;32mI (17276) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (17281) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (17287) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (17294) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (17300) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (17304) WIFI CONNECT: RSSI 		-68[0m
+[0;32mI (17309) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (17313) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (17318) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (17325) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (17331) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (17336) WIFI CONNECT: RSSI 		-68[0m
+[0;32mI (17340) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (17345) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (17350) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (17357) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (17363) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (17368) WIFI CONNECT: RSSI 		-69[0m
+[0;32mI (17372) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (17376) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (17382) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (17388) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (17395) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (17399) WIFI CONNECT: RSSI 		-69[0m
+4
+Three o'clockHiepTHREE O'CLOCKpayyoo
+[0;32mI (21910) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (21912) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 18[0m
+[0;32mI (21913) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (21918) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (21924) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (21931) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (21937) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (21941) WIFI CONNECT: RSSI 		-69[0m
+[0;32mI (21946) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (21950) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (21955) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (21962) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (21969) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (21973) WIFI CONNECT: RSSI 		-69[0m
+[0;32mI (21977) WIFI CONNECT: SSID 		THREE O'CLOCK[0m
+[0;32mI (21982) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA2_PSK[0m
+[0;32mI (21988) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (21994) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_CCMP[0m
+[0;32mI (22000) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (22005) WIFI CONNECT: RSSI 		-71[0m
+[0;32mI (22009) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (22013) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (22019) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (22025) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (22032) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (22036) WIFI CONNECT: RSSI 		-72[0m
+[0;32mI (22040) WIFI CONNECT: SSID 		Hiep[0m
+[0;32mI (22044) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (22050) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (22057) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (22063) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (22067) WIFI CONNECT: RSSI 		-80[0m
+5
+Three o'clockpayyooTHREE O'CLOCKHiepHiep
+[0;32mI (26578) WIFI CONNECT: Max AP number ap_info can hold = 50[0m
+[0;32mI (26580) WIFI CONNECT: Total APs scanned = 0, actual AP number ap_info holds = 17[0m
+[0;32mI (26581) WIFI CONNECT: SSID 		Three o'clock[0m
+[0;32mI (26586) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (26592) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (26599) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (26605) WIFI CONNECT: Channel 		1
+[0m
+[0;32mI (26609) WIFI CONNECT: RSSI 		-70[0m
+[0;32mI (26614) WIFI CONNECT: SSID 		payyoo[0m
+[0;32mI (26618) WIFI CONNECT: Authmode 	WIFI_AUTH_WPA_PSK[0m
+[0;32mI (26623) WIFI CONNECT: Pairwise Cipher 	WIFI_CIPHER_TYPE_TKIP_CCMP[0m
+[0;32mI (26630) WIFI CONNECT: Group Cipher 	WIFI_CIPHER_TYPE_TKIP[0m
+[0;32mI (26637) WIFI CONNECT: Channel 		1
+[0m
