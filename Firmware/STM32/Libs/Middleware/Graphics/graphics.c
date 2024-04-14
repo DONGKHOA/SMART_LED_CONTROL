@@ -335,10 +335,6 @@ void GraphicsCircle(int16_t x, int16_t y, uint16_t radius, colour_t colour)
 	}
 }
 
-void GraphicsMonochromeBitmap(int16_t x, int16_t y, uint16_t width, uint16_t height, colour_t fgColour, colour_t bgColour, const uint8_t *imageData)
-{
-	ILI9341DrawMonoBitmap(x, y, width, height, imageData, fgColour, bgColour);
-}
 
 void GraphicsColourBitmap(int16_t x, int16_t y, uint16_t width, uint16_t height, const uint8_t *imageData)
 {

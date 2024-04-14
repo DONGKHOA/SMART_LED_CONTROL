@@ -188,19 +188,7 @@ void GraphicsLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, colour_t colou
  */
 void GraphicsCircle(int16_t x, int16_t y, uint16_t radius, colour_t colour);
 
-/**
- * Plot a monochrome bitmap
- *
- * @param x Left coordinate of bounding box
- * @param y Top coordinate of bounding box
- * @param width Width of bitmap
- * @param height Height of bitmap
- * @param fgColour The foreground colour in 565 format
- * @param bgColour The backgroundground colour in 565 format
- * @param imageData Byte array of image data 8 pixels per byte
- * @note NOT CLIPPED. Image must be completely on screen
- */
-void GraphicsMonochromeBitmap(int16_t x, int16_t y, uint16_t width, uint16_t height, colour_t fgColour, colour_t bgColour, const uint8_t *imageData);
+
 
 /**
  * Plot a colour bitmap
