@@ -499,7 +499,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "../../../BTL_ESP.step",
       "svg": "",
       "vrml": ""
     },
