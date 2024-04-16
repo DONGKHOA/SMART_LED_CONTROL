@@ -15,7 +15,6 @@
 #define V_AT_25C  (1.43F)
 #define V_REF_INT (1.2F)
 
-void temperature_sensor_init(void);
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
 float calculate_temperature(void);
 

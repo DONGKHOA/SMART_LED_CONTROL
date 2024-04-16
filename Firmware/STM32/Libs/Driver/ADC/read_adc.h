@@ -13,7 +13,8 @@
 #include "stm32f1xx_hal.h"
 #include "stdint.h"
 
-int16_t read_adc(ADC_HandleTypeDef hadc2);
+int16_t read_adc(ADC_HandleTypeDef* hadc);
+void temperature_sensor_init(ADC_HandleTypeDef* hadc, TIM_HandleTypeDef* htim);
 
 /***********************************************************************/
 
