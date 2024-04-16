@@ -5,7 +5,7 @@
         "target/esp32.cfg"
     ],
     "idf.port": "/dev/ttyUSB0",
-    "cmake.sourceDirectory": "D:/BTL_ESD/Firmware/ESP32/BTL_ESD",
+    "cmake.sourceDirectory": "D:/BTL_ESD/Firmware/ESP32/BTL_ESP",
     "files.associations": {
         "graphics.h": "c",
         "ili9341.h": "c",

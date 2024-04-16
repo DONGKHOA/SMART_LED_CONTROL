@@ -49,7 +49,7 @@
 #define MQTT_PUBLISH_BIT                        (1 << 5)
 
 // UART TX EVENT 
-#define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
+#define SEND_NUMBER_NAME_WIFI_SCAN_BIT          (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)
@@ -146,4 +146,23 @@ static inline int8_t matchingWIFIScan(uint8_t * data, uint8_t * ssid, uint8_t *p
     return -1;
 }
 
+/*********************
+ *   GLOBAL FUNCTION
+ *********************/
+
+void transmissionFrameData(uart_tx_heading_t heading, char *data)
+{
+    if (heading == HEADING_SEND_NAME_WIFI_SCAN)
+    {
+        uartSendData(UART_NUM_1, (volatile uint8_t *) heading);
+        uartSendData(UART_NUM_1, (volatile uint8_t *) data);
+        uartSendData(UART_NUM_1, (volatile uint8_t *) '\n');
+    }
+    else
+    {
+        uartSendData(UART_NUM_1, (volatile uint8_t *) heading);
+        uartSendData(UART_NUM_1, (volatile uint8_t *) '\n');
+    }
+    
+}
 #endif /* MAIN_H */
