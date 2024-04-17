@@ -7,7 +7,7 @@
 
 #include "Icon/icon.h"
 #include "stdint.h"
-#include "check_touch_screen.h"
+#include "check_touch_screen/check_touch_screen.h"
 
 static const uint16_t icon_pos[3][4] = {
     {99, 140, 75, 39},

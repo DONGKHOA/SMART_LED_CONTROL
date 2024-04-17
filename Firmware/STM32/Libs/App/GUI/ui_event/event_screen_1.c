@@ -1,5 +1,5 @@
 #include "event.h"
-#include "check_touch_screen.h"
+#include "check_touch_screen/check_touch_screen.h"
 #include "screen.h"
 
 /**
