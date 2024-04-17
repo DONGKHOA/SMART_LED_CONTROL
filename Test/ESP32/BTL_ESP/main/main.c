@@ -11,7 +11,7 @@ void test(void *arg)
     while(1)
     {
         printf("%d\n",WIFI_Scan(data_uart));
-        printf("%s\n", data_uart);
+        // printf("%s\n", data_uart);
         vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
 }
@@ -20,5 +20,5 @@ void app_main(void)
 {
     ESP_ERROR_CHECK(NVS_Init());
     WIFI_StaInit();
-    xTaskCreate(test, "DHT11", 1024 * 10, NULL, 10, NULL);
+    xTaskCreate(test, "DHT11", 1024 * 15, NULL, 10, NULL);
 }

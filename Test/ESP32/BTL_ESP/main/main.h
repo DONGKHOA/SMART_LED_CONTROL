@@ -49,7 +49,7 @@
 #define MQTT_PUBLISH_BIT                        (1 << 5)
 
 // UART TX EVENT 
-#define SEND_NUMBER_WIFI_SCAN_BIT               (1 << 0)
+#define SEND_NUMBER_NAME_WIFI_SCAN_BIT               (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)

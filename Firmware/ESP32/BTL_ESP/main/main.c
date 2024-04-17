@@ -61,7 +61,6 @@ void startUartRxTask(void *arg)
 
     while (1)
     {
-        // printf("1\n");
         uint16_t rxBytes = uart_read_bytes(UART_NUM_1, &buffer_temp,
                                            RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
 
@@ -89,7 +88,7 @@ void startUartTxTask(void *arg)
     while (1)
     {
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
-                                                SEND_NUMBER_WIFI_SCAN_BIT | 
+                                                SEND_NUMBER_NAME_WIFI_SCAN_BIT | 
                                                 SEND_CONNECT_WIFI_SUCCESSFUL_BIT |
                                                 SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT |
                                                 REFUSE_CONNECT_MQTT_BIT |
@@ -99,44 +98,30 @@ void startUartTxTask(void *arg)
                                                 portMAX_DELAY);
         switch (uxBits)
         {
-            case SEND_NUMBER_WIFI_SCAN_BIT:
-                uint8_t buffer_temp[32];
-
-                memcpy(buffer_temp, (uint8_t *)data_uart, strlen((char *)data_uart) + 1);
-
-                sprintf((char *)data_uart, "%d%d\n", HEADING_SEND_NUMBER_WIFI_SCAN, 
-                                            num_wifi_scan);
-                uartSendData(UART_NUM_1, data_uart);
-                
-                sprintf((char *)data_uart, "%d%s\n", HEADING_SEND_NAME_WIFI_SCAN, 
-                                            buffer_temp);
-                uartSendData(UART_NUM_1, data_uart);
+            case SEND_NUMBER_NAME_WIFI_SCAN_BIT:
+                transmissionFrameData(HEADING_SEND_NUMBER_WIFI_SCAN, NULL);
+                transmissionFrameData(HEADING_SEND_NAME_WIFI_SCAN, data_uart);
                 break;
 
             case SEND_CONNECT_WIFI_SUCCESSFUL_BIT:
                 flag_connected_wifi = 1;
-                sprintf((char *)data_uart, "%d\n", HEADING_SEND_CONNECT_WIFI_SUCCESSFUL);
-                uartSendData(UART_NUM_1, data_uart);
+                transmissionFrameData(HEADING_SEND_CONNECT_WIFI_SUCCESSFUL, NULL);
                 break;
 
             case SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT:
                 flag_connected_wifi = 0;
-                sprintf((char *)data_uart, "%d\n", HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL);
-                uartSendData(UART_NUM_1, data_uart);
+                transmissionFrameData(HEADING_SEND_CONNECT_WIFI_UNSUCCESSFUL, NULL);
                 break;
             case REFUSE_CONNECT_MQTT_BIT:
-                sprintf((char *)data_uart, "%d\n", HEADING_REFUSE_CONNECT_MQTT);
-                uartSendData(UART_NUM_1, data_uart);
+                transmissionFrameData(HEADING_REFUSE_CONNECT_MQTT, NULL);
                 break;
             
             case SEND_CONNECT_MQTT_SUCCESSFUL_BIT:
-                sprintf((char *)data_uart, "%d\n", HEADING_SEND_CONNECT_MQTT_SUCCESSFUL);
-                uartSendData(UART_NUM_1, data_uart);
+                transmissionFrameData(HEADING_SEND_CONNECT_MQTT_SUCCESSFUL, NULL);
                 break;
 
             case SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT:
-                sprintf((char *)data_uart, "%d\n", HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL);
-                uartSendData(UART_NUM_1, data_uart);
+                transmissionFrameData(HEADING_SEND_CONNECT_MQTT_UNSUCCESSFUL, NULL);
                 break;
         }
     }
@@ -146,7 +131,6 @@ void startWifiScan(void *arg)
 {
     while (1)
     {
-        printf("3\n");
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
                                                  ON_WIFI_BIT | 
                                                  OFF_WIFI_BIT,
@@ -177,7 +161,7 @@ void startWifiScan(void *arg)
             }
             
             xEventGroupSetBits(event_uart_tx_heading, 
-                                    SEND_NUMBER_WIFI_SCAN_BIT);
+                                    SEND_NUMBER_NAME_WIFI_SCAN_BIT);
         }
 
         if (uxBits & OFF_WIFI_BIT)
@@ -198,7 +182,6 @@ void startWifiConnectTask(void *arg)
                                                 CONNECT_WIFI_SCAN_BIT,
                                                 pdTRUE, pdFALSE, 
                                                 portMAX_DELAY);
-        printf("4\n");
         if (uxBits & CONNECT_WIFI_RX_BIT)
         {
             /*
@@ -240,7 +223,6 @@ void startMQTTConnectTask(void * arg)
 {
     while (1)
     {
-        printf("5\n");
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
                                                 CONNECT_MQTT_BIT,
                                                 pdTRUE, pdFALSE, 
@@ -278,11 +260,10 @@ void startMQTTControlDataTask(void *arg)
     TickType_t xLastWakeTime;
     const TickType_t xFrequency = 2000;
     xLastWakeTime = xTaskGetTickCount();
-    uint8_t str[32];
+    char str[32];
 
     while (1)
     {
-        printf("6\n");
         if (MQTT_app_state_connect() == 1)
         {
             esp_mqtt_client_subscribe(mqtt_client_0.client, "button", 0);
@@ -321,41 +302,41 @@ void app_main(void)
 
     printf("create task in main\n");
     
-    // xTaskCreate(startUartRxTask, 
-    //             "uart_rx_task", 
-    //             STACK_SIZE * 3, 
-    //             NULL, 
-    //             9, `
-    //             &uart_rx_task);
+    xTaskCreate(startUartRxTask, 
+                "uart_rx_task", 
+                STACK_SIZE * 3, 
+                NULL, 
+                2,
+                &uart_rx_task);
 
-    // xTaskCreate(startUartTxTask, 
-    //             "uart_tx_task", 
-    //             STACK_SIZE * 2, 
-    //             NULL, 
-    //             8, 
-    //             &uart_tx_task);
+    xTaskCreate(startUartTxTask, 
+                "uart_tx_task", 
+                STACK_SIZE * 2, 
+                NULL, 
+                2, 
+                &uart_tx_task);
 
-    // xTaskCreate(startWifiScan, 
-    //             "Wifi scan", 
-    //             STACK_SIZE * 5, 
-    //             NULL, 
-    //             7, 
-    //             &wifiScan_task);
+    xTaskCreate(startWifiScan, 
+                "Wifi scan", 
+                STACK_SIZE * 15, 
+                NULL, 
+                7, 
+                &wifiScan_task);
 
-    // xTaskCreate(startWifiConnectTask, 
-    //             "Wifi connect", 
-    //             STACK_SIZE * 3, 
-    //             NULL, 
-    //             6, 
-    //             &wifiConnect_task);
+    xTaskCreate(startWifiConnectTask, 
+                "Wifi connect", 
+                STACK_SIZE * 3, 
+                NULL, 
+                6, 
+                &wifiConnect_task);
 
-    // xTaskCreate(startMQTTConnectTask, 
-    //             "Mqtt connect", 
-    //             STACK_SIZE * 3, 
-    //             NULL, 
-    //             5, 
-    //             &mqttConnect_task);
-    // vTaskSuspend(mqttConnect_task);
+    xTaskCreate(startMQTTConnectTask, 
+                "Mqtt connect", 
+                STACK_SIZE * 3, 
+                NULL, 
+                5, 
+                &mqttConnect_task);
+    vTaskSuspend(mqttConnect_task);
 
-    // printf ("Main task end\n");
+    printf ("Main task end\n");
 }

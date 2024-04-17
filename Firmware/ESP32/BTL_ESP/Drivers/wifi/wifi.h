@@ -11,7 +11,7 @@
  *      DEFINES
  *********************/
 
-#define SCAN_LIST_SIZE      20
+#define SCAN_LIST_SIZE      50
 #define LIMIT_STORE_WIFI    10
 
 /**********************
@@ -36,7 +36,7 @@ extern int8_t state_connected_wifi;
  **********************/
 
 void WIFI_StaInit(void);
-uint8_t WIFI_Scan(uint8_t * ssid_name);
+uint8_t WIFI_Scan(uint8_t * data_name);
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
 int8_t WIFI_ScanNVS(uint8_t * ssid, uint8_t * pass);
 void WIFI_StoreNVS(uint8_t * ssid, uint8_t *password);
