@@ -2,7 +2,7 @@
  * graphics.h
  *
  *  Created on: Mar 17, 2024
- *      Author: dongkhoa
+ *      Author: Author: vuhuy
  */
 
 #ifndef MIDDLEWARE_GRAPHICS_GRAPHICS_H_

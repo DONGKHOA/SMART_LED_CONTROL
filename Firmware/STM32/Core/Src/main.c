@@ -523,6 +523,11 @@ static void Screen_Task(void *pvParameters)
     case SCREEN_MAIN:
     	screen_4();
       break;
+
+    case SCREEN_MQTT:
+    	screen_5();
+    	break;
+
     }
     vTaskDelay(1000);
   }

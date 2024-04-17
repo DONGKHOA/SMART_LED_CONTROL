@@ -2,7 +2,7 @@
  * illuminance.h
  *
  *  Created on: Apr 9, 2024
- *      Author: dongkhoa
+ *      Author: Author: vuhuy
  */
 
 #ifndef APP_ILLUMINANCE_ILLUMINANCE_H_

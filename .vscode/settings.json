@@ -14,7 +14,8 @@
         "main.h": "c",
         "mqtt_client_tcp.h": "c",
         "stdint.h": "c",
-        "stm32f1xx_hal.h": "c"
+        "stm32f1xx_hal.h": "c",
+        "keypad_MQTT.h": "c"
     },
     "cSpell.words": [
         "Authmode",

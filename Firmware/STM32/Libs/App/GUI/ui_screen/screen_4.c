@@ -2,7 +2,7 @@
  * screen_4.c
  *
  *  Created on: Mar 17, 2024
- *      Author: dongkhoa
+ *      Author: Author: vuhuy
  */
 #include "screen.h"
 #include "graphics.h"
