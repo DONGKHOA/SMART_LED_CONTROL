@@ -1,28 +1,30 @@
-/*
- * illuminance.c
- *
- *  Created on: Apr 9, 2024
- *      Author: Author: vuhuy
- */
-
 #include "illuminance.h"
+#include "calibrate_adc.h"
 
-float voltage_adc (int16_t y)
+float volt;
+float Ev;
+int16_t var;
+extern ADC_HandleTypeDef hadc2;
+
+
+float voltage_adc()
 {
-	float volt = (((float)y*3.3)/4096);
+	var = read_adc(&hadc2);
+	int16_t var_after = calibrate_adc(var);
+	volt = (((float)var_after*3.3)/4096);
  	volt = volt/6;
 	return volt;
 }
 
-float illuminance_adc (float volt)
+float illuminance_adc()
 {
 	float R = volt*10; // (kOhm)
-	float Ev = R - 4.6974;
+	Ev = R - 4.6974;
 	Ev = Ev/(-1.02*10e-4);
 	return Ev;
 }
 
-float illuminance_signal (float volt)
+float illuminance_signal()
 {
 	if (volt < 9)
 		return 0;
