@@ -5,6 +5,7 @@
 
 extern int16_t x;
 extern int16_t y;
+uint8_t autocontrol = 0;
 // extern field_bit_screen4_t bit_map_screen_4;
 
 void check_event_screen_4(check_event_t *event, 
@@ -32,6 +33,20 @@ void check_event_screen_4(check_event_t *event,
 		}
 		else
 		{
+			vTaskDelay(2000);
+			if(touch == ICON_AUTO)
+			{
+				autocontrol = 1; // turn on mode auto
+			}
+			if(touch == ICON_AUTO)
+			{
+				vTaskDelay(1000);
+				if(touch == ICON_AUTO)
+				{
+					autocontrol = 0; // turn off mode auto
+				}
+			}
+			// draw one note to display on
 			// set mode auto turn on or off led follow lux
 		}
 	}

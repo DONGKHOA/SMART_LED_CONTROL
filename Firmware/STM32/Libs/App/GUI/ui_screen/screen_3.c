@@ -6,6 +6,8 @@
  */
 #include "screen.h"
 #include "Keypad/keypad_wifi.h"
+#include "graphics.h"
+#include "icon.h"
 
 field_bit_screen3_t bit_map_screen_3 = {
 	.frame = 1,
