@@ -43,9 +43,31 @@ typedef struct
 	uint8_t key : 1;
 } __attribute__((packed)) field_bit_screen3_t;
 
+typedef struct 
+{
+	uint8_t screen : 1;
+	uint8_t ret : 1;
+	uint8_t ON : 1;
+	uint8_t OFF :1;
+	uint8_t control : 1;
+	uint8_t automode : 1;
+} __attribute__((packed)) field_bit_screen4_t;
+
+typedef struct
+{
+	uint8_t screen : 1;
+	uint8_t ret : 1;
+	uint8_t text : 1;
+	uint8_t frame : 1;
+	uint8_t key : 1;
+} __attribute__((packed)) field_bit_screen5_t;
+
+
 extern field_bit_screen1_t bit_map_screen_1;
 extern field_bit_screen2_t bit_map_screen_2;
 extern field_bit_screen3_t bit_map_screen_3;
+extern field_bit_screen4_t bit_map_screen_4;
+extern field_bit_screen5_t bit_map_screen_5;
 
 typedef enum
 {

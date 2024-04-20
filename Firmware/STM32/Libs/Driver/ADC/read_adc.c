@@ -1,8 +1,15 @@
+/*
+ * read_adc.c
+ *
+ *  Created on: Apr 9, 2024
+ *      Author: Author: vuhuy
+ */
 #include "read_adc.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
 uint16_t ADC_RESULT[2];
+
 int16_t read_adc (ADC_HandleTypeDef* hadc)
 {
     HAL_ADC_Start(hadc);

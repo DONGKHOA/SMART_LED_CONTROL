@@ -17,7 +17,8 @@ typedef enum
 	EVENT_SCREEN_1 = 0,
 	EVENT_SCREEN_2,
 	EVENT_SCREEN_3,
-	EVENT_SCREEN_4
+	EVENT_SCREEN_4,
+	EVENT_SCREEN_5
 } __attribute__((packed)) check_event_t;
 
 extern QueueHandle_t queue_data_tx;
@@ -30,6 +31,8 @@ void check_event_screen_2(check_event_t *event,
 void check_event_screen_3(check_event_t *event,
 						  screen_state_t *screen);
 void check_event_screen_4(check_event_t *event,
+						  screen_state_t *screen);
+void check_event_screen_5(check_event_t *event,
 						  screen_state_t *screen);
 
 #endif /* APP_GUI_UI_EVENT_INC_EVENT_H_ */

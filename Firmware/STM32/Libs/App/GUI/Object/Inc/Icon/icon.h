@@ -17,5 +17,6 @@ extern const uint8_t icon_home[];
 extern const uint8_t icon_return[];
 extern const uint8_t icon_button[];
 extern const uint8_t icon_MQTT[];
+extern const uint8_t icon_auto[];
 
 #endif /* APP_GUI_ICON_ICON_H_ */
