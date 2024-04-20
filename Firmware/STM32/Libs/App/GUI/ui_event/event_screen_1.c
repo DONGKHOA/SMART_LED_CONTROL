@@ -23,6 +23,8 @@ void check_event_screen_1(check_event_t *event,
 	{
 		if (touch == ICON_WIFI) // touch icon wifi
 		{
+			/* add string following frame '1ON'
+			*/
 			*event = EVENT_SCREEN_2;
 			*screen = SCREEN_WIFI;
 		}
@@ -41,7 +43,11 @@ void check_event_screen_1(check_event_t *event,
 		}
 		else
 		{
-			// jump to screen_5
+			if(connected == 1) // wifi connected
+			{
+			*event = EVENT_SCREEN_5;
+			*screen = SCREEN_MQTT;
+			}
 		}
 	}
 }

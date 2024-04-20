@@ -11,7 +11,7 @@ static const char character_key[12] = {'0', '1', '2', '3',
 									   '4', '5', '6', '7',
 									   '8', '9', 'x', 'v'};
 
-static uint8_t password[9];
+static uint8_t password[8];
 static uint8_t password_pos = 0;
 static uint8_t full = 8;
 uint8_t connected = 0; // check wifi have been connected yet ?
@@ -35,6 +35,17 @@ void check_event_screen_3(check_event_t *event,
 			*event = EVENT_SCREEN_3;
 			x_coordinate = 0;
 		}
+
+		else if( key == ICON_RETURN)
+		{
+			for (password_pos = 0; password_pos < 8; password_pos++)
+				{
+					password[password_pos] = 0;
+				}
+			*event = EVENT_SCREEN_2;
+			*screen = EVENT_SCREEN_2;
+		}
+
 		else if (key == NUM_v)
 		{
 			if (password_pos > full)
@@ -42,17 +53,19 @@ void check_event_screen_3(check_event_t *event,
 				uint8_t temp;
 				password_pos = 0;
 				*event = EVENT_SCREEN_3;
+                /* add '2ssid\rpassword\r\n' into a array to transmit, heading will be 
+				send first and data will be second */
 				xQueueSend(queue_data_tx, &password, 0);
 				xQueueReceive(queue_data_rx, &temp, portMAX_DELAY);
-				// check success or unsuccess, if success set *screen = screen_4
-				// declare one variable with name ' connected ' if wifi is connected
+				// check success or unsuccess, if success set *screen = screen_5
 				x_coordinate = 0;
-				for (password_pos = 0; password_pos < 9; password_pos++)
+				for (password_pos = 0; password_pos < 8; password_pos++)
 				{
 					password[password_pos] = 0;
 				}
 			}
 		}
+
 		else
 		{
 			x_coordinate += OFFSET_X;

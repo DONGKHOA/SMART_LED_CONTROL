@@ -28,6 +28,7 @@ typedef enum
 	NUM_x,
 	NUM_v,
 	NUM_point,
+	ICON_RETURN,
 } key_MQTT_character_t;
 
 inline __attribute__((always_inline)) void object_Keypad_MQTT(void)

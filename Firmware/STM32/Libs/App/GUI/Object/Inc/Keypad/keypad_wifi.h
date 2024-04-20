@@ -20,6 +20,7 @@ typedef enum
 	NUM_9,
 	NUM_x,
 	NUM_v,
+	ICON_RETURN,
 } key_character_t;
 
 inline __attribute__((always_inline)) void object_keypad_Wifi(void)

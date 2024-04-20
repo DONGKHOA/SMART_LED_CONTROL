@@ -20,7 +20,10 @@ void check_event_screen_2(check_event_t *event,
 		{
 			*event = EVENT_SCREEN_3;
 			*screen = SCREEN_KEYPAD;
-			// send to ESP32 "STM32 have choosen WIFI1"
+			// send to ESP32 "STM32 have choosen WIFI1 "
+			/* transmit name of wifi have choosen into 'event_screen_3' to add string
+			 following frame '2ssid$\rpassword\r\n' */ 
+
 		}
 		else if(touch == WIFI2)
 		{
