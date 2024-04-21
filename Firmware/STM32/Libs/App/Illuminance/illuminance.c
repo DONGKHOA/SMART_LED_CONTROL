@@ -1,10 +1,12 @@
 #include "illuminance.h"
 #include "calibrate_adc.h"
+#include "event.h"
 
 float volt;
 float Ev;
 int16_t var;
 extern ADC_HandleTypeDef hadc2;
+extern uint8_t autocontrol;
 
 
 float voltage_adc()
@@ -24,9 +26,30 @@ float illuminance_adc()
 	return Ev;
 }
 
-float illuminance_signal()
+int illuminance_signal()
 {
 	if (volt < 9)
-		return 0;
-	else return 1;
+		return 0; //Turn the light off
+	else return 1; //Turn the light on
+}
+
+void turnOnLight()
+{
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+}
+
+void turnOffLight()
+{
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+}
+
+void autocontrol_mode()
+{
+	if (autocontrol)
+	{
+		if (illuminance_signal() )
+		turnOnLight();
+		else turnOffLight();
+	}
+	else turnOffLight();
 }

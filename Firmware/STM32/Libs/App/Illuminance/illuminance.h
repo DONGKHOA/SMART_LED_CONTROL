@@ -7,7 +7,10 @@
 
 float voltage_adc();
 float illuminance_adc();
-float illuminance_signal();
+int illuminance_signal();
+void turnOnLight();
+void turnOffLight();
+void autocontrol_mode();
 
 /***********************************************************/
 
