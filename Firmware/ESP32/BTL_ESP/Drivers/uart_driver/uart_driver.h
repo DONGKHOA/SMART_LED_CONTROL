@@ -22,6 +22,6 @@ void uartDriverInit(uart_port_t uart_port, gpio_num_t tx_pin, gpio_num_t rx_pin,
                     uart_hw_flowcontrol_t flow_control,
                     uart_stop_bits_t stop_bit);
 
-void uartSendData(uart_port_t uart_port, volatile uint8_t* data);
+void uartSendData(uart_port_t uart_port, char * data);
 
 #endif

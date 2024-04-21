@@ -19,7 +19,7 @@
  * parity, flow control, and stop bits.
  * 
  * @param uart_port The `uart_port` parameter specifies which UART port to initialize. It could be
- * something like `UART_NUM_0` or `UART_NUM_1` depending on the specific UART hardware you are working
+ * something like `UART_NUM_0` or `UART_NUM_2` depending on the specific UART hardware you are working
  * with.
  * @param tx_pin The `tx_pin` parameter in the `uartDriverInit` function refers to the GPIO pin number
  * that is used for transmitting data in UART communication. This pin is connected to the transmit (TX)
@@ -70,13 +70,14 @@ void uartDriverInit(uart_port_t uart_port, gpio_num_t tx_pin, gpio_num_t rx_pin,
  * The function `uartSendData` sends data over a UART port by writing the specified data bytes.
  * 
  * @param uart_port The `uart_port` parameter is the UART port or interface through which the data will
- * be sent. It is typically a hardware UART port on a microcontroller or a similar device.
- * @param data The `data` parameter in the `uartSendData` function is a pointer to a constant character
- * array (string) that contains the data to be sent via UART (Universal Asynchronous
- * Receiver-Transmitter).
+ * be sent. It is typically a hardware-specific identifier that specifies which UART peripheral to use
+ * for communication.
+ * @param data The `data` parameter in the `uartSendData` function is a pointer to a character array
+ * (string) that contains the data to be sent via UART (Universal Asynchronous Receiver-Transmitter)
+ * communication.
  */
-void uartSendData(uart_port_t uart_port, volatile uint8_t* data)
+void uartSendData(uart_port_t uart_port, char* data)
 {
-    const int len = strlen((char *)data);
-    uart_write_bytes(uart_port, (const void *) data, len);
+    const int len = strlen(data);
+    uart_write_bytes(uart_port, data, len);
 }

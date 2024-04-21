@@ -25,20 +25,16 @@ typedef enum
     UNEXPECTED_EVENT,
 }WIFI_Status_t;
 
-/**********************
- *   EXTERN VARIABLE
- **********************/
-
-extern int8_t state_connected_wifi;
 
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
 void WIFI_StaInit(void);
-uint8_t WIFI_Scan(uint8_t * data_name);
+uint8_t WIFI_Scan(char * data_name);
 WIFI_Status_t WIFI_Connect(uint8_t *ssid, uint8_t *password);
 int8_t WIFI_ScanNVS(uint8_t * ssid, uint8_t * pass);
 void WIFI_StoreNVS(uint8_t * ssid, uint8_t *password);
+WIFI_Status_t WIFI_state_connect(void);
 
 #endif

@@ -10,8 +10,6 @@
 #include "esp_netif.h"
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
 #include "freertos/queue.h"
 
 #include "lwip/sockets.h"
@@ -32,8 +30,9 @@
  *  STATIC VARIABLES
  **********************/
 
-static char data [10];
+// static char data [10];
 static int8_t state_connect_mqtt = -1;
+static uint8_t number_mqtt_subscribe = 0;
 
 /**********************
  *   STATIC FUNCTIONS
@@ -52,6 +51,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             state_connect_mqtt = 1;
             break;
         case MQTT_EVENT_SUBSCRIBED:
+            number_mqtt_subscribe++;
             ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
             break;
         case MQTT_EVENT_PUBLISHED:
@@ -59,8 +59,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-            printf("TOPIC=%.*s\n", event->topic_len, event->topic);
-            sprintf(data ,"%.*s\n", event->data_len, event->data);
+            printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
+            printf("DATA=%.*s\r\n", event->data_len, event->data);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -98,36 +98,14 @@ void MQTT_app_start(MQTT_Client_Data_t *MQTT_Client, char *url)
     esp_mqtt_client_start(MQTT_Client->client);
 }
 
-/**
- * The function MQTT_app_get_data copies data from an array to a structure member until a null
- * character is encountered, and returns -1 if no data is copied or 1 otherwise.
- * 
- * @param MQTT_Client The function `MQTT_app_get_data` takes a pointer to a structure of type
- * `MQTT_Client_Data_t` as a parameter. This structure likely contains a data array that the function
- * manipulates. The function clears the data array, copies data from another array `data` into the `MQ
- * 
- * @return The function `MQTT_app_get_data` returns an `int8_t` value. If `i` is equal to 0, it returns
- * -1. Otherwise, it returns 1.
- */
-int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client)
-{
-    memset(MQTT_Client->data, '\0', sizeof(MQTT_Client->data));
-    uint8_t i;
-    for (i = 0; i < sizeof(MQTT_Client->data); i++)
-    {
-        MQTT_Client->data[i] = data[i];
-        if (data[i] == '\n')
-        {
-            MQTT_Client->data[i] = '\0';
-            memset(data, '\0', sizeof(data));
-            break;
-        }
+// int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client)
+// {
+//     if (number_mqtt_subscribe == 0)
+//     {
         
-    }
-
-    if(i == 0)  return -1;
-    else        return 1;
-}
+//     }
+    
+// }
 
 int8_t MQTT_app_state_connect(void)
 {

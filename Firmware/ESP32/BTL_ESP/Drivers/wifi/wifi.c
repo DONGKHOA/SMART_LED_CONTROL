@@ -38,7 +38,7 @@
  *     VARIABLES
  **********************/
 
-int8_t state_connected_wifi = -1;
+static WIFI_Status_t state_connected_wifi = CONNECT_FAIL;
 
 /**********************
  *  STATIC VARIABLES
@@ -69,14 +69,14 @@ static void event_handler(void *arg, esp_event_base_t event_base,
         }
         else
         {
-            state_connected_wifi = -1;
+            state_connected_wifi = CONNECT_FAIL;
             xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
         }
         ESP_LOGE(TAG, "connect to the AP fail");
     }
     else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
-        state_connected_wifi = 0;
+        state_connected_wifi = CONNECT_OK;
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
@@ -321,9 +321,10 @@ void WIFI_StaInit(void)
  * @return The function `WIFI_Scan` returns the total number of WiFi networks scanned and stored in the
  * `data_name` buffer after removing any duplicate SSIDs.
  */
-uint8_t WIFI_Scan(uint8_t *data_name)
+uint8_t WIFI_Scan(char *data_name)
 {
     char ssid_name[1024];
+    int i;
     memset(ssid_name, '\0', sizeof(ssid_name));
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
@@ -345,7 +346,7 @@ uint8_t WIFI_Scan(uint8_t *data_name)
     uint8_t buffer[32];
     uint16_t total_number_wifi = 0;
 
-    for (int i = 0; i < number; i++)
+    for (i = 0; i < number; i++)
     {
         uint16_t temp_pos = 0;
 
@@ -372,9 +373,9 @@ uint8_t WIFI_Scan(uint8_t *data_name)
         ESP_LOGI(TAG, "Channel \t\t%d\n", ap_info[i].primary);
     }
 
-    deleteDuplicateSubstrings(ssid_name, (char *)data_name);
+    deleteDuplicateSubstrings(ssid_name, data_name);
 
-    for (int i = 0; i < strlen((char *)data_name); i++)
+    for (i = 0; i < strlen(data_name); i++)
     {
         if (data_name[i] == '\n')
         {
@@ -382,6 +383,7 @@ uint8_t WIFI_Scan(uint8_t *data_name)
             total_number_wifi++;
         }
     }
+    data_name[i] = '\0';
 
     return total_number_wifi;
 }
@@ -535,4 +537,9 @@ void WIFI_StoreNVS(uint8_t *ssid, uint8_t *password)
     WIFI_SetNumSSID(num_wifi);
     WIFI_SetSSID(ssid, num_wifi);
     WIFI_SetPass(password, num_wifi);
+}
+
+WIFI_Status_t WIFI_state_connect(void)
+{
+    return state_connected_wifi;
 }

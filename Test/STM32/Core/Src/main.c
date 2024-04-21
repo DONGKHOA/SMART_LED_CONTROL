@@ -90,6 +90,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   uint8_t temp = 0x01;
+  uint8_t data[10] = "ON";
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,8 +100,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//	  temp = 0x02;
+//	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
+//	  temp = '\n';
+//	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
+//	  HAL_Delay(5000);
 	  temp = 0x01;
 	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
+	  HAL_UART_Transmit(&huart1, &data, 2, 100);
 	  temp = '\n';
 	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
 	  HAL_Delay(5000);
