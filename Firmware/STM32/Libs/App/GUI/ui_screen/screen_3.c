@@ -1,3 +1,7 @@
+/**
+ * The `screen_3` function updates the display with specific graphics and text elements based on the
+ * state of the `bit_map_screen_3` structure.
+ */
 /*
  * screen_3.c
  *

@@ -9,7 +9,7 @@
 #include "graphics.h"
 
 field_bit_screen1_t bit_map_screen_1 = {
-	.screen = 1, 
+	.screen = 1,
 	.wifi = 1,
 	.home = 1,
 	.MQTT = 1,

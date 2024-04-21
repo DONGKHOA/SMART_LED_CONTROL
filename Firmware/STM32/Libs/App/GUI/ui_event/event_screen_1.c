@@ -21,18 +21,17 @@ void check_event_screen_1(check_event_t *event,
 	touch_icon_screen1_t touch = check_event_icon_screen1(x, y);
 	if (touch != NO_TOUCH_ICON_SC1)
 	{
-		if (touch == ICON_WIFI) // touch icon wifi
+		if (touch == ICON_WIFI) /*if touch icon wifi*/
 		{
-			/* add string following frame '1ON'
-			*/
-			*event = EVENT_SCREEN_2;
+			/* add string following frame 'heading\rON' and jump to screen_2	*/
+			*event = EVENT_SCREEN_2; /* list wifi */
 			*screen = SCREEN_WIFI;
 		}
-		else if (touch == ICON_HOME)
+		else if (touch == ICON_HOME) /*if touch icon home*/
 		{
-			if (connected == 1) // wifi connected
+			if (connected == 1) /*checking wifi connected yet ? if connected jump to screen_4*/
 			{
-				*event = EVENT_SCREEN_4;
+				*event = EVENT_SCREEN_4; /* screen_main*/
 				*screen = SCREEN_MAIN;
 			}
 			else
@@ -41,12 +40,12 @@ void check_event_screen_1(check_event_t *event,
 				*screen = SCREEN_WIFI;
 			}
 		}
-		else
+		else /*if touch icon MQTT*/
 		{
-			if(connected == 1) // wifi connected
+			if (connected == 1) /*if connected wifi, jump to screen_5 to connect MQTT*/
 			{
-			*event = EVENT_SCREEN_5;
-			*screen = SCREEN_MQTT;
+				*event = EVENT_SCREEN_5; /*screen keypad MQTT*/
+				*screen = SCREEN_MQTT;
 			}
 		}
 	}

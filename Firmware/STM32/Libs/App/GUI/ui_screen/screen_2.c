@@ -1,3 +1,6 @@
+/**
+ * The function `screen_2` sets up a graphical user interface for displaying Wi-Fi network information.
+ */
 /*
  * screen_2.c
  *
@@ -13,7 +16,7 @@ field_bit_screen2_t bit_map_screen_2 = {
 	.ret = 1,
 	.text1 = 1,
 	.text2 = 1,
-	.WIFI_Connected = 1,
+	// .WIFI_Connected = 1,
 	.WIFI1 = 1,
 	.WIFI2 = 1,
 	.WIFI3 = 1,
@@ -49,7 +52,7 @@ void screen_2(void)
 		bit_map_screen_2.text2 = 0;
 	}
 
-	if(bit_map_screen_2.WIFI_Connected == 1)
+	if (bit_map_screen_2.WIFI_Connected == 1)
 	{
 		GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
 		bit_map_screen_2.WIFI_Connected = 0;

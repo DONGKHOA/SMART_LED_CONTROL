@@ -29,7 +29,7 @@
 #include "touch.h"
 #include "screen.h"
 #include "event.h"
-
+#include "uartstdio.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "queue.h"
@@ -89,6 +89,58 @@ check_event_t check_event = EVENT_SCREEN_1;
 
 QueueHandle_t queue_data_tx = NULL;
 QueueHandle_t queue_data_rx = NULL;
+
+UART_t data_uart_1;
+
+
+EventGroupHandle_t event_uart_tx_heading;
+EventGroupHandle_t event_uart_rx_heading;
+
+static void checkingHeadingRxData(uint8_t heading)
+{
+  switch (heading)
+  {
+  case HEADING_NUMBER_WIFI_SCAN:
+    xEventGroupSetBits(event_uart_rx_heading, NUMBER_WIFI_SCAN_BIT);
+    break;
+  
+  case HEADING_NAME_WIFI_SCAN:
+    xEventGroupSetBits(event_uart_rx_heading,  NAME_WIFI_SCAN_BIT);
+    break;
+
+  case HEADING_CONNECT_WIFI_SUCCESSFUL:
+    xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_SUCCESSFUL_BIT);
+    xEventGroupClearBits(event_uart_rx_heading, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+    break;
+
+  case HEADING_CONNECT_WIFI_UNSUCCESSFUL:
+    xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+    xEventGroupClearBits(event_uart_rx_heading, CONNECT_WIFI_SUCCESSFUL_BIT);
+    break;
+
+  case HEADING_SSID_CONNECT_WIFI_SUCCESS:
+    xEventGroupSetBits(event_uart_rx_heading, SSID_CONNECT_WIFI_SUCCESSFUL_BIT);
+    break;
+
+  case HEADING_REFUSE_CONNECT_MQTT:
+    xEventGroupSetBits(event_uart_rx_heading, REFUSE_CONNECT_MQTT_BIT );
+    break;
+
+  case HEADING_CONNECT_MQTT_SUCCESSFUL:
+    xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_SUCCESSFUL_BIT);
+    xEventGroupClearBits(event_uart_rx_heading, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+    break;
+
+  case CONNECT_MQTT_UNSUCCESSFUL_BIT:
+    xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+    xEventGroupClearBits(event_uart_rx_heading, CONNECT_MQTT_SUCCESSFUL_BIT);
+    break;
+
+  case HEADING_MQTT_SUBSCRIBE:
+     xEventGroupSetBits(event_uart_rx_heading, MQTT_SUBSCRIBE_BIT  );
+     break;
+  }
+}
 
 /* USER CODE END 0 */
 
@@ -540,6 +592,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 static void Screen_Task(void *pvParameters)
 {
+  
   while (1)
   {
     // state machine ui_screen (choose ui screen)
@@ -574,6 +627,7 @@ static void UartTx_Task(void *pvParameters)
 {
   while (1)
   {
+
   }
 }
 
