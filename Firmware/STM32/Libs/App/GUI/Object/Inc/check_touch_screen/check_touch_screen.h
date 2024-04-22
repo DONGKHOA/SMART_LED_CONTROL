@@ -22,11 +22,14 @@ typedef enum
 typedef enum
 {
     ICON_RETURN = 0,
+    ON_OFF_WIFI,
     WIFI1,
     WIFI2,
     WIFI3,
     WIFI4,
     WIFI5,
+    NEXT,
+    BACK,
     NO_TOUCH_ICON_SC2,
 } touch_icon_screen2_t;
 

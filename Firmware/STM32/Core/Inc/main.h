@@ -68,15 +68,18 @@ void Error_Handler(void);
 #define SPI2_CS_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define RX_BUFFER_SIZE 1024
 
-  // UART TX EVENT
-#define ON_WIFI_BIT                             (1 << 0)
-#define OFF_WIFI_BIT                            (1 << 1)
-#define CONNECT_WIFI_BIT                        (1 << 2)
-#define CONNECT_MQTT_BIT                        (1 << 3)
-#define MQTT_PUBLISH_BIT                        (1 << 5)
+#define TIME_REQUEST_SCAN                 5000
 
-  // UART RX EVENT
+// UART TX EVENT
+#define ON_WIFI_BIT                       (1 << 0)
+#define OFF_WIFI_BIT                      (1 << 1)
+#define CONNECT_WIFI_BIT                  (1 << 2)
+#define CONNECT_MQTT_BIT                  (1 << 3)
+#define MQTT_PUBLISH_BIT                  (1 << 5)
+
+// UART RX EVENT
 #define NUMBER_WIFI_SCAN_BIT              (1 << 0) 
 #define NAME_WIFI_SCAN_BIT                (1 << 1)
 #define CONNECT_WIFI_SUCCESSFUL_BIT       (1 << 2)
@@ -86,6 +89,7 @@ void Error_Handler(void);
 #define CONNECT_MQTT_SUCCESSFUL_BIT       (1 << 6)
 #define CONNECT_MQTT_UNSUCCESSFUL_BIT     (1 << 7)
 #define MQTT_SUBSCRIBE_BIT                (1 << 8)
+#define DETECT_TOUCH_SCREEN_BIT           (1 << 9)
 
 /**********************
  *      TYPEDEFS

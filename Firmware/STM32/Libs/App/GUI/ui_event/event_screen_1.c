@@ -30,6 +30,11 @@ void check_event_screen_1(screen_state_t *screen)
 	{
 		if (touch == ICON_WIFI) /*if touch icon wifi*/
 		{
+			bit_map_screen_2.screen = 1;
+			bit_map_screen_2.ret = 1;
+			bit_map_screen_2.text2 = 1;
+			bit_map_screen_2.on_off_wifi = 1;
+
 			*screen = SCREEN_WIFI;
 		}
 		else if (touch == ICON_HOME) /*if touch icon home*/

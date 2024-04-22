@@ -17,7 +17,7 @@ static const uint16_t frame_pos[7][4] = {
 touch_icon_screen2_t check_event_icon_screen2(int16_t x, int16_t y)
 {
     touch_icon_screen2_t i;
-    for (i = 0; i < 7; i++)
+    for (i = 0; i < NO_TOUCH_ICON_SC2; i++)
     {
         if (x > frame_pos[i][0] && x < frame_pos[i][1] && y > frame_pos[i][2] && y < frame_pos[i][3])
             break;

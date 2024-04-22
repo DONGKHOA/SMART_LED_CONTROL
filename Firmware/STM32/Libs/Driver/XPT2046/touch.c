@@ -1,7 +1,19 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "stm32f1xx_hal.h"
 #include "touch.h"
 #include "calibrate_touch.h"
 #include "graphics.h"
+#include "FreeRTOS.h"
+#include "timers.h"
+#include "event_groups.h"
+#include "main.h"
+
+/*********************
+ *      DEFINES
+ *********************/
 
 #define COMMAND_READ_X             			0XD0
 #define COMMAND_READ_Y             			0X90
@@ -11,10 +23,23 @@
 #define TOUCH_IRQ_PORT						GPIOA
 #define TOUCH_IRQ_PIN						GPIO_PIN_1
 
+/**********************
+ *  EXTERN VARIABLES
+ **********************/
+
 extern SPI_HandleTypeDef hspi2;
+extern EventGroupHandle_t event_uart_rx;
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
 
 static MATRIX matrix;
 static bool state_touch = 0;
+
+/******************************
+ *  STATIC PROTOTYPE FUNCTION
+ ******************************/
 
 static void DrawCross(int16_t x, int16_t y, int16_t length);
 static uint8_t SpiTransfer(uint8_t byte);
@@ -23,9 +48,16 @@ static bool TouchIsTouched(void);
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+
 	if (GPIO_Pin == TOUCH_IRQ_PIN)
 	{
 		state_touch = !state_touch;
+		if (state_touch == 1)
+		{
+			BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
+			xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
+			portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+		}
 	}
 }
 

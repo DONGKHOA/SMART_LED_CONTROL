@@ -20,7 +20,7 @@ static const uint16_t icon_pos[3][4] = {
 touch_icon_screen1_t check_event_icon_screen1(int16_t x, int16_t y)
 {
     touch_icon_screen1_t i;
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < NO_TOUCH_ICON_SC1; i++)
     {
         if (x > icon_pos[i][0] && x < icon_pos[i][1] && y > icon_pos[i][2] && y < icon_pos[i][3])
             break;

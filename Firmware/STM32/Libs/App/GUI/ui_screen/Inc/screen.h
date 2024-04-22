@@ -24,6 +24,7 @@ typedef struct
 {
 	uint8_t screen : 1;
 	uint8_t ret : 1;
+	uint8_t on_off_wifi : 1;
 	uint8_t text1 : 1;
 	uint8_t text2 : 1;
 	uint8_t WIFI_Connected : 1;
@@ -32,6 +33,8 @@ typedef struct
 	uint8_t WIFI3 : 1;
 	uint8_t WIFI4 : 1;
 	uint8_t WIFI5 : 1;
+	uint8_t NEXT : 1;
+	uint8_t BACK : 1;
 } __attribute__((packed)) field_bit_screen2_t;
 
 typedef struct
