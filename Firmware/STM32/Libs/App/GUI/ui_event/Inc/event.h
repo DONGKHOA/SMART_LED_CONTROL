@@ -12,27 +12,13 @@
 #include "FreeRTOS.h"
 #include "queue.h"
 
-typedef enum
-{
-	EVENT_SCREEN_1 = 0,
-	EVENT_SCREEN_2,
-	EVENT_SCREEN_3,
-	EVENT_SCREEN_4,
-	EVENT_SCREEN_5
-} __attribute__((packed)) check_event_t;
-
 extern QueueHandle_t queue_data_tx;
 extern QueueHandle_t queue_data_rx;
 
-void check_event_screen_1(check_event_t *event,
-						  screen_state_t *screen);
-void check_event_screen_2(check_event_t *event,
-						  screen_state_t *screen);
-void check_event_screen_3(check_event_t *event,
-						  screen_state_t *screen);
-void check_event_screen_4(check_event_t *event,
-						  screen_state_t *screen);
-void check_event_screen_5(check_event_t *event,
-						  screen_state_t *screen);
+void check_event_screen_1(screen_state_t *screen);
+void check_event_screen_2(screen_state_t *screen);
+void check_event_screen_3(screen_state_t *screen);
+void check_event_screen_4(screen_state_t *screen);
+void check_event_screen_5(screen_state_t *screen);
 
 #endif /* APP_GUI_UI_EVENT_INC_EVENT_H_ */

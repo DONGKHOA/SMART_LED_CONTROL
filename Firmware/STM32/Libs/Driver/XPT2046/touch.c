@@ -14,11 +14,25 @@
 extern SPI_HandleTypeDef hspi2;
 
 static MATRIX matrix;
+static bool state_touch = 0;
 
 static void DrawCross(int16_t x, int16_t y, int16_t length);
 static uint8_t SpiTransfer(uint8_t byte);
 static bool GetPointRaw(uint16_t* x, uint16_t* y);
-static bool GetPointRaw(uint16_t* x, uint16_t* y);
+static bool TouchIsTouched(void);
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == TOUCH_IRQ_PIN)
+	{
+		state_touch = !state_touch;
+	}
+}
+
+bool TouchIsTouched(void)
+{
+	return state_touch;
+}
 
 static uint8_t SpiTransfer(uint8_t byte)
 {
@@ -34,7 +48,7 @@ static void DrawCross(int16_t x, int16_t y, int16_t length)
 	GraphicsClear(WHITE);
 	GraphicsHline(x - length / 2, x + length / 2, y, BLACK);
 	GraphicsVline(x, y - length / 2, y + length / 2, BLACK);
-	GraphicsStandardString(50, 150, "Touch centre of cross", BLACK);
+	GraphicsStandardString(50, 150, "Touch center of cross", BLACK);
 }
 
 static bool GetPointRaw(uint16_t* x, uint16_t* y)
@@ -119,12 +133,6 @@ static bool GetPointRaw(uint16_t* x, uint16_t* y)
 	*y = (databuffer[1][4] + databuffer[1][5]) / 2U;
 
 	return (true);
-}
-
-bool TouchIsTouched(void)
-{
-	GPIO_PinState pin_state = HAL_GPIO_ReadPin(TOUCH_IRQ_PORT, TOUCH_IRQ_PIN);
-	return pin_state == GPIO_PIN_RESET;
 }
 
 bool TouchGetCalibratedPoint(int16_t *x, int16_t *y)

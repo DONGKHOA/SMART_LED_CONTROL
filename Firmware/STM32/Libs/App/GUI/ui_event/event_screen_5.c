@@ -16,8 +16,7 @@ static uint8_t MQTT_pos = 0;
 uint8_t connect_MQTT = 0;
 
 /*MQTT screen are similar to Wifi screen in terms of functionality*/
-void check_event_screen_5(check_event_t *event,
-                          screen_state_t *screen)
+void check_event_screen_5(screen_state_t *screen)
 {
     static uint16_t x_coordinate = 0;
 
@@ -32,7 +31,6 @@ void check_event_screen_5(check_event_t *event,
             }
             bit_map_screen_5.frame = 1;
             MQTT_pos = 0;
-            *event = EVENT_SCREEN_5;
             x_coordinate = 0;
         }
 
@@ -42,7 +40,6 @@ void check_event_screen_5(check_event_t *event,
             {
                 MQTT[MQTT_pos] = 0;
             }
-            *event = EVENT_SCREEN_1;
             *screen = SCREEN_START;
         }
 
@@ -50,7 +47,6 @@ void check_event_screen_5(check_event_t *event,
         {
             uint8_t temp;
             MQTT_pos = 0;
-            *event = EVENT_SCREEN_5;
             xQueueSend(queue_data_tx, &MQTT, 0);
             xQueueReceive(queue_data_rx, &temp, portMAX_DELAY);
             // check success or unsuccess, if success set *screen = screen_4

@@ -1,15 +1,16 @@
-/*
- * screen.h
- *
- *  Created on: Apr 14, 2024
- *      Author: vuhuy
- */
-
 #ifndef APP_GUI_UI_SCREEN_INC_SCREEN_H_
 #define APP_GUI_UI_SCREEN_INC_SCREEN_H_
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include <stdio.h>
 #include "stdint.h"
+
+/**********************
+ *      TYPEDEFS
+ **********************/
 
 typedef struct
 {
@@ -61,12 +62,6 @@ typedef struct
 	uint8_t key : 1;
 } __attribute__((packed)) field_bit_screen5_t;
 
-extern field_bit_screen1_t bit_map_screen_1;
-extern field_bit_screen2_t bit_map_screen_2;
-extern field_bit_screen3_t bit_map_screen_3;
-extern field_bit_screen4_t bit_map_screen_4;
-extern field_bit_screen5_t bit_map_screen_5;
-
 typedef enum
 {
 	SCREEN_START = 0,
@@ -75,6 +70,20 @@ typedef enum
 	SCREEN_MAIN,
 	SCREEN_MQTT
 } screen_state_t;
+
+/**********************
+ *  EXTERN VARIABLES
+ **********************/
+
+extern field_bit_screen1_t bit_map_screen_1;
+extern field_bit_screen2_t bit_map_screen_2;
+extern field_bit_screen3_t bit_map_screen_3;
+extern field_bit_screen4_t bit_map_screen_4;
+extern field_bit_screen5_t bit_map_screen_5;
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void screen_1(void);
 void screen_2(void);

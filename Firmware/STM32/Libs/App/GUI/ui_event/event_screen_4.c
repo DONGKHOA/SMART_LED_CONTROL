@@ -7,15 +7,13 @@ extern int16_t x;
 extern int16_t y;
 uint8_t autocontrol = 0;
 
-void check_event_screen_4(check_event_t *event,
-						  screen_state_t *screen)
+void check_event_screen_4(screen_state_t *screen)
 {
 	touch_icon_screen4_t touch = check_event_icon_screen4(x, y);
 	if (touch != NO_TOUCH_ICON_SC4)
 	{
 		if (touch == ICON_RETURN_SC4) /*return screen_1 */
 		{
-			*event = EVENT_SCREEN_1;
 			*screen = SCREEN_START;
 		}
 		else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/

@@ -1,25 +1,21 @@
-/**
- * The `screen_3` function updates the display with specific graphics and text elements based on the
- * state of the `bit_map_screen_3` structure.
- */
-/*
- * screen_3.c
- *
- *  Created on: Mar 17, 2024
- *      Author: Author: vuhuy
- */
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "screen.h"
 #include "Keypad/keypad_wifi.h"
 #include "graphics.h"
 #include "icon.h"
 
-field_bit_screen3_t bit_map_screen_3 = {
-	.frame = 1,
-	.ret = 1,
-	.key = 1,
-	.text = 1,
-	.screen = 1,
-};
+/**********************
+ *     VARIABLES
+ **********************/
+
+field_bit_screen3_t bit_map_screen_3;
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void screen_3(void)
 {

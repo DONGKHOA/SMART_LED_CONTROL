@@ -16,8 +16,7 @@ static uint8_t password_pos = 0;
 static uint8_t full = 8;
 uint8_t connected = 0; /*The variable contains the status of whether wifi is connected or not*/
 
-void check_event_screen_3(check_event_t *event,
-						  screen_state_t *screen)
+void check_event_screen_3(screen_state_t *screen)
 {
 	static uint16_t x_coordinate = 0; /*variable containing location*/
 
@@ -33,7 +32,6 @@ void check_event_screen_3(check_event_t *event,
 			}
 			bit_map_screen_3.frame = 1;
 			password_pos = 0;
-			*event = EVENT_SCREEN_3;
 			x_coordinate = 0;
 		}
 
@@ -43,8 +41,6 @@ void check_event_screen_3(check_event_t *event,
 			{
 				password[password_pos] = 0;
 			}
-			*event = EVENT_SCREEN_2;
-			*screen = EVENT_SCREEN_2;
 		}
 
 		else if (key == NUM_v) /*If you click check, check to see if the entered password is sufficient.
@@ -54,7 +50,6 @@ void check_event_screen_3(check_event_t *event,
 			{
 				uint8_t temp;
 				password_pos = 0;
-				*event = EVENT_SCREEN_3;
 				/* add '2ssid\rpassword\r\n' into a array to transmit, heading will be
 				send first and data will be second */
 				xQueueSend(queue_data_tx, &password, 0);

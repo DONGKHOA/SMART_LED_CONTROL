@@ -21,7 +21,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stdio.h"
 
 #include "graphics.h"
 #include "calibrate_touch.h"
@@ -29,16 +28,13 @@
 #include "touch.h"
 #include "screen.h"
 #include "event.h"
-<<<<<<< HEAD
-#include "uartstdio.h"
-=======
 
 #include "read_adc.h"
-#include "calibrate_adc.h"
-#include "illuminance.h"
 #include "cal_temperature.h"
+#include "illuminance.h"
 
->>>>>>> 3b3d36a39e03481962cefb0a806547cbea43ae83
+#include "uartstdio.h"
+
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "queue.h"
@@ -54,10 +50,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-static void Screen_Task(void *pvParameters);
-static void UartTx_Task(void *pvParameters);
-static void UartRx_Task(void *pvParameters);
-static void ADC_Task(void *pvParameters);
+#define RX_BUFFER_SIZE 1024
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -75,8 +68,23 @@ SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim3;
 
+UART_HandleTypeDef huart4;
+
 /* USER CODE BEGIN PV */
 extern float Temperature;
+
+int16_t x;
+int16_t y;
+screen_state_t screen_current = SCREEN_START;
+
+uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
+
+QueueHandle_t queue_data_tx = NULL;
+QueueHandle_t queue_data_rx = NULL;
+
+EventGroupHandle_t event_uart_tx_heading;
+EventGroupHandle_t event_uart_rx_heading;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,76 +94,20 @@ static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_UART4_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
+static void Screen_Task(void *pvParameters);
+static void UartTx_Task(void *pvParameters);
+static void UartRx_Task(void *pvParameters);
+static void ADC_Task(void *pvParameters);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int16_t x;
-int16_t y;
-screen_state_t screen_current = SCREEN_START;
-check_event_t check_event = EVENT_SCREEN_1;
-
-QueueHandle_t queue_data_tx = NULL;
-QueueHandle_t queue_data_rx = NULL;
-
-UART_t data_uart_1;
-
-
-EventGroupHandle_t event_uart_tx_heading;
-EventGroupHandle_t event_uart_rx_heading;
-
-static void checkingHeadingRxData(uint8_t heading)
-{
-  switch (heading)
-  {
-  case HEADING_NUMBER_WIFI_SCAN:
-    xEventGroupSetBits(event_uart_rx_heading, NUMBER_WIFI_SCAN_BIT);
-    break;
-  
-  case HEADING_NAME_WIFI_SCAN:
-    xEventGroupSetBits(event_uart_rx_heading,  NAME_WIFI_SCAN_BIT);
-    break;
-
-  case HEADING_CONNECT_WIFI_SUCCESSFUL:
-    xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_SUCCESSFUL_BIT);
-    xEventGroupClearBits(event_uart_rx_heading, CONNECT_WIFI_UNSUCCESSFUL_BIT);
-    break;
-
-  case HEADING_CONNECT_WIFI_UNSUCCESSFUL:
-    xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_UNSUCCESSFUL_BIT);
-    xEventGroupClearBits(event_uart_rx_heading, CONNECT_WIFI_SUCCESSFUL_BIT);
-    break;
-
-  case HEADING_SSID_CONNECT_WIFI_SUCCESS:
-    xEventGroupSetBits(event_uart_rx_heading, SSID_CONNECT_WIFI_SUCCESSFUL_BIT);
-    break;
-
-  case HEADING_REFUSE_CONNECT_MQTT:
-    xEventGroupSetBits(event_uart_rx_heading, REFUSE_CONNECT_MQTT_BIT );
-    break;
-
-  case HEADING_CONNECT_MQTT_SUCCESSFUL:
-    xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_SUCCESSFUL_BIT);
-    xEventGroupClearBits(event_uart_rx_heading, CONNECT_MQTT_UNSUCCESSFUL_BIT);
-    break;
-
-  case CONNECT_MQTT_UNSUCCESSFUL_BIT:
-    xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_UNSUCCESSFUL_BIT);
-    xEventGroupClearBits(event_uart_rx_heading, CONNECT_MQTT_SUCCESSFUL_BIT);
-    break;
-
-  case HEADING_MQTT_SUBSCRIBE:
-     xEventGroupSetBits(event_uart_rx_heading, MQTT_SUBSCRIBE_BIT  );
-     break;
-  }
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -191,28 +143,44 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_UART4_Init();
-  MX_USART1_UART_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  GraphicsInit();
 
-  // init service
-  queue_data_rx = xQueueCreate(1024, sizeof(uint8_t));
-  queue_data_tx = xQueueCreate(1024, sizeof(uint8_t));
-  // init task
-  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
-  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  // init temperature
-  temperature_sensor_init(&hadc1, &htim3);
+  // Init driver
+
+  GraphicsInit();
+  GraphicsClear(BLACK);
+  HAL_Delay(500);
+  GraphicsClear(PINK);
+  HAL_Delay(500);
+  TouchCalibrate();
+  GraphicsClear(BLACK);
+
+  // Init application
+
+//  bit_map_screen_1.screen = 1;
+//  bit_map_screen_1.wifi = 1;
+//  bit_map_screen_1.home = 1;
+//  bit_map_screen_1.MQTT = 1;
+
+//  // init temperature
+//  temperature_sensor_init(&hadc1, &htim3);
+//
+//  // init service
+//  queue_data_rx = xQueueCreate(1024, sizeof(uint8_t));
+//  queue_data_tx = xQueueCreate(1024, sizeof(uint8_t));
+//  // init task
+//  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 1, NULL);
+//  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+//  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+//  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  vTaskStartScheduler();
+//  vTaskStartScheduler();
   while (1)
   {
     /* USER CODE END WHILE */
@@ -504,96 +472,24 @@ static void MX_UART4_Init(void)
 
   /* USER CODE END UART4_Init 0 */
 
-  LL_USART_InitTypeDef USART_InitStruct = {0};
-
-  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Peripheral clock enable */
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_UART4);
-
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOC);
-  /**UART4 GPIO Configuration
-  PC10   ------> UART4_TX
-  PC11   ------> UART4_RX
-  */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_10;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_11;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING;
-  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
   /* USER CODE BEGIN UART4_Init 1 */
 
   /* USER CODE END UART4_Init 1 */
-  USART_InitStruct.BaudRate = 115200;
-  USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
-  USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
-  USART_InitStruct.Parity = LL_USART_PARITY_NONE;
-  USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
-  USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
-  LL_USART_Init(UART4, &USART_InitStruct);
-  LL_USART_ConfigAsyncMode(UART4);
-  LL_USART_Enable(UART4);
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN UART4_Init 2 */
 
   /* USER CODE END UART4_Init 2 */
-
-}
-
-/**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  LL_USART_InitTypeDef USART_InitStruct = {0};
-
-  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Peripheral clock enable */
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_USART1);
-
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
-  /**USART1 GPIO Configuration
-  PA9   ------> USART1_TX
-  PA10   ------> USART1_RX
-  */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_9;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_10;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING;
-  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
-  USART_InitStruct.BaudRate = 115200;
-  USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
-  USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
-  USART_InitStruct.Parity = LL_USART_PARITY_NONE;
-  USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
-  USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
-  USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
-  LL_USART_Init(USART1, &USART_InitStruct);
-  LL_USART_ConfigAsyncMode(USART1);
-  LL_USART_Enable(USART1);
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
 
 }
 
@@ -641,7 +537,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : TFT_IRQ_Pin */
   GPIO_InitStruct.Pin = TFT_IRQ_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(TFT_IRQ_GPIO_Port, &GPIO_InitStruct);
 
@@ -673,6 +569,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
@@ -680,32 +580,36 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 static void Screen_Task(void *pvParameters)
 {
-  
+
   while (1)
   {
     // state machine ui_screen (choose ui screen)
     switch (screen_current)
     {
     case SCREEN_START:
-    	screen_1();
+      screen_1();
+      check_event_screen_1(&screen_current);
       break;
 
     case SCREEN_WIFI:
-    	screen_2();
+      screen_2();
+      check_event_screen_2(&screen_current);
       break;
 
     case SCREEN_KEYPAD:
-    	screen_3();
+      screen_3();
+      check_event_screen_3(&screen_current);
       break;
 
     case SCREEN_MAIN:
-    	screen_4();
+      screen_4();
+      check_event_screen_4(&screen_current);
       break;
 
     case SCREEN_MQTT:
-    	screen_5();
-    	break;
-
+      screen_5();
+      check_event_screen_5(&screen_current);
+      break;
     }
     vTaskDelay(1000);
   }
@@ -715,14 +619,66 @@ static void UartTx_Task(void *pvParameters)
 {
   while (1)
   {
-
   }
 }
 
 static void UartRx_Task(void *pvParameters)
 {
+  uint8_t buffer_temp[RX_BUFFER_SIZE + 1];
+  uint16_t pos_buffer_uart_rx = 0;
+  uint8_t enable_bit = 0;
+  uart_rx_heading_t data_heading;
+
   while (1)
   {
+    uint32_t rxBytes = UARTRead((char *)buffer_temp);
+    data_heading = buffer_temp[0];
+    if (rxBytes > 0)
+    {
+      memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
+      for (uint16_t i = 0; i < rxBytes; i++)
+      {
+        buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i + 1];
+        if (buffer_uart_rx[pos_buffer_uart_rx] == '\n')
+        {
+          enable_bit = 1;
+          buffer_uart_rx[pos_buffer_uart_rx] = '\0';
+          break;
+        }
+        pos_buffer_uart_rx++;
+      }
+
+      if (enable_bit == 0)
+      {
+        continue;
+      }
+
+      switch (data_heading)
+      {
+        case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
+          break;
+
+        case HEADING_RECEIVE_NAME_WIFI_SCAN:
+
+          break;
+        case HEADING_RECEIVE_CONNECT_WIFI:
+
+          break;
+
+        case HEADING_RECEIVE_CONNECT_MQTT:
+          break;
+
+        case HEADING_MQTT_SUBSCRIBE:
+          break;
+        
+        default:
+
+          break;
+        memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
+      }
+      enable_bit = 0;
+    }
+    vTaskDelay(50);
   }
 }
 
@@ -730,8 +686,8 @@ static void ADC_Task(void *pvParameters)
 {
   while (1)
   {
-	  voltage_adc();
-	  Temperature = calculate_temperature();
+    voltage_adc();
+    Temperature = calculate_temperature();
   }
 }
 

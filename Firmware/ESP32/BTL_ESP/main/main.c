@@ -137,6 +137,8 @@ static void MQTT_timer_cb(TimerHandle_t xTimer)
 static void startUartRxTask(void *arg)
 {
     uint8_t buffer_temp[RX_BUF_SIZE + 1];
+    uint16_t pos_buffer_uart_rx = 0;
+    uint8_t enable_bit = 0;
 
     while (1)
     {
@@ -148,11 +150,19 @@ static void startUartRxTask(void *arg)
             memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
             for (uint16_t i = 0; i < rxBytes; i++)
             {
-                buffer_uart_rx[i] = buffer_temp[i + 1];
-                if (buffer_uart_rx[i] == '\n')
+                buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i + 1];
+                if (buffer_uart_rx[pos_buffer_uart_rx] == '\n')
                 {
-                    buffer_uart_rx[i] = '\0';
+                    enable_bit = 1;
+                    buffer_uart_rx[pos_buffer_uart_rx] = '\0';
+                    break;
                 }
+                pos_buffer_uart_rx++;
+            }
+
+            if (enable_bit == 0)
+            {
+                continue;
             }
 
             switch (data_heading)
@@ -183,6 +193,8 @@ static void startUartRxTask(void *arg)
                 break;
                 memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
             }
+
+            enable_bit = 0;
         }
         vTaskDelay(50 / portTICK_PERIOD_MS);
     }

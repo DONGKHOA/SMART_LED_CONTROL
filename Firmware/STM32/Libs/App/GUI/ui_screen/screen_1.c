@@ -8,12 +8,7 @@
 #include "Icon/icon.h"
 #include "graphics.h"
 
-field_bit_screen1_t bit_map_screen_1 = {
-	.screen = 1,
-	.wifi = 1,
-	.home = 1,
-	.MQTT = 1,
-};
+field_bit_screen1_t bit_map_screen_1;
 
 /**
  * The function `screen_1` clears the screen and displays different icons based on the values of
