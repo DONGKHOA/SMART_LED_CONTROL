@@ -13,13 +13,7 @@
 #include "graphics.h"
 #include "icon.h"
 
-field_bit_screen5_t bit_map_screen_5 = {
-	.frame = 1,
-	.ret = 1,
-	.key = 1,
-	.text = 1,
-	.screen = 1,
-};
+field_bit_screen5_t bit_map_screen_5;
 
 void screen_5(void)
 {

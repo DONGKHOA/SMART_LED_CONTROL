@@ -14,10 +14,16 @@ void check_event_screen_4(screen_state_t *screen)
 	{
 		if (touch == ICON_RETURN_SC4) /*return screen_1 */
 		{
+			bit_map_screen_1.screen = 1;
+			bit_map_screen_1.wifi = 1;
+			bit_map_screen_1.home = 1;
+			bit_map_screen_1.MQTT = 1;
 			*screen = SCREEN_START;
 		}
 		else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/
 		{
+			bit_map_screen_4.control = 1;
+			
 			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
 			{
@@ -30,6 +36,8 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else /*Automatically turn on or off the light according to brightness if pressed icon_auto*/
 		{
+			bit_map_screen_4.automode = 1;
+
 			vTaskDelay(2000);
 			if (touch == ICON_AUTO)
 			{

@@ -30,6 +30,7 @@ void check_event_screen_3(screen_state_t *screen)
 			{
 				password[password_pos] = 0;
 			}
+			
 			bit_map_screen_3.frame = 1;
 			password_pos = 0;
 			x_coordinate = 0;
@@ -41,6 +42,21 @@ void check_event_screen_3(screen_state_t *screen)
 			{
 				password[password_pos] = 0;
 			}
+			password_pos = 0;
+			x_coordinate = 0;
+
+			bit_map_screen_2.screen = 1;
+			bit_map_screen_2.ret = 1;
+			bit_map_screen_2.on_off_wifi = 1;
+			bit_map_screen_2.text1 = 1;
+			bit_map_screen_2.text2 = 1;
+			bit_map_screen_2.WIFI1 = 1;
+			bit_map_screen_2.WIFI2 = 1;
+			bit_map_screen_2.WIFI3 = 1;
+			bit_map_screen_2.WIFI4 = 1;
+			bit_map_screen_2.WIFI5 = 1;
+			bit_map_screen_2.NEXT = 1;
+			*screen = SCREEN_WIFI;
 		}
 
 		else if (key == NUM_v) /*If you click check, check to see if the entered password is sufficient.

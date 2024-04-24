@@ -3,14 +3,16 @@
 #include "check_touch_screen/check_touch_screen.h"
 
 /* position of each icon screen_2 */
-static const uint16_t frame_pos[7][4] = {
+static const uint16_t frame_pos[9][4] = {
     {7, 35, 8, 31},      // icon return
-    {34, 204, 54, 80},   // frame wifi connected
+    {170, 200, 5, 35},   // On_off_wifi
     {34, 204, 117, 142}, // frame wifi 1
     {34, 204, 156, 181}, // frame wifi 2
     {34, 204, 195, 220}, // frame wifi 3
     {34, 204, 234, 259}, // frame wifi 4
     {34, 204, 273, 298}, // frame wifi 5
+    {182, 235, 298, 316},// frame next
+    {11, 68, 298, 316},  // frame back
 };
 
 /* check touch icon */

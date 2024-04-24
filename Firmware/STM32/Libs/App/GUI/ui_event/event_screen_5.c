@@ -40,6 +40,11 @@ void check_event_screen_5(screen_state_t *screen)
             {
                 MQTT[MQTT_pos] = 0;
             }
+            
+            bit_map_screen_1.screen = 1;
+			bit_map_screen_1.wifi = 1;
+			bit_map_screen_1.home = 1;
+			bit_map_screen_1.MQTT = 1;
             *screen = SCREEN_START;
         }
 

@@ -32,17 +32,34 @@ void check_event_screen_1(screen_state_t *screen)
 		{
 			bit_map_screen_2.screen = 1;
 			bit_map_screen_2.ret = 1;
-			bit_map_screen_2.text2 = 1;
 			bit_map_screen_2.on_off_wifi = 1;
-
+			bit_map_screen_2.text1 = 1;
+			bit_map_screen_2.text2 = 1;
+			bit_map_screen_2.WIFI1 = 1;
+			bit_map_screen_2.WIFI2 = 1;
+			bit_map_screen_2.WIFI3 = 1;
+			bit_map_screen_2.WIFI4 = 1;
+			bit_map_screen_2.WIFI5 = 1;
+			bit_map_screen_2.NEXT = 1;
+		
 			*screen = SCREEN_WIFI;
 		}
 		else if (touch == ICON_HOME) /*if touch icon home*/
 		{
+			bit_map_screen_4.ret = 1;
+			bit_map_screen_4.control = 1;
+			bit_map_screen_4.automode = 1;
+
 			*screen = SCREEN_MAIN;
 		}
 		else /*if touch icon MQTT*/
 		{
+			bit_map_screen_5.screen = 1;
+			bit_map_screen_5.ret = 1;
+			bit_map_screen_5.text = 1;
+			bit_map_screen_5.frame = 1;
+			bit_map_screen_5.key = 1;
+
 			*screen = SCREEN_MQTT;
 		}
 	}

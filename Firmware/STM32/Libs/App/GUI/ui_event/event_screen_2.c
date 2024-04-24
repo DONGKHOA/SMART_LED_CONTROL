@@ -43,7 +43,7 @@ void check_event_screen_2(screen_state_t *screen)
 		}
 		else if (touch == ON_OFF_WIFI)
 		{
-			bit_map_screen_2.on_off_wifi = 1;
+			bit_map_screen_2.on_off_wifi = 1; // draw button on off wifi
 			state_wifi = !state_wifi;
 			if (state_wifi == 1)
 			{
@@ -64,23 +64,48 @@ void check_event_screen_2(screen_state_t *screen)
 		}
 		else if (touch == WIFI1)
 		{
-			// chuyeenr qua man hinh 3
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
 		}
 		else if (touch == WIFI2)
 		{
-			// chuyeenr qua man hinh 3
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
 		}
 		else if (touch == WIFI3)
 		{
-			// chuyeenr qua man hinh 3
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
 		}
 		else if (touch == WIFI4)
 		{
-			// chuyeenr qua man hinh 3
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
 		}
 		else if (touch == WIFI5)
 		{
-			// chuyeenr qua man hinh 3
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
 		}
 	}
 }

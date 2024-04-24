@@ -94,11 +94,11 @@ void screen_2(void)
 	{
 		if (state_wifi == 1)
 		{
-			GraphicsRoundedRectangle(185, 10, 20, 20, 3, GREEN);
+			GraphicsRoundedRectangle(185, 10, 20, 20, 3, GREEN); // green if wifi on
 		}
 		else
 		{
-			GraphicsRoundedRectangle(185, 10, 20, 20, 3, RED);
+			GraphicsRoundedRectangle(185, 10, 20, 20, 3, RED);	// red if wifi off
 		}
 	}
 
@@ -121,12 +121,13 @@ void screen_2(void)
 		if (bit_map_screen_2.WIFI_Connected == 1)
 		{
 			GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
-			// in ssid connected
+			GraphicsLargeString(40, 57, "", WHITE); // in ssid connected
 			connected = 1;
 			bit_map_screen_2.WIFI_Connected = 0;
 		}
 	}
-
+	
+	// max storage of rectangle is 13
 	if (uxBits & DETECT_TOUCH_SCREEN_BIT)
 	{
 		if (state_wifi == 1)
@@ -135,36 +136,36 @@ void screen_2(void)
 
 			if (bit_map_screen_2.WIFI1 == 1)
 			{
-				// in ssid 1
 				GraphicsRoundedRectangle(34, 117, 170, 25, 5, BLACK);
+				GraphicsLargeString(40, 120, "", WHITE);	// in ssid 1
 				bit_map_screen_2.WIFI1 = 0;
 			}
 
 			if (bit_map_screen_2.WIFI2 == 1)
 			{
-				// in ssid 2
 				GraphicsRoundedRectangle(34, 156, 170, 25, 5, BLACK);
+				GraphicsLargeString(40, 160, "", WHITE); 	// in ssid 2
 				bit_map_screen_2.WIFI2 = 0;
 			}
 
 			if (bit_map_screen_2.WIFI3 == 1)
 			{
-				// in ssid 3
 				GraphicsRoundedRectangle(34, 195, 170, 25, 5, BLACK);
+				GraphicsLargeString(40, 200, "", WHITE);	// in ssid 3
 				bit_map_screen_2.WIFI3 = 0;
 			}
 
 			if (bit_map_screen_2.WIFI4 == 1)
 			{
-				// in ssid 4
 				GraphicsRoundedRectangle(34, 234, 170, 25, 5, BLACK);
+				GraphicsLargeString(40, 240, "", WHITE);	// in ssid 4
 				bit_map_screen_2.WIFI4 = 0;
 			}
 
 			if (bit_map_screen_2.WIFI5 == 1)
 			{
-				// in ssid 5
 				GraphicsRoundedRectangle(34, 273, 170, 25, 5, BLACK);
+				GraphicsLargeString(40, 280, "", WHITE);	// in ssid 5
 				bit_map_screen_2.WIFI5 = 0;
 			}
 
@@ -172,11 +173,11 @@ void screen_2(void)
 			{
 				if (numPage == limitNumPage)
 				{
-					// write character with WHITE
+					GraphicsLargeString(182, 298, "NEXT->", WHITE);	// write character with WHITE
 				}
 				else
 				{
-					// write character with BLACK
+					GraphicsLargeString(182, 298, "NEXT->", BLACK);	// write character with BLACK
 				}
 
 				bit_map_screen_2.NEXT = 1;
@@ -186,11 +187,11 @@ void screen_2(void)
 			{
 				if (numPage == 1)
 				{
-					// write character with WHITE
+					GraphicsLargeString(11, 298, "<-BACK", WHITE);	// write character with WHITE
 				}
 				else
 				{
-					// write character with BLACK
+					GraphicsLargeString(11, 298, "<-BACK", BLACK);	// write character with BLACK
 				}
 
 				bit_map_screen_2.BACK = 1;
@@ -207,7 +208,6 @@ void screen_2(void)
 			GraphicsRoundedRectangle(34, 195, 170, 25, 5, WHITE);
 			GraphicsRoundedRectangle(34, 234, 170, 25, 5, WHITE);
 			GraphicsRoundedRectangle(34, 273, 170, 25, 5, WHITE);
-			// add icon on off wifi
 		}
 	}
 }

@@ -12,14 +12,7 @@
 #include "graphics.h"
 #include "Icon/icon.h"
 
-field_bit_screen4_t bit_map_screen_4 = {
-	.screen = 1,
-	.control = 1,
-	.ret = 1,
-	.automode = 1,
-	.ON = 0,
-	.OFF = 0,
-};
+field_bit_screen4_t bit_map_screen_4;
 
 void screen_4(void)
 {
@@ -50,12 +43,14 @@ void screen_4(void)
 	if (bit_map_screen_4.ON == 1)
 	{
 		GraphicsLargeString(95, 119, "ON", BLACK);
-		GraphicsRectangle(126, 119, 20, 15, WHITE);
+		GraphicsLargeString(126, 119, "OFF", WHITE);
+		bit_map_screen_4.ON = 0;
 	}
 
 	if (bit_map_screen_4.OFF == 1)
 	{
 		GraphicsLargeString(126, 119, "OFF", BLACK);
-		GraphicsRectangle(95, 119, 20, 15, WHITE);
+		GraphicsLargeString(95, 119, "ON", WHITE);
+		bit_map_screen_4.OFF = 0;
 	}
 }
