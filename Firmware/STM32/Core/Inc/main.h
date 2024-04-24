@@ -68,7 +68,7 @@ void Error_Handler(void);
 #define SPI2_CS_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define RX_BUFFER_SIZE 1024
+#define RX_BUFFER_SIZE 					          100
 
 #define TIME_REQUEST_SCAN                 5000
 

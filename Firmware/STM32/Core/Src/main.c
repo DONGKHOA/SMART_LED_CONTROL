@@ -71,7 +71,26 @@ TIM_HandleTypeDef htim3;
 UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN PV */
+
+/**********************
+ *  EXTERN VARIABLES
+ **********************/
+
 extern float Temperature;
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
+
+static TaskHandle_t uart_rx_task;
+static TaskHandle_t uart_tx_task;
+static TaskHandle_t control_led_task;
+static TaskHandle_t read_adc_task;
+static TaskHandle_t screen_task;
+
+/**********************
+ *  GLOBAL VARIABLES
+ **********************/
 
 int16_t x;
 int16_t y;
@@ -106,12 +125,13 @@ static void Screen_Task(void *pvParameters);
 static void UartTx_Task(void *pvParameters);
 static void UartRx_Task(void *pvParameters);
 static void ADC_Task(void *pvParameters);
+static void ControlLed_Task(void *pvParameters);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern void functionRequestCallBack( TimerHandle_t xTimer );
+extern void functionRequestCallBack(TimerHandle_t xTimer);
 /* USER CODE END 0 */
 
 /**
@@ -179,10 +199,13 @@ int main(void)
   timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCallBack);
 
   // init task
-  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, NULL);
-  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+
+  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, &screen_task);
+  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_tx_task);
+  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_rx_task);
+  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, &read_adc_task);
+  xTaskCreate(ControlLed_Task, "led_Task", configMINIMAL_STACK_SIZE, NULL, 1, &control_led_task);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -687,6 +710,13 @@ static void ADC_Task(void *pvParameters)
   {
     voltage_adc();
     Temperature = calculate_temperature();
+  }
+}
+
+static void ControlLed_Task(void *pvParameters)
+{
+  while (1)
+  {
   }
 }
 
