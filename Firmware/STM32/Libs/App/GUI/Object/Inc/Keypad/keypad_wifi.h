@@ -1,13 +1,20 @@
 #ifndef APP_GUI_OBJECT_KEYPAD_H_
 #define APP_GUI_OBJECT_KEYPAD_H_
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "graphics.h"
 #include "stdint.h"
 #include "Icon/icon.h"
 
+/**********************
+ *      TYPEDEFS
+ **********************/
+
 typedef enum
 {
-	NO_TOUCH = -1,
 	NUM_0 = 0,
 	NUM_1,
 	NUM_2,
@@ -21,7 +28,12 @@ typedef enum
 	NUM_x,
 	NUM_v,
 	ICON_RETURN,
+	NO_TOUCH,
 } key_character_t;
+
+/**********************
+ *   INLINE FUNCTIONS
+ **********************/
 
 inline __attribute__((always_inline)) void object_keypad_Wifi(void)
 {
@@ -51,4 +63,5 @@ inline __attribute__((always_inline)) void object_keypad_Wifi(void)
 }
 
 key_character_t check_event_keypad_Wifi(int16_t x, int16_t y);
+
 #endif

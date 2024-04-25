@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include "stdint.h"
+#include "FreeRTOS.h"
+#include "event_groups.h"
 
 /**********************
  *      TYPEDEFS
@@ -71,7 +73,8 @@ typedef enum
 	SCREEN_WIFI,
 	SCREEN_KEYPAD,
 	SCREEN_MAIN,
-	SCREEN_MQTT
+	SCREEN_MQTT,
+	SCREEN_OFF,
 } screen_state_t;
 
 /**********************
@@ -88,10 +91,10 @@ extern field_bit_screen5_t bit_map_screen_5;
  *   GLOBAL FUNCTIONS
  **********************/
 
-void screen_1(void);
-void screen_2(void);
-void screen_3(void);
-void screen_4(void);
-void screen_5(void);
+void screen_1(EventBits_t uxBits);
+void screen_2(EventBits_t uxBits);
+void screen_3(EventBits_t uxBits);
+void screen_4(EventBits_t uxBits);
+void screen_5(EventBits_t uxBits);
 
 #endif /* APP_GUI_UI_SCREEN_INC_SCREEN_H_ */

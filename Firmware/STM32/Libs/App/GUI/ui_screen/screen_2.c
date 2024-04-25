@@ -8,8 +8,13 @@
 #include "main.h"
 #include <string.h>
 #include <stdlib.h>
-#include "FreeRTOS.h"
-#include "event_groups.h"
+
+/*********************
+ *      DEFINES
+ *********************/
+
+#define MAX_LENGTH_SSID 13
+#define SSID_IN_PAGE 5
 
 /**********************
  *     VARIABLES
@@ -20,11 +25,12 @@ uint8_t state_wifi = 0;
 uint8_t numPage = 1;
 uint8_t limitNumPage;
 uint8_t u8_quantitySSID = 0;
-char ssid1[16];
-char ssid2[16];
-char ssid3[16];
-char ssid4[16];
-char ssid5[16];
+char ssid1[32];
+char ssid2[32];
+char ssid3[32];
+char ssid4[32];
+char ssid5[32];
+char ssid_connect[32];
 
 /**********************
  *  EXTERN VARIABLES
@@ -39,30 +45,29 @@ extern TimerHandle_t timer_request_scan_wifi;
  *  STATIC VARIABLES
  **********************/
 
-static uint8_t connected = 0;
 static char dataSSID[65];
 
 /******************************
  *  STATIC PROTOTYPE FUNCTION
  ******************************/
 
-static void processingSSID(char *data, uint8_t offset);
+static void processingSSID(char *data, uint8_t page);
 static uint8_t getNumPage(uint8_t quantitySSID);
 
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
-void functionRequestCallBack( TimerHandle_t xTimer )
-{
-	xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
-}
-
 /**
- * The function `screen_2` handles various graphical elements and events related to Wi-Fi connectivity
+ * The function `screen_2` handles various graphical elements and logic related to Wi-Fi connectivity
  * on a screen.
+ *
+ * @param uxBits The `uxBits` parameter in the `screen_2` function is a bitmask representing various
+ * event bits that have been set. The function checks these bits to determine which actions to take
+ * based on the events that have occurred. Each bit in the `uxBits` parameter corresponds to a specific
+ * event or
  */
-void screen_2(void)
+void screen_2(EventBits_t uxBits)
 {
 	if (bit_map_screen_2.screen == 1)
 	{
@@ -98,17 +103,24 @@ void screen_2(void)
 		}
 		else
 		{
-			GraphicsRoundedRectangle(185, 10, 20, 20, 3, RED);	// red if wifi off
+			GraphicsRoundedRectangle(185, 10, 20, 20, 3, RED); // red if wifi off
 		}
 	}
 
-	EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | NAME_WIFI_SCAN_BIT | CONNECT_WIFI_SUCCESSFUL_BIT | DETECT_TOUCH_SCREEN_BIT,
-											 pdTRUE, pdFALSE,
-											 portMAX_DELAY);
+	if (bit_map_screen_2.WIFI_Connected == 1)
+	{
+		GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
+		GraphicsLargeString(40, 57, ssid_connect, WHITE); // in ssid connected
+	}
+	else
+		GraphicsRoundedRectangle(34, 54, 170, 25, 5, WHITE);
+
 	if (uxBits & NUMBER_WIFI_SCAN_BIT)
 	{
 		u8_quantitySSID = atoi((const char *)buffer_uart_rx);
 		limitNumPage = getNumPage(u8_quantitySSID);
+		if (numPage > limitNumPage)
+			numPage = limitNumPage;
 	}
 
 	if (uxBits & NAME_WIFI_SCAN_BIT)
@@ -118,97 +130,100 @@ void screen_2(void)
 
 	if (uxBits & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
-		if (bit_map_screen_2.WIFI_Connected == 1)
-		{
-			GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 57, "", WHITE); // in ssid connected
-			connected = 1;
-			bit_map_screen_2.WIFI_Connected = 0;
-		}
+		bit_map_screen_2.WIFI_Connected = 1;
+		GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
+		GraphicsLargeString(40, 57, ssid_connect, WHITE); // in ssid connected
 	}
-	
-	// max storage of rectangle is 13
-	if (uxBits & DETECT_TOUCH_SCREEN_BIT)
+
+	if (state_wifi == 1)
 	{
-		if (state_wifi == 1)
+		processingSSID(dataSSID, numPage);
+
+		if (bit_map_screen_2.WIFI1 == 1)
 		{
-			processingSSID(dataSSID, numPage);
-
-			if (bit_map_screen_2.WIFI1 == 1)
-			{
-				GraphicsRoundedRectangle(34, 117, 170, 25, 5, BLACK);
-				GraphicsLargeString(40, 120, "", WHITE);	// in ssid 1
-				bit_map_screen_2.WIFI1 = 0;
-			}
-
-			if (bit_map_screen_2.WIFI2 == 1)
-			{
-				GraphicsRoundedRectangle(34, 156, 170, 25, 5, BLACK);
-				GraphicsLargeString(40, 160, "", WHITE); 	// in ssid 2
-				bit_map_screen_2.WIFI2 = 0;
-			}
-
-			if (bit_map_screen_2.WIFI3 == 1)
-			{
-				GraphicsRoundedRectangle(34, 195, 170, 25, 5, BLACK);
-				GraphicsLargeString(40, 200, "", WHITE);	// in ssid 3
-				bit_map_screen_2.WIFI3 = 0;
-			}
-
-			if (bit_map_screen_2.WIFI4 == 1)
-			{
-				GraphicsRoundedRectangle(34, 234, 170, 25, 5, BLACK);
-				GraphicsLargeString(40, 240, "", WHITE);	// in ssid 4
-				bit_map_screen_2.WIFI4 = 0;
-			}
-
-			if (bit_map_screen_2.WIFI5 == 1)
-			{
-				GraphicsRoundedRectangle(34, 273, 170, 25, 5, BLACK);
-				GraphicsLargeString(40, 280, "", WHITE);	// in ssid 5
-				bit_map_screen_2.WIFI5 = 0;
-			}
-
-			if (bit_map_screen_2.NEXT == 1)
-			{
-				if (numPage == limitNumPage)
-				{
-					GraphicsLargeString(182, 298, "NEXT->", WHITE);	// write character with WHITE
-				}
-				else
-				{
-					GraphicsLargeString(182, 298, "NEXT->", BLACK);	// write character with BLACK
-				}
-
-				bit_map_screen_2.NEXT = 1;
-			}
-
-			if (bit_map_screen_2.BACK == 1)
-			{
-				if (numPage == 1)
-				{
-					GraphicsLargeString(11, 298, "<-BACK", WHITE);	// write character with WHITE
-				}
-				else
-				{
-					GraphicsLargeString(11, 298, "<-BACK", BLACK);	// write character with BLACK
-				}
-
-				bit_map_screen_2.BACK = 1;
-			}
-			xTimerReset(timer_request_scan_wifi, 0);
+			GraphicsRoundedRectangle(34, 117, 170, 25, 5, BLACK);
+			GraphicsLargeString(40, 120, ssid1, WHITE); // in ssid 1
+			bit_map_screen_2.WIFI1 = 0;
 		}
 		else
-		{
-			xTimerStop(timer_request_scan_wifi, 0);
-			connected = 0;
-			GraphicsRoundedRectangle(34, 54, 170, 25, 5, WHITE);
 			GraphicsRoundedRectangle(34, 117, 170, 25, 5, WHITE);
-			GraphicsRoundedRectangle(34, 156, 170, 25, 5, WHITE);
-			GraphicsRoundedRectangle(34, 195, 170, 25, 5, WHITE);
-			GraphicsRoundedRectangle(34, 234, 170, 25, 5, WHITE);
-			GraphicsRoundedRectangle(34, 273, 170, 25, 5, WHITE);
+
+		if (bit_map_screen_2.WIFI2 == 1)
+		{
+			GraphicsRoundedRectangle(34, 156, 170, 25, 5, BLACK);
+			GraphicsLargeString(40, 160, ssid2, WHITE); // in ssid 2
+			bit_map_screen_2.WIFI2 = 0;
 		}
+		else
+			GraphicsRoundedRectangle(34, 156, 170, 25, 5, WHITE);
+
+		if (bit_map_screen_2.WIFI3 == 1)
+		{
+			GraphicsRoundedRectangle(34, 195, 170, 25, 5, BLACK);
+			GraphicsLargeString(40, 200, ssid3, WHITE); // in ssid 3
+			bit_map_screen_2.WIFI3 = 0;
+		}
+		else
+			GraphicsRoundedRectangle(34, 195, 170, 25, 5, WHITE);
+
+		if (bit_map_screen_2.WIFI4 == 1)
+		{
+			GraphicsRoundedRectangle(34, 234, 170, 25, 5, BLACK);
+			GraphicsLargeString(40, 240, ssid4, WHITE); // in ssid 4
+			bit_map_screen_2.WIFI4 = 0;
+		}
+		else
+			GraphicsRoundedRectangle(34, 234, 170, 25, 5, WHITE);
+
+		if (bit_map_screen_2.WIFI5 == 1)
+		{
+			GraphicsRoundedRectangle(34, 273, 170, 25, 5, BLACK);
+			GraphicsLargeString(40, 280, ssid5, WHITE); // in ssid 5
+			bit_map_screen_2.WIFI5 = 0;
+		}
+		else
+			GraphicsRoundedRectangle(34, 273, 170, 25, 5, WHITE);
+
+		if (bit_map_screen_2.NEXT == 1)
+		{
+			if (numPage == limitNumPage)
+			{
+				GraphicsLargeString(182, 298, "NEXT->", WHITE); // write character with WHITE
+			}
+			else
+			{
+				GraphicsLargeString(182, 298, "NEXT->", BLACK); // write character with BLACK
+			}
+
+			bit_map_screen_2.NEXT = 1;
+		}
+
+		if (bit_map_screen_2.BACK == 1)
+		{
+			if (numPage == 1)
+			{
+				GraphicsLargeString(11, 298, "<-BACK", WHITE); // write character with WHITE
+			}
+			else
+			{
+				GraphicsLargeString(11, 298, "<-BACK", BLACK); // write character with BLACK
+			}
+
+			bit_map_screen_2.BACK = 1;
+		}
+		xTimerReset(timer_request_scan_wifi, 0);
+	}
+	else
+	{
+		xTimerStop(timer_request_scan_wifi, 0);
+
+		bit_map_screen_2.WIFI_Connected = 0;
+		GraphicsRoundedRectangle(34, 54, 170, 25, 5, WHITE);
+		GraphicsRoundedRectangle(34, 117, 170, 25, 5, WHITE);
+		GraphicsRoundedRectangle(34, 156, 170, 25, 5, WHITE);
+		GraphicsRoundedRectangle(34, 195, 170, 25, 5, WHITE);
+		GraphicsRoundedRectangle(34, 234, 170, 25, 5, WHITE);
+		GraphicsRoundedRectangle(34, 273, 170, 25, 5, WHITE);
 	}
 }
 
@@ -217,19 +232,19 @@ void screen_2(void)
  **********************/
 
 /**
- * The function `processingSSID` processes a string input, extracts substrings separated by "\r", and
- * stores them in different variables.
+ * The function `processingSSID` processes and stores SSID data into arrays based on the page number
+ * and sets corresponding bit fields.
  *
- * @param data The `processingSSID` function takes a character array `data` and an offset value as
- * input parameters. The `data` array contains a list of SSIDs (Service Set Identifiers) separated by
- * carriage return characters. The function processes this data and extracts individual SSIDs based on
- * the offset provided.
- * @param offset The `offset` parameter in the `processingSSID` function is used to determine which set
- * of SSIDs to process from the input data. It is used to calculate the starting position for
- * extracting SSID information from the `arg_list` array. The formula `(offset - 1) * 5
+ * @param data The `processingSSID` function takes a `char* data` and a `uint8_t page` as parameters.
+ * The `data` parameter is a pointer to a character array containing information about SSIDs, and the
+ * `page` parameter is an integer representing the current page number.
+ * @param page The `page` parameter in the `processingSSID` function is used to determine which page of
+ * SSIDs to process. It is an unsigned 8-bit integer (`uint8_t`) that indicates the current page number
+ * being processed. This parameter helps in calculating the position of SSIDs in the input data
  */
-static void processingSSID(char *data, uint8_t offset)
+static void processingSSID(char *data, uint8_t page)
 {
+	uint8_t numSSID = 5;
 	char *arg_list[4];
 	char buffer[1024];
 	memcpy(buffer, data, strlen((char *)data));
@@ -244,12 +259,33 @@ static void processingSSID(char *data, uint8_t offset)
 		temp_token = strtok(NULL, "\r");
 	}
 
-	// Store data in array
-	memcpy(ssid1, arg_list[0 + (offset - 1) * 5], strlen((char *)arg_list[0 + (offset - 1) * 5]) + 1);
-	memcpy(ssid2, arg_list[1 + (offset - 1) * 5], strlen((char *)arg_list[1 + (offset - 1) * 5]) + 1);
-	memcpy(ssid3, arg_list[2 + (offset - 1) * 5], strlen((char *)arg_list[2 + (offset - 1) * 5]) + 1);
-	memcpy(ssid4, arg_list[3 + (offset - 1) * 5], strlen((char *)arg_list[3 + (offset - 1) * 5]) + 1);
-	memcpy(ssid5, arg_list[4 + (offset - 1) * 5], strlen((char *)arg_list[4 + offset * 5]) + 1);
+	// Store data in array and set bit filed
+
+	if ((page == limitNumPage) && ((u8_quantitySSID % SSID_IN_PAGE) > 0))
+	{
+		numSSID = u8_quantitySSID % SSID_IN_PAGE;
+	}
+
+	switch (numSSID)
+	{
+	case 0:
+	case 5:
+		memcpy(ssid5, arg_list[4 + (page - 1) * 5], strlen((char *)arg_list[4 + (page - 1) * 5]) + 1);
+		bit_map_screen_2.WIFI5 = 1;
+	case 4:
+		memcpy(ssid4, arg_list[3 + (page - 1) * 5], strlen((char *)arg_list[3 + (page - 1) * 5]) + 1);
+		bit_map_screen_2.WIFI4 = 1;
+	case 3:
+		memcpy(ssid3, arg_list[2 + (page - 1) * 5], strlen((char *)arg_list[2 + (page - 1) * 5]) + 1);
+		bit_map_screen_2.WIFI3 = 1;
+	case 2:
+		memcpy(ssid2, arg_list[1 + (page - 1) * 5], strlen((char *)arg_list[1 + (page - 1) * 5]) + 1);
+		bit_map_screen_2.WIFI2 = 1;
+	case 1:
+		memcpy(ssid1, arg_list[0 + (page - 1) * 5], strlen((char *)arg_list[0 + (page - 1) * 5]) + 1);
+		bit_map_screen_2.WIFI1 = 1;
+		break;
+	}
 }
 
 /**
@@ -271,8 +307,8 @@ static uint8_t getNumPage(uint8_t quantitySSID)
 	}
 	else
 	{
-		quantity = quantitySSID / 5;
-		if ((quantitySSID % 5) > 0)
+		quantity = quantitySSID / SSID_IN_PAGE;
+		if ((quantitySSID % SSID_IN_PAGE) > 0)
 			quantity++;
 		return quantity;
 	}

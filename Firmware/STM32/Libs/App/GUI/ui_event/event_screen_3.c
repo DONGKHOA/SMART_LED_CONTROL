@@ -1,20 +1,55 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "event.h"
 #include "Keypad/keypad_wifi.h"
+#include <string.h>
+#include "main.h"
 
-#define OFFSET_X 15
-#define OFFSET_Y 90
+/*********************
+ *      DEFINES
+ *********************/
 
-extern int16_t x;
-extern int16_t y;
+#define OFFSET_X 				15
+#define OFFSET_Y 				90
+#define MIN_LENGTH_PASSWORD		8
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
 
 static const char character_key[12] = {'0', '1', '2', '3',
 									   '4', '5', '6', '7',
 									   '8', '9', 'x', 'v'};
-
-uint8_t password[8];
 static uint8_t password_pos = 0;
-static uint8_t full = 8;
-uint8_t connected = 0; /*The variable contains the status of whether wifi is connected or not*/
+static char password[9];
+
+/**********************
+ *  EXTERN VARIABLES
+ **********************/
+
+extern int16_t x;
+extern int16_t y;
+
+extern uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
+extern EventGroupHandle_t event_uart_rx;
+extern EventGroupHandle_t event_uart_tx;
+
+extern char text[18];
+extern EventBits_t bitsScreen3;
+
+extern char ssid_connect[32];
+
+/**********************
+ *     VARIABLES
+ **********************/
+
+char ssid[32];
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void check_event_screen_3(screen_state_t *screen)
 {
@@ -23,14 +58,9 @@ void check_event_screen_3(screen_state_t *screen)
 	key_character_t key = check_event_keypad_Wifi(x, y); /*checking touch position of each element in the keyboard */
 	if (key != NO_TOUCH)
 	{
-		if (key == NUM_x) /*If you press delete, delete all elements entered into the password[] array,
-						  redraw the password display frame, and check screen events again 3*/
+		if (key == NUM_x)
 		{
-			for (password_pos = 0; password_pos < 9; password_pos++)
-			{
-				password[password_pos] = 0;
-			}
-			
+			memset(password, '\0', sizeof(password));
 			bit_map_screen_3.frame = 1;
 			password_pos = 0;
 			x_coordinate = 0;
@@ -38,10 +68,7 @@ void check_event_screen_3(screen_state_t *screen)
 
 		else if (key == ICON_RETURN) /*return to screen_2*/
 		{
-			for (password_pos = 0; password_pos < 8; password_pos++)
-			{
-				password[password_pos] = 0;
-			}
+			memset(password, '\0', sizeof(password));
 			password_pos = 0;
 			x_coordinate = 0;
 
@@ -62,30 +89,46 @@ void check_event_screen_3(screen_state_t *screen)
 		else if (key == NUM_v) /*If you click check, check to see if the entered password is sufficient.
 								   If so, write it to Queue to check*/
 		{
-			if (password_pos > full)
+			if (password_pos >= (MIN_LENGTH_PASSWORD - 1))
 			{
-				uint8_t temp;
 				password_pos = 0;
-				/* add '2ssid\rpassword\r\n' into a array to transmit, heading will be
-				send first and data will be second */
-				xQueueSend(queue_data_tx, &password, 0);
-				xQueueReceive(queue_data_rx, &temp, portMAX_DELAY);
-				// check success or unsuccess, if success set *screen = screen_5
 				x_coordinate = 0;
-				for (password_pos = 0; password_pos < 8; password_pos++)
-				{
-					password[password_pos] = 0;
-				}
+				sprintf((char *)buffer_uart_tx, "%s\r%s", ssid, password);
+				xEventGroupSetBits(event_uart_tx, CONNECT_WIFI_BIT);
+				memset(password, '\0', sizeof(password));
+			}
+			else
+			{
+				bit_map_screen_3.text = 1;
+				strcpy(text, "Min 8 number");
 			}
 		}
 
 		else /*touch keypad to entering password*/
 		{
-			x_coordinate += OFFSET_X;
 			password[password_pos] = character_key[key];
-			password_pos++;
 			GraphicsLargeCharacter(x_coordinate, OFFSET_Y,
 								   character_key[key], WHITE);
+			password_pos++;
+			x_coordinate += OFFSET_X;
 		}
+	}
+
+	if (bitsScreen3 & CONNECT_WIFI_SUCCESSFUL_BIT)
+	{
+		strcpy(ssid_connect, ssid);
+		bit_map_screen_2.screen = 1;
+		bit_map_screen_2.ret = 1;
+		bit_map_screen_2.on_off_wifi = 1;
+		bit_map_screen_2.WIFI_Connected = 1;
+		bit_map_screen_2.text1 = 1;
+		bit_map_screen_2.text2 = 1;
+		bit_map_screen_2.WIFI1 = 1;
+		bit_map_screen_2.WIFI2 = 1;
+		bit_map_screen_2.WIFI3 = 1;
+		bit_map_screen_2.WIFI4 = 1;
+		bit_map_screen_2.WIFI5 = 1;
+		bit_map_screen_2.NEXT = 1;
+		*screen = SCREEN_WIFI;
 	}
 }

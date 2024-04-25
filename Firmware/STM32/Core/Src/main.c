@@ -88,13 +88,15 @@ static TaskHandle_t control_led_task;
 static TaskHandle_t read_adc_task;
 static TaskHandle_t screen_task;
 
+static screen_state_t screen_current = SCREEN_START;
+static TimerHandle_t timer_refresh_display;
+
 /**********************
  *  GLOBAL VARIABLES
  **********************/
 
 int16_t x;
 int16_t y;
-screen_state_t screen_current = SCREEN_START;
 
 uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
 uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
@@ -131,7 +133,17 @@ static void ControlLed_Task(void *pvParameters);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern void functionRequestCallBack(TimerHandle_t xTimer);
+void functionRequestCallBack(TimerHandle_t xTimer)
+{
+  xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
+  xTimerReset(timer_request_scan_wifi, 0);
+}
+
+void timerRefreshDisplayCallBack(TimerHandle_t xTimer)
+{
+  xEventGroupSetBits(event_uart_tx, REFRESH_DISPLAY_BIT);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -184,6 +196,7 @@ int main(void)
   bit_map_screen_1.wifi = 1;
   bit_map_screen_1.home = 1;
   bit_map_screen_1.MQTT = 1;
+  bit_map_screen_2.WIFI_Connected = 0;
 
   // init temperature
   temperature_sensor_init(&hadc1, &htim3);
@@ -197,6 +210,7 @@ int main(void)
   event_uart_rx = xEventGroupCreate();
 
   timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCallBack);
+  timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, (void *)0, functionRequestCallBack);
 
   // init task
 
@@ -210,6 +224,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  xTimerStart(timer_refresh_display, 0);
+
   vTaskStartScheduler();
   while (1)
   {
@@ -600,40 +616,60 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 static void Screen_Task(void *pvParameters)
 {
 
   while (1)
   {
     // state machine ui_screen (choose ui screen)
-    switch (screen_current)
+    EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | 
+                                              NAME_WIFI_SCAN_BIT | 
+                                              CONNECT_WIFI_SUCCESSFUL_BIT | 
+                                              DETECT_TOUCH_SCREEN_BIT | 
+                                              CONNECT_WIFI_UNSUCCESSFUL_BIT | 
+                                              REFUSE_CONNECT_MQTT_BIT | 
+                                              CONNECT_MQTT_SUCCESSFUL_BIT | 
+                                              CONNECT_MQTT_UNSUCCESSFUL_BIT | 
+                                              REFRESH_DISPLAY_BIT,
+                                              pdTRUE, pdFALSE,
+                                              portMAX_DELAY);
+    if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
+      bit_map_screen_2.WIFI_Connected = 0;
+    if ((uxBits & DETECT_TOUCH_SCREEN_BIT) || (uxBits & REFRESH_DISPLAY_BIT))
     {
-    case SCREEN_START:
-      check_event_screen_1(&screen_current);
-      screen_1();
-      break;
+      switch (screen_current)
+      {
+      case SCREEN_START:
+        check_event_screen_1(&screen_current);
+        screen_1(uxBits);
+        break;
 
-    case SCREEN_WIFI:
-      check_event_screen_2(&screen_current);
-      screen_2();
-      break;
+      case SCREEN_WIFI:
+        check_event_screen_2(&screen_current);
+        screen_2(uxBits);
+        break;
 
-    case SCREEN_KEYPAD:
-      check_event_screen_3(&screen_current);
-      screen_3();
-      break;
+      case SCREEN_KEYPAD:
+        check_event_screen_3(&screen_current);
+        screen_3(uxBits);
+        break;
 
-    case SCREEN_MAIN:
-      check_event_screen_4(&screen_current);
-      screen_4();
-      break;
+      case SCREEN_MAIN:
+        check_event_screen_4(&screen_current);
+        screen_4(uxBits);
+        break;
 
-    case SCREEN_MQTT:
-      check_event_screen_5(&screen_current);
-      screen_5();
-      break;
+      case SCREEN_MQTT:
+        check_event_screen_5(&screen_current);
+        screen_5(uxBits);
+        break;
+        
+      case SCREEN_OFF:
+
+        break;
+      }
     }
-    vTaskDelay(10);
   }
 }
 

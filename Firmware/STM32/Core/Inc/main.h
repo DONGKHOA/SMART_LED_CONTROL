@@ -71,6 +71,7 @@ void Error_Handler(void);
 #define RX_BUFFER_SIZE 					          100
 
 #define TIME_REQUEST_SCAN                 5000
+#define TIME_REFRESH_DISPLAY              100
 
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)
@@ -84,12 +85,12 @@ void Error_Handler(void);
 #define NAME_WIFI_SCAN_BIT                (1 << 1)
 #define CONNECT_WIFI_SUCCESSFUL_BIT       (1 << 2)
 #define CONNECT_WIFI_UNSUCCESSFUL_BIT     (1 << 3)
-#define SSID_CONNECT_WIFI_SUCCESSFUL_BIT  (1 << 4)
-#define REFUSE_CONNECT_MQTT_BIT           (1 << 5) // if haven't connect wifi
-#define CONNECT_MQTT_SUCCESSFUL_BIT       (1 << 6)
-#define CONNECT_MQTT_UNSUCCESSFUL_BIT     (1 << 7)
-#define MQTT_SUBSCRIBE_BIT                (1 << 8)
-#define DETECT_TOUCH_SCREEN_BIT           (1 << 9)
+#define REFUSE_CONNECT_MQTT_BIT           (1 << 4) // if haven't connect wifi
+#define CONNECT_MQTT_SUCCESSFUL_BIT       (1 << 5)
+#define CONNECT_MQTT_UNSUCCESSFUL_BIT     (1 << 6)
+#define MQTT_SUBSCRIBE_BIT                (1 << 7)
+#define DETECT_TOUCH_SCREEN_BIT           (1 << 8)
+#define REFRESH_DISPLAY_BIT               (1 << 9)
 
 /**********************
  *      TYPEDEFS

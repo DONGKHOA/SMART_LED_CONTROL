@@ -55,10 +55,9 @@
 #define SEND_NUMBER_NAME_WIFI_SCAN_BIT          (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
-#define SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT   (1 << 3)
-#define REFUSE_CONNECT_MQTT_BIT                 (1 << 4)
-#define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 5)
-#define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 6)
+#define REFUSE_CONNECT_MQTT_BIT                 (1 << 3)
+#define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 4)
+#define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
 
 /**********************
  *      TYPEDEFS

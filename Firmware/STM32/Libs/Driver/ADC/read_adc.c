@@ -11,6 +11,7 @@ int16_t read_adc (ADC_HandleTypeDef* hadc)
     HAL_ADC_Stop(hadc);
     return var;
 }
+
 void temperature_sensor_init(ADC_HandleTypeDef* hadc, TIM_HandleTypeDef* htim)
 {
 	 HAL_TIM_Base_Start(htim); // Start Timer3 (Trigger Source For ADC1)

@@ -1,19 +1,15 @@
-/*
- * event.h
- *
- *  Created on: Apr 14, 2024
- *      Author: Author: vuhuy
- */
-
 #ifndef APP_GUI_UI_EVENT_INC_EVENT_H_
 #define APP_GUI_UI_EVENT_INC_EVENT_H_
 
-#include "screen.h"
-#include "FreeRTOS.h"
-#include "queue.h"
+/*********************
+ *      INCLUDES
+ *********************/
 
-extern QueueHandle_t queue_data_tx;
-extern QueueHandle_t queue_data_rx;
+#include "screen.h"
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void check_event_screen_1(screen_state_t *screen);
 void check_event_screen_2(screen_state_t *screen);

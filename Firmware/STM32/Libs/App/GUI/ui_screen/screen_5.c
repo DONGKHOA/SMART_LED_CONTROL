@@ -1,13 +1,7 @@
-/**
- * The function `screen_5` updates the display with a frame, return icon, text, and keypad for entering
- * a password.
- */
-/*
- * screen_5.c
- *
- *  Created on: Apr 15, 2024
- *      Author: vuhuy
- */
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "screen.h"
 #include "Keypad/keypad_MQTT.h"
 #include "graphics.h"
@@ -15,7 +9,7 @@
 
 field_bit_screen5_t bit_map_screen_5;
 
-void screen_5(void)
+void screen_5(EventBits_t uxBits)
 {
 	if (bit_map_screen_5.screen == 1)
 	{

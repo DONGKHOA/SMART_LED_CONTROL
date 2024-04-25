@@ -6,18 +6,22 @@
 #include "Keypad/keypad_wifi.h"
 #include "graphics.h"
 #include "icon.h"
+#include "main.h"
+#include <string.h>
 
 /**********************
  *     VARIABLES
  **********************/
 
 field_bit_screen3_t bit_map_screen_3;
+char text[18];
+EventBits_t bitsScreen3;
 
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
 
-void screen_3(void)
+void screen_3(EventBits_t uxBits)
 {
 	if (bit_map_screen_3.screen == 1)
 	{
@@ -33,7 +37,7 @@ void screen_3(void)
 
 	if (bit_map_screen_3.text == 1)
 	{
-		GraphicsLargeString(35, 45, "ENTER PASSWORD", BLACK);
+		GraphicsLargeString(35, 45, text, BLACK);
 		bit_map_screen_3.text = 0;
 	}
 
@@ -47,5 +51,12 @@ void screen_3(void)
 	{
 		object_keypad_Wifi();
 		bit_map_screen_3.key = 0;
+	}
+
+	bitsScreen3 = uxBits;
+	
+	if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
+	{
+		strcpy(text, "re-enter password");
 	}
 }

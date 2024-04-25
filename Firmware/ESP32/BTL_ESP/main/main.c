@@ -247,11 +247,6 @@ static void startUartTxTask(void *arg)
             transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
         }
 
-        if (uxBits & SEND_SSID_CONNECT_WIFI_SUCCESSFUL_BIT)
-        {
-            transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
-        }
-
         if (uxBits & REFUSE_CONNECT_MQTT_BIT)
         {
             transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);

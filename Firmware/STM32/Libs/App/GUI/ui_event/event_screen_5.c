@@ -1,11 +1,20 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "event.h"
 #include "Keypad/keypad_MQTT.h"
+
+/*********************
+ *      DEFINES
+ *********************/
 
 #define OFFSET_X 15
 #define OFFSET_Y 90
 
-extern int16_t x;
-extern int16_t y;
+/**********************
+ *  STATIC VARIABLES
+ **********************/
 
 static const char character_key[13] = {'0', '1', '2', '3',
                                        '4', '5', '6', '7',
@@ -13,6 +22,14 @@ static const char character_key[13] = {'0', '1', '2', '3',
 
 static uint8_t MQTT[15];
 static uint8_t MQTT_pos = 0;
+
+/**********************
+ *  EXTERN VARIABLES
+ **********************/
+
+extern int16_t x;
+extern int16_t y;
+
 uint8_t connect_MQTT = 0;
 
 /*MQTT screen are similar to Wifi screen in terms of functionality*/
@@ -50,10 +67,9 @@ void check_event_screen_5(screen_state_t *screen)
 
         else if (key == NUM_v)
         {
-            uint8_t temp;
             MQTT_pos = 0;
-            xQueueSend(queue_data_tx, &MQTT, 0);
-            xQueueReceive(queue_data_rx, &temp, portMAX_DELAY);
+            // xQueueSend(queue_data_tx, &MQTT, 0);
+            // xQueueReceive(queue_data_rx, &temp, portMAX_DELAY);
             // check success or unsuccess, if success set *screen = screen_4
             x_coordinate = 0;
             for (MQTT_pos = 0; MQTT_pos < 15; MQTT_pos++)

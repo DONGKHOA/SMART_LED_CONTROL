@@ -1,20 +1,14 @@
-/**
- * The `screen_4` function updates the graphics on the screen based on the state of the
- * `bit_map_screen_4` structure.
- */
-/*
- * screen_4.c
- *
- *  Created on: Mar 17, 2024
- *      Author: Author: vuhuy
- */
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "screen.h"
 #include "graphics.h"
 #include "Icon/icon.h"
 
 field_bit_screen4_t bit_map_screen_4;
 
-void screen_4(void)
+void screen_4(EventBits_t uxBits)
 {
 	if (bit_map_screen_4.screen == 1)
 	{

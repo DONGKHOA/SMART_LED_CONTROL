@@ -1,9 +1,7 @@
-/*
- * screen_1.c
- *
- *  Created on: Mar 17, 2024
- *      Author: Author: vuhuy
- */
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "screen.h"
 #include "Icon/icon.h"
 #include "graphics.h"
@@ -14,7 +12,7 @@ field_bit_screen1_t bit_map_screen_1;
  * The function `screen_1` clears the screen and displays different icons based on the values of
  * corresponding bit_map_screen_1 flags.
  */
-void screen_1(void)
+void screen_1(EventBits_t uxBits)
 {
 	if (bit_map_screen_1.screen == 1)
 	{
