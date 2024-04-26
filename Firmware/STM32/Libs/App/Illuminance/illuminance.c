@@ -1,18 +1,21 @@
 #include "illuminance.h"
-#include "calibrate_adc.h"
-#include "event.h"
+
 
 float volt;
-float Ev;
+float Ev_before;
 int16_t var;
+int16_t var_after;
+int16_t Ev;
 extern ADC_HandleTypeDef hadc2;
 extern uint8_t autocontrol;
+int low_threshold = 10;
+int high_threshold = 875;
 
 
 float voltage_adc()
 {
 	var = read_adc(&hadc2);
-	int16_t var_after = calibrate_adc(var);
+	var_after = calibrate_adc(var);
 	volt = (((float)var_after*3.3)/4096);
  	volt = volt/6;
 	return volt;
@@ -20,10 +23,35 @@ float voltage_adc()
 
 float illuminance_adc()
 {
-	float R = volt*10; // (kOhm)
-	Ev = R - 4.6974;
-	Ev = Ev/(-1.02*10e-4);
-	return Ev;
+	float R = volt*10; // I=100uA, (The unit of R is KOhm)
+	Ev_before = R - 4.6974;
+	Ev_before = Ev_before/(-1.02*10e-4);
+	Ev_before = Ev_before/5 ;
+	if (Ev_before < 800)   Ev_before= Ev_before - 500;
+
+	if (Ev_before < low_threshold)
+	    {
+	        Ev_before = low_threshold;
+	    }
+	else if (Ev_before > high_threshold)
+	    {
+	        Ev_before = 1000;
+	    }
+	return Ev_before;
+}
+
+int16_t adjust_Ev()
+{
+    Ev = round((double)Ev_before / 10) * 10;
+    if (Ev < low_threshold)
+    {
+        Ev = low_threshold;
+    }
+    else if (Ev > high_threshold)
+    {
+        Ev = 1000;
+    }
+    return Ev;
 }
 
 int illuminance_signal()

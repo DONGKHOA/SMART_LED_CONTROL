@@ -4,10 +4,15 @@
 /***********************************************************/
 
 #include "stdint.h"
+#include "calibrate_adc.h"
+#include "event.h"
+#include "stdio.h"
+#include "math.h"
 
 float voltage_adc();
 float illuminance_adc();
 int illuminance_signal();
+int16_t adjust_Ev();
 void turnOnLight();
 void turnOffLight();
 void autocontrol_mode();
