@@ -16,6 +16,7 @@
 #define MAX_LENGTH_SSID 13
 #define SSID_IN_PAGE 5
 
+
 /**********************
  *     VARIABLES
  **********************/
