@@ -81,7 +81,7 @@ extern float Temperature;
 /**********************
  *  STATIC VARIABLES
  **********************/
-
+// Task Handle
 static TaskHandle_t uart_rx_task;
 static TaskHandle_t uart_tx_task;
 static TaskHandle_t control_led_task;
@@ -98,15 +98,17 @@ static TimerHandle_t timer_refresh_display;
 int16_t x;
 int16_t y;
 
-uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
-uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
+char buffer_uart_rx[RX_BUFFER_SIZE + 1];
+char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
 QueueHandle_t queue_data_tx = NULL;
 QueueHandle_t queue_data_rx = NULL;
 
+// EventGroup Handle
 EventGroupHandle_t event_uart_tx;
 EventGroupHandle_t event_uart_rx;
 
+// Timer Handle
 TimerHandle_t timer_request_scan_wifi;
 
 /* USER CODE END PV */
@@ -714,19 +716,41 @@ static void UartRx_Task(void *pvParameters)
       switch (data_heading)
       {
       case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
+      xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT );
         break;
 
       case HEADING_RECEIVE_NAME_WIFI_SCAN:
-
+      xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
         break;
-      case HEADING_RECEIVE_CONNECT_WIFI:
 
+      case HEADING_RECEIVE_CONNECT_WIFI:
+      if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+      {
+        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
+      }
+      else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+      {
+        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+      }
         break;
 
       case HEADING_RECEIVE_CONNECT_MQTT:
+          if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
+          }
+          else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+          }
+          else if(memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
+          }
         break;
 
       case HEADING_MQTT_SUBSCRIBE:
+      xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
         break;
 
       default:
