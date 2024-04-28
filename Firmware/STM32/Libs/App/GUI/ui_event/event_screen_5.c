@@ -23,8 +23,8 @@ static const char character_key[13] = {'0', '1', '2', '3',
                                        '4', '5', '6', '7',
                                        '8', '9', 'x', 'v', '.'};
 
-static uint8_t MQTT[16];
-static uint8_t MQTT_pos = 0;
+uint8_t MQTT[16];
+uint8_t MQTT_pos = 0;
 
 /**********************
  *  EXTERN VARIABLES
