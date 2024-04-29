@@ -681,12 +681,6 @@ static void Screen_Task(void *pvParameters)
 
 static void UartTx_Task(void *pvParameters)
 {
-  void transmitdata (uart_tx_heading_t heading, char* data)
-  {
-    UARTWrite((char *)&heading, sizeof(heading));
-    UARTWrite(data, strlen(data));
-    UARTWrite("\n", 1);
-  }
   while (1)
   {
     EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
