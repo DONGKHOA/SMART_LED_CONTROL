@@ -118,11 +118,11 @@ typedef enum
  *   INLINE FUNCTION
  *********************/
 static inline void transmitdata (uart_tx_heading_t heading, char* data)
-	  {
-	    UARTWrite((char *)&heading, sizeof(uart_tx_heading_t));
-      UARTWrite(data, strlen(data));
-	    UARTWrite("\n", 1);
-	  }
+{
+	UARTWrite((char *)&heading, sizeof(uart_tx_heading_t));
+      	UARTWrite(data, strlen(data));
+	UARTWrite("\n", 1);
+}
 
 #ifdef __cplusplus
 }
