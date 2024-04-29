@@ -114,6 +114,18 @@ typedef enum
   HEADING_MQTT_SUBSCRIBE,
 } uart_rx_heading_t;
 
+/*********************
+ *   INLINE FUNCTION
+ *********************/
+
+static inline void transmitdata(uart_tx_heading_t heading, char *data)
+{
+	UARTWrite((char *)&heading, 1);
+	UARTWrite(data, strlen(data));
+	UARTWrite("\n", 1);
+}
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

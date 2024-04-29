@@ -631,14 +631,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-static void transmitdata(uart_tx_heading_t heading, char *data)
-{
-	UARTWrite((char *)&heading, 1);
-	UARTWrite(data, strlen(data));
-	UARTWrite("\n", 1);
-}
-
 static void Screen_Task(void *pvParameters)
 {
 
@@ -694,10 +686,10 @@ static void UartTx_Task(void *pvParameters)
   {
     EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
                                              ON_WIFI_BIT |
-                                                 OFF_WIFI_BIT |
-                                                 CONNECT_WIFI_BIT |
-                                                 CONNECT_MQTT_BIT |
-                                                 MQTT_PUBLISH_BIT,
+                                             OFF_WIFI_BIT |
+                                             CONNECT_WIFI_BIT |
+                                             CONNECT_MQTT_BIT |
+                                             MQTT_PUBLISH_BIT,
                                              pdTRUE, pdFALSE,
                                              portMAX_DELAY);
     if (uxBits & ON_WIFI_BIT)
