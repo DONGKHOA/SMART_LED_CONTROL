@@ -628,7 +628,7 @@ static void Screen_Task(void *pvParameters)
                                               CONNECT_WIFI_SUCCESSFUL_BIT | 
                                               DETECT_TOUCH_SCREEN_BIT | 
                                               CONNECT_WIFI_UNSUCCESSFUL_BIT | 
-                                              REFUSE_CONNECT_MQTT_BIT | 
+                                              SEND_REFUSE_CONNECT_MQTT_BIT | 
                                               CONNECT_MQTT_SUCCESSFUL_BIT | 
                                               CONNECT_MQTT_UNSUCCESSFUL_BIT | 
                                               REFRESH_DISPLAY_BIT,

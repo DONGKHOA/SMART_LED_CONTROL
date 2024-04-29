@@ -14,6 +14,7 @@
 #include "freertos/timers.h"
 #include "freertos/queue.h"
 #include "freertos/event_groups.h"
+#include "freertos/semphr.h"
 
 #include "esp_system.h"
 #include "esp_event.h"
@@ -40,7 +41,7 @@
 
 #define MIN_STACK_SIZE                          1024
 
-#define TIME_MQTT_SUBSCRIBE                     2000
+#define TIME_MQTT_SUBSCRIBE                     10000
 #define MQTT_PUBLISH                            0
 #define MQTT_SUBSCRIBE                          1
 
@@ -55,9 +56,10 @@
 #define SEND_NUMBER_NAME_WIFI_SCAN_BIT          (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
-#define REFUSE_CONNECT_MQTT_BIT                 (1 << 3)
+#define SEND_REFUSE_CONNECT_MQTT_BIT            (1 << 3)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 4)
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
+#define SEND_MQTT_SUBSCRIBE                     (1 << 6)
 
 /**********************
  *      TYPEDEFS

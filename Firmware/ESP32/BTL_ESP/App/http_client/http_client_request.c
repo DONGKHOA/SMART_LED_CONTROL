@@ -31,7 +31,7 @@
 
 static char REQUEST[512];
 static const char *TAG = "http request";
-char *data;
+char *data_http;
 
 static uint8_t http_request()
 {
@@ -76,7 +76,7 @@ static uint8_t http_request()
 
     ESP_LOGI(TAG, "... connected");
     freeaddrinfo(res);
-    sprintf(REQUEST, "GET http://api.openweathermap.org/data/2.5/weather?q=Thanh%%20pho%%20Ho%%20Chi%%20Minh&appid=a5b16100ee019b826c6a7e22902d14e5\n\n");
+    sprintf(REQUEST, "GET http://api.openweathermap.org/data_http/2.5/weather?q=Thanh%%20pho%%20Ho%%20Chi%%20Minh&appid=a5b16100ee019b826c6a7e22902d14e5\n\n");
     if (write(s, REQUEST, strlen(REQUEST)) < 0) 
     {
         ESP_LOGE(TAG, "... socket send failed");
@@ -105,11 +105,11 @@ static uint8_t http_request()
         r = read(s, recv_buf, 64-1);
         for(i = 0; i < r; i++) 
         {
-            *(data + i + count) = recv_buf[i];
+            *(data_http + i + count) = recv_buf[i];
         }
         count += i;
     } while(r > 0);
-    *(data + i + count) = '\0';
+    *(data_http + i + count) = '\0';
 
     ESP_LOGI(TAG, "... done reading from socket. Last read return=%d errno=%d.", r, errno);
     close(s);
@@ -119,16 +119,16 @@ static uint8_t http_request()
 
 char *WIFI_HTTP_Request()
 {
-    data = (char *)calloc(1024, 1);
-    if (data == NULL)
+    data_http = (char *)calloc(1024, 1);
+    if (data_http == NULL)
     {
       printf("Unable to allocate memory.\n");
       exit(1);
     }
     if (http_request() == HTTP_REQUEST_OK)
     {
-        return data;
+        return data_http;
     }
-    free(data);   
+    free(data_http);   
     return NULL;
 }

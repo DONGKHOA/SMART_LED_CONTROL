@@ -6,8 +6,8 @@
  *********************/
 
 #include <stdint.h>
-#include "driver/gpio.h"
 #include "driver/uart.h"
+#include "driver/gpio.h"
 
 /*********************
  *      DEFINES
