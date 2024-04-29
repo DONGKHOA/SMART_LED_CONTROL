@@ -72,6 +72,7 @@ void Error_Handler(void);
 
 #define TIME_REQUEST_SCAN                 5000
 #define TIME_REFRESH_DISPLAY              100
+#define TIME_WAIT                         30000
 
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)

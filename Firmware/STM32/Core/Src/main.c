@@ -114,7 +114,7 @@ EventGroupHandle_t event_uart_rx;
 
 // Timer Handle
 TimerHandle_t timer_request_scan_wifi;
-
+TimerHandle_t timer_wait_off_screen;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -148,6 +148,11 @@ void functionRequestCallBack(TimerHandle_t xTimer)
 void timerRefreshDisplayCallBack(TimerHandle_t xTimer)
 {
   xEventGroupSetBits(event_uart_tx, REFRESH_DISPLAY_BIT);
+}
+
+void vBacklightTimerCallback(TimerHandle_t xTimer)
+{
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
 }
 
 /* USER CODE END 0 */
@@ -217,7 +222,7 @@ int main(void)
 
   timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCallBack);
   timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, (void *)0, functionRequestCallBack);
-
+  timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCallback);
   // init task
 
   xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, &screen_task);
@@ -672,7 +677,8 @@ static void Screen_Task(void *pvParameters)
         break;
         
       case SCREEN_OFF:
-
+        check_event_screen_6(&screen_current);
+        screen_1(uxBits);
         break;
       }
     }
@@ -749,7 +755,7 @@ static void UartTx_Task(void *pvParameters)
                 state_auto[3] = '\0';
             }
 
-            sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+ //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
             transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
         }
   }
