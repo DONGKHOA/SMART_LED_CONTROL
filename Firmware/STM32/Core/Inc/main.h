@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "string.h"
+#include "uartstdio.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -72,6 +73,7 @@ void Error_Handler(void);
 
 #define TIME_REQUEST_SCAN                 5000
 #define TIME_REFRESH_DISPLAY              100
+#define TIME_WAIT                         30000
 
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)
@@ -113,6 +115,16 @@ typedef enum
 } uart_rx_heading_t;
 
 /* USER CODE END Private defines */
+
+/*********************
+ *   INLINE FUNCTION
+ *********************/
+static inline void transmitdata (uart_tx_heading_t heading, char* data)
+{
+	UARTWrite((char *)&heading, sizeof(uart_tx_heading_t));
+      	UARTWrite(data, strlen(data));
+	UARTWrite("\n", 1);
+}
 
 #ifdef __cplusplus
 }

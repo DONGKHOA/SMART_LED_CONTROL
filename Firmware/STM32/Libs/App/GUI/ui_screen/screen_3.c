@@ -29,6 +29,12 @@ void screen_3(EventBits_t uxBits)
 		bit_map_screen_3.screen = 0;
 	}
 
+	if (bit_map_screen_3.frame == 1)
+	{
+		GraphicsRoundedRectangle(35, 82, 170, 30, 5, BLACK);
+		bit_map_screen_3.frame = 0;
+	}
+
 	if (bit_map_screen_3.ret == 1)
 	{
 		GraphicsColourBitmap(7, 8, 28, 23, icon_return);
@@ -37,14 +43,9 @@ void screen_3(EventBits_t uxBits)
 
 	if (bit_map_screen_3.text == 1)
 	{
-		GraphicsLargeString(35, 45, text, BLACK);
+		GraphicsFilledRectangle(70, 56, 110, 15, WHITE);
+		GraphicsLargeString(70, 56, text, BLACK);
 		bit_map_screen_3.text = 0;
-	}
-
-	if (bit_map_screen_3.frame == 1)
-	{
-		GraphicsRoundedRectangle(35, 82, 170, 30, 5, BLACK);
-		bit_map_screen_3.frame = 0;
 	}
 
 	if (bit_map_screen_3.key == 1)
@@ -58,5 +59,6 @@ void screen_3(EventBits_t uxBits)
 	if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
 	{
 		strcpy(text, "re-enter password");
+		bit_map_screen_3.text = 1;
 	}
 }

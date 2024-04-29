@@ -33,8 +33,6 @@
 #include "cal_temperature.h"
 #include "illuminance.h"
 
-#include "uartstdio.h"
-
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "queue.h"
@@ -77,11 +75,15 @@ UART_HandleTypeDef huart4;
  **********************/
 
 extern float Temperature;
+extern int16_t Ev;
+extern uint8_t autocontrol; 
+extern uint8_t MQTT[15];
+extern uint8_t MQTT_pos;
 
 /**********************
  *  STATIC VARIABLES
  **********************/
-
+// Task Handle
 static TaskHandle_t uart_rx_task;
 static TaskHandle_t uart_tx_task;
 static TaskHandle_t control_led_task;
@@ -98,17 +100,19 @@ static TimerHandle_t timer_refresh_display;
 int16_t x;
 int16_t y;
 
-uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
-uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
+char buffer_uart_rx[RX_BUFFER_SIZE + 1];
+char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
 QueueHandle_t queue_data_tx = NULL;
 QueueHandle_t queue_data_rx = NULL;
 
+// EventGroup Handle
 EventGroupHandle_t event_uart_tx;
 EventGroupHandle_t event_uart_rx;
 
+// Timer Handle
 TimerHandle_t timer_request_scan_wifi;
-
+TimerHandle_t timer_wait_off_screen;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -142,6 +146,11 @@ void functionRequestCallBack(TimerHandle_t xTimer)
 void timerRefreshDisplayCallBack(TimerHandle_t xTimer)
 {
   xEventGroupSetBits(event_uart_tx, REFRESH_DISPLAY_BIT);
+}
+
+void vBacklightTimerCallback(TimerHandle_t xTimer)
+{
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
 }
 
 /* USER CODE END 0 */
@@ -211,7 +220,7 @@ int main(void)
 
   timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCallBack);
   timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, (void *)0, functionRequestCallBack);
-
+  timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCallback);
   // init task
 
   xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, &screen_task);
@@ -666,7 +675,8 @@ static void Screen_Task(void *pvParameters)
         break;
         
       case SCREEN_OFF:
-
+        check_event_screen_6(&screen_current);
+        screen_1(uxBits);
         break;
       }
     }
@@ -677,6 +687,69 @@ static void UartTx_Task(void *pvParameters)
 {
   while (1)
   {
+    EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
+                                                     ON_WIFI_BIT |
+                                                     OFF_WIFI_BIT |
+                                                     CONNECT_WIFI_BIT |
+                                                     CONNECT_MQTT_BIT |
+                                                     MQTT_PUBLISH_BIT,
+                                                     pdTRUE, pdFALSE,
+                                                     portMAX_DELAY);
+        if (uxBits & ON_WIFI_BIT)
+        {
+            sprintf((char *)buffer_uart_tx, "%s", "ON");
+            buffer_uart_tx[2] = '\0';
+            transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+        }
+
+        if (uxBits & OFF_WIFI_BIT)
+        {
+            sprintf((char *)buffer_uart_tx, "%s", "OFF");
+            buffer_uart_tx[3] = '\0';
+            transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+        }
+
+        if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
+        {
+            transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
+        }
+
+        if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
+        {
+            memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
+            buffer_uart_tx[16] = '\0';
+            transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
+        }
+
+        if (uxBits & MQTT_PUBLISH_BIT) 
+        {
+            char state_led[4], state_auto[4];
+            uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+            if (pinValue == GPIO_PIN_SET) 
+            {
+                strcpy(state_led, "ON");
+                state_led[2] = '\0';
+            } 
+            else 
+            {
+                strcpy(state_led, "OFF");
+                state_led[3] = '\0';
+            }
+            
+            if (autocontrol)
+            {
+                strcpy(state_auto, "ON");
+                state_auto[2] = '\0';
+            } 
+            else 
+            {
+                strcpy(state_auto, "OFF");
+                state_auto[3] = '\0';
+            }
+
+ //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+            transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+        }
   }
 }
 
@@ -714,19 +787,41 @@ static void UartRx_Task(void *pvParameters)
       switch (data_heading)
       {
       case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
+      xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT );
         break;
 
       case HEADING_RECEIVE_NAME_WIFI_SCAN:
-
+      xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
         break;
-      case HEADING_RECEIVE_CONNECT_WIFI:
 
+      case HEADING_RECEIVE_CONNECT_WIFI:
+      if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+      {
+        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
+      }
+      else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+      {
+        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+      }
         break;
 
       case HEADING_RECEIVE_CONNECT_MQTT:
+          if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
+          }
+          else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+          }
+          else if(memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
+          {
+            xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
+          }
         break;
 
       case HEADING_MQTT_SUBSCRIBE:
+      xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
         break;
 
       default:
@@ -746,6 +841,7 @@ static void ADC_Task(void *pvParameters)
   {
     voltage_adc();
     Temperature = calculate_temperature();
+    adjust_Ev();
   }
 }
 

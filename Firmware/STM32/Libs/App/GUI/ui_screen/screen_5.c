@@ -6,8 +6,20 @@
 #include "Keypad/keypad_MQTT.h"
 #include "graphics.h"
 #include "icon.h"
+#include "main.h"
+#include "string.h"
+
+/**********************
+ *     VARIABLES
+ **********************/
 
 field_bit_screen5_t bit_map_screen_5;
+char text_sc5[14];
+EventBits_t bitsScreen5;
+
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
 void screen_5(EventBits_t uxBits)
 {
@@ -31,7 +43,8 @@ void screen_5(EventBits_t uxBits)
 
 	if (bit_map_screen_5.text == 1)
 	{
-		GraphicsLargeString(35, 45, "ENTER PASSWORD", BLACK);
+		GraphicsFilledRectangle(80, 63, 90, 15, WHITE);
+		GraphicsLargeString(82, 63, text_sc5, BLACK);
 		bit_map_screen_5.text = 0;
 	}
 
@@ -39,5 +52,13 @@ void screen_5(EventBits_t uxBits)
 	{
 		object_Keypad_MQTT();
 		bit_map_screen_5.key = 0;
+	}
+
+	bitsScreen5 = uxBits;
+
+	if (uxBits & CONNECT_MQTT_UNSUCCESSFUL_BIT)
+	{
+		strcpy(text_sc5, "re-enter MQTT");
+		bit_map_screen_5.text = 1;
 	}
 }

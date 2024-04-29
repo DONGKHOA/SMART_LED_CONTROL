@@ -34,6 +34,18 @@ void screen_4(EventBits_t uxBits)
 		bit_map_screen_4.automode = 0;
 	}
 
+	if(bit_map_screen_4.on_auto == 1)
+	{
+		GraphicsLargeString(104, 236, "AUTO", BLACK);
+		bit_map_screen_4.on_auto = 0;
+	}
+
+	if(bit_map_screen_4.off_auto == 1)
+	{
+		GraphicsLargeString(104, 236, "AUTO", WHITE);
+		bit_map_screen_4.off_auto = 0;
+	}
+
 	if (bit_map_screen_4.ON == 1)
 	{
 		GraphicsLargeString(95, 119, "ON", BLACK);

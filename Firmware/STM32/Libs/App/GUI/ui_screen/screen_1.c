@@ -34,4 +34,14 @@ void screen_1(EventBits_t uxBits)
 		GraphicsColourBitmap(94, 150, 216, 255, icon_MQTT);
 		bit_map_screen_1.MQTT = 0;
 	}
+	if(bit_map_screen_1.connected_MQTT == 1)
+	{
+		GraphicsCircle(145, 209, 3, GREEN);
+		bit_map_screen_1.connected_MQTT = 0;
+	}
+	if(bit_map_screen_1.connected_WIFI == 1)
+	{
+		GraphicsCircle(140, 52, 3, GREEN);
+		bit_map_screen_1.connected_WIFI = 0;
+	}
 }
