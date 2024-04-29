@@ -33,8 +33,6 @@
 #include "cal_temperature.h"
 #include "illuminance.h"
 
-#include "uartstdio.h"
-
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "queue.h"
