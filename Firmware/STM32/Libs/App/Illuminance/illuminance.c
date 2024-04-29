@@ -10,8 +10,8 @@ extern ADC_HandleTypeDef hadc2;
 extern uint8_t autocontrol;
 int low_threshold = 10;
 int high_threshold = 875;
-extern volatile uint8_t led_state = 0; 
-extern volatile uint8_t auto_control = 0;
+extern volatile uint8_t led_state; 
+extern volatile uint8_t auto_control;
 
 
 float voltage_adc()

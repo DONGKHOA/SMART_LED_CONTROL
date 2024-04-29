@@ -204,23 +204,26 @@ static void startUartRxTask(void *arg)
                 {
                     memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
                 }
-                
                 break;
 
             case HEADING_CONNECT_WIFI:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
                 break;
+
             case HEADING_CONNECT_MQTT:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
                 break;
+
             case HEADING_MQTT_PUBLISH:
                 uint8_t buffer = MQTT_PUBLISH;
                 xQueueSend(mqtt_queue, &buffer, 0);
                 break;
+
             default:
                 enable_bit = 0;
                 memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
                 break;
+
                 memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
             }
 
@@ -490,12 +493,13 @@ static void startMQTTControlDataTask(void *arg)
                 char state_led[10];
                 char state_auto_nodered[10];
                 esp_mqtt_client_subscribe(mqtt_client_0.client, "button", 0);
-                esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
-
                 xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
                 strcpy(state_led, data_mqtt);
+
+                esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
                 xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
                 strcpy(state_auto_nodered, data_mqtt);
+                
                 sprintf(buffer_uart_tx, "%s\r%s", state_led, state_auto_nodered);
                 xEventGroupSetBits(event_uart_tx_heading,
                                    SEND_MQTT_SUBSCRIBE);
