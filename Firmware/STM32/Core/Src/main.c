@@ -76,7 +76,8 @@ UART_HandleTypeDef huart4;
 
 extern float Temperature;
 extern int16_t Ev;
-extern uint8_t autocontrol; 
+extern uint8_t check_state_led; 
+extern uint8_t check_state_auto; 
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -103,8 +104,10 @@ int16_t y;
 char buffer_uart_rx[RX_BUFFER_SIZE + 1];
 char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
+//QueueHandle
 QueueHandle_t queue_data_tx = NULL;
 QueueHandle_t queue_data_rx = NULL;
+QueueHandle_t queue_control_led = NULL;
 
 // EventGroup Handle
 EventGroupHandle_t event_uart_tx;
@@ -113,6 +116,7 @@ EventGroupHandle_t event_uart_rx;
 // Timer Handle
 TimerHandle_t timer_request_scan_wifi;
 TimerHandle_t timer_wait_off_screen;
+TimerHandle_t timer_read_temp;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -214,6 +218,8 @@ int main(void)
 
   queue_data_rx = xQueueCreate(1024, sizeof(uint8_t));
   queue_data_tx = xQueueCreate(1024, sizeof(uint8_t));
+  queue_control_led = xQueueCreate(1024, sizeof(uint8_t));
+
 
   event_uart_tx = xEventGroupCreate();
   event_uart_rx = xEventGroupCreate();
@@ -736,7 +742,7 @@ static void UartTx_Task(void *pvParameters)
                 state_led[3] = '\0';
             }
             
-            if (autocontrol)
+            if (check_state_autol)
             {
                 strcpy(state_auto, "ON");
                 state_auto[2] = '\0';
@@ -839,18 +845,32 @@ static void ADC_Task(void *pvParameters)
 {
   while (1)
   {
-    voltage_adc();
-    Temperature = calculate_temperature();
-    adjust_Ev();
+     if(xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
+    {
+		voltage_adc();
+		Temperature = calculate_temperature();
+		adjust_Ev();
+    }
   }
 }
-
 static void ControlLed_Task(void *pvParameters)
 {
   while (1)
   {
+    if( xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS )
+    {
+      if(check_state_led)
+      {
+         turnOnLight();
+      }
+      else
+      {
+        turnOffLight();
+      }
+    }
   }
 }
+
 
 /* USER CODE END 4 */
 

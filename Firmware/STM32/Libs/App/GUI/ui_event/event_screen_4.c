@@ -2,10 +2,16 @@
 #include "check_touch_screen/check_touch_screen.h"
 #include "screen.h"
 #include "graphics.h"
+#include "queue.h"
 
 extern int16_t x;
 extern int16_t y;
+extern QueueHandle_t queue_control_led;
 uint8_t autocontrol = 0;
+volatile uint8_t led_state = 0; 
+volatile uint8_t auto_control = 0;
+ 
+
 
 void check_event_screen_4(screen_state_t *screen)
 {
@@ -22,8 +28,9 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/
 		{
-			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
+			uint8_t check_state_led = (led_state == 0) ? 1 : 0; 
+			xQueueSend(queue_control_led, &check_state_led, portMAX_DELAY);
+			if(check_state_led)
 			{
 				bit_map_screen_4.ON = 1; // if Button on
 			}
@@ -34,21 +41,15 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else /*Automatically turn on or off the light according to brightness if pressed icon_auto*/
 		{
-			vTaskDelay(2000);
-			if (touch == ICON_AUTO)
+			uint8_t check_state_auto = (auto_control == 0) ? 1 : 0;
+			xQueueSend(queue_control_led, &check_state_auto, portMAX_DELAY);
+			if (check_state_auto)
 			{
-				bit_map_screen_4.on_auto = 1;
-				autocontrol = 1; // turn on mode auto
-
+				bit_map_screen_4.on_auto = 1;	
 			}
-			if (touch == ICON_AUTO)
+			else
 			{
-				vTaskDelay(1000);
-				if (touch == ICON_AUTO)
-				{
-					bit_map_screen_4.off_auto = 1;
-					autocontrol = 0; // turn off mode auto
-				}
+				bit_map_screen_4.off_auto = 1;
 			}
 			// draw one note to display on or off mode auto
 		}
