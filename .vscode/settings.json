@@ -30,7 +30,8 @@
         "LOGI",
         "LOGW",
         "MQTT",
-        "netif"
+        "netif",
+        "nodered"
     ],
     "docwriter.style": "Doxygen"
 }

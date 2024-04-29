@@ -1,9 +1,22 @@
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "main.h"
 
-// Variable Handle
+/**********************
+ *     VARIABLES
+ **********************/
 
-static char buffer_uart_rx[RX_BUF_SIZE + 1];
-static char buffer_uart_tx[RX_BUF_SIZE + 1];
+char buffer_uart_rx[RX_BUF_SIZE + 1];
+char buffer_uart_tx[RX_BUF_SIZE + 1];
+
+SemaphoreHandle_t mqtt_semaphore;
+
+/**********************
+ *  STATIC VARIABLES
+ **********************/
+
 static int8_t volatile data_heading = -1;
 
 static uint8_t volatile ssid[32];
@@ -13,7 +26,7 @@ static uint8_t flag_connect_success = 0;
 static uint8_t num_wifi_scan = 0;
 
 static char url_mqtt[30] = "mqtt://172.16.0.181:1883";
-MQTT_Client_Data_t mqtt_client_0;
+static MQTT_Client_Data_t mqtt_client_0;
 
 // Task Handle
 
@@ -75,6 +88,8 @@ void app_main(void)
                                         pdFALSE, (void *)0, MQTT_timer_cb);
 
     mqtt_queue = xQueueCreate(2, sizeof(uint8_t));
+
+    mqtt_semaphore = xSemaphoreCreateCounting(2,0);
 
     printf("Task start initialization\n");
 
@@ -204,13 +219,14 @@ static void startUartTxTask(void *arg)
 {
     while (1)
     {
-        EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
+        EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx_heading,
                                                  SEND_NUMBER_NAME_WIFI_SCAN_BIT |
                                                      SEND_CONNECT_WIFI_SUCCESSFUL_BIT |
                                                      SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT |
-                                                     REFUSE_CONNECT_MQTT_BIT |
+                                                     SEND_REFUSE_CONNECT_MQTT_BIT |
                                                      SEND_CONNECT_MQTT_SUCCESSFUL_BIT |
-                                                     SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT,
+                                                     SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT |
+                                                     SEND_MQTT_SUBSCRIBE,
                                                  pdTRUE, pdFALSE,
                                                  portMAX_DELAY);
 
@@ -247,7 +263,7 @@ static void startUartTxTask(void *arg)
             transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
         }
 
-        if (uxBits & REFUSE_CONNECT_MQTT_BIT)
+        if (uxBits & SEND_REFUSE_CONNECT_MQTT_BIT)
         {
             transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
         }
@@ -258,6 +274,11 @@ static void startUartTxTask(void *arg)
         }
 
         if (uxBits & SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT)
+        {
+            transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
+        }
+
+        if (uxBits & SEND_MQTT_SUBSCRIBE)
         {
             transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
         }
@@ -406,7 +427,7 @@ static void startMQTTConnectTask(void *arg)
             {
                 strcpy(buffer_uart_tx, "REFUSE");
                 xEventGroupSetBits(event_uart_tx_heading,
-                                   REFUSE_CONNECT_MQTT_BIT);
+                                   SEND_REFUSE_CONNECT_MQTT_BIT);
             }
         }
     }
@@ -442,8 +463,6 @@ static void startMQTTControlDataTask(void *arg)
                 char state_auto[4];
                 char lux[5];
                 char temperature[10];
-                // pre processing data from buffer uart rx to:
-                // state_led, state_auto, lux, temperature
 
                 processingDataMQTTPublish(buffer_uart_rx, state_led, state_auto, lux, temperature);
 
@@ -453,11 +472,18 @@ static void startMQTTControlDataTask(void *arg)
             }
             else if (buffer == MQTT_SUBSCRIBE)
             {
-                // char state_led[4];
-                // char state_auto[4];
-
+                char state_led[10];
+                char state_auto_nodered[10];
                 esp_mqtt_client_subscribe(mqtt_client_0.client, "button", 0);
                 esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
+
+                xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
+                strcpy(state_led, data_mqtt);
+                xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
+                strcpy(state_auto_nodered, data_mqtt);
+                sprintf(buffer_uart_tx, "%s\r%s", state_led, state_auto_nodered);
+                xEventGroupSetBits(event_uart_tx_heading,
+                                   SEND_MQTT_SUBSCRIBE);
             }
         }
     }

@@ -76,8 +76,12 @@ UART_HandleTypeDef huart4;
 
 extern float Temperature;
 extern int16_t Ev;
+<<<<<<< HEAD
 extern uint8_t check_state_led; 
 extern uint8_t check_state_auto; 
+=======
+extern uint8_t autocontrol;
+>>>>>>> 329eee12d5afb511891550253ae507fde22b6264
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -638,17 +642,9 @@ static void Screen_Task(void *pvParameters)
   while (1)
   {
     // state machine ui_screen (choose ui screen)
-    EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | 
-                                              NAME_WIFI_SCAN_BIT | 
-                                              CONNECT_WIFI_SUCCESSFUL_BIT | 
-                                              DETECT_TOUCH_SCREEN_BIT | 
-                                              CONNECT_WIFI_UNSUCCESSFUL_BIT | 
-                                              REFUSE_CONNECT_MQTT_BIT | 
-                                              CONNECT_MQTT_SUCCESSFUL_BIT | 
-                                              CONNECT_MQTT_UNSUCCESSFUL_BIT | 
-                                              REFRESH_DISPLAY_BIT,
-                                              pdTRUE, pdFALSE,
-                                              portMAX_DELAY);
+    EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | NAME_WIFI_SCAN_BIT | CONNECT_WIFI_SUCCESSFUL_BIT | DETECT_TOUCH_SCREEN_BIT | CONNECT_WIFI_UNSUCCESSFUL_BIT | SEND_REFUSE_CONNECT_MQTT_BIT | CONNECT_MQTT_SUCCESSFUL_BIT | CONNECT_MQTT_UNSUCCESSFUL_BIT | REFRESH_DISPLAY_BIT,
+                                             pdTRUE, pdFALSE,
+                                             portMAX_DELAY);
     if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
       bit_map_screen_2.WIFI_Connected = 0;
     if ((uxBits & DETECT_TOUCH_SCREEN_BIT) || (uxBits & REFRESH_DISPLAY_BIT))
@@ -679,7 +675,7 @@ static void Screen_Task(void *pvParameters)
         check_event_screen_5(&screen_current);
         screen_5(uxBits);
         break;
-        
+
       case SCREEN_OFF:
         check_event_screen_6(&screen_current);
         screen_1(uxBits);
@@ -694,39 +690,40 @@ static void UartTx_Task(void *pvParameters)
   while (1)
   {
     EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
-                                                     ON_WIFI_BIT |
-                                                     OFF_WIFI_BIT |
-                                                     CONNECT_WIFI_BIT |
-                                                     CONNECT_MQTT_BIT |
-                                                     MQTT_PUBLISH_BIT,
-                                                     pdTRUE, pdFALSE,
-                                                     portMAX_DELAY);
-        if (uxBits & ON_WIFI_BIT)
-        {
-            sprintf((char *)buffer_uart_tx, "%s", "ON");
-            buffer_uart_tx[2] = '\0';
-            transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-        }
+                                             ON_WIFI_BIT |
+                                                 OFF_WIFI_BIT |
+                                                 CONNECT_WIFI_BIT |
+                                                 CONNECT_MQTT_BIT |
+                                                 MQTT_PUBLISH_BIT,
+                                             pdTRUE, pdFALSE,
+                                             portMAX_DELAY);
+    if (uxBits & ON_WIFI_BIT)
+    {
+      sprintf((char *)buffer_uart_tx, "%s", "ON");
+      buffer_uart_tx[2] = '\0';
+      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+    }
 
-        if (uxBits & OFF_WIFI_BIT)
-        {
-            sprintf((char *)buffer_uart_tx, "%s", "OFF");
-            buffer_uart_tx[3] = '\0';
-            transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-        }
+    if (uxBits & OFF_WIFI_BIT)
+    {
+      sprintf((char *)buffer_uart_tx, "%s", "OFF");
+      buffer_uart_tx[3] = '\0';
+      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+    }
 
-        if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
-        {
-            transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
-        }
+    if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
+    {
+      transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
+    }
 
-        if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
-        {
-            memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
-            buffer_uart_tx[16] = '\0';
-            transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
-        }
+    if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
+    {
+      memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
+      buffer_uart_tx[16] = '\0';
+      transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
+    }
 
+<<<<<<< HEAD
         if (uxBits & MQTT_PUBLISH_BIT) 
         {
             char state_led[4], state_auto[4];
@@ -752,10 +749,37 @@ static void UartTx_Task(void *pvParameters)
                 strcpy(state_auto, "OFF");
                 state_auto[3] = '\0';
             }
+=======
+    if (uxBits & MQTT_PUBLISH_BIT)
+    {
+      char state_led[4], state_auto[4];
+      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+      if (pinValue == GPIO_PIN_SET)
+      {
+        strcpy(state_led, "ON");
+        state_led[2] = '\0';
+      }
+      else
+      {
+        strcpy(state_led, "OFF");
+        state_led[3] = '\0';
+      }
+>>>>>>> 329eee12d5afb511891550253ae507fde22b6264
 
- //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
-            transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
-        }
+      if (autocontrol)
+      {
+        strcpy(state_auto, "ON");
+        state_auto[2] = '\0';
+      }
+      else
+      {
+        strcpy(state_auto, "OFF");
+        state_auto[3] = '\0';
+      }
+
+      //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+    }
   }
 }
 
@@ -793,41 +817,41 @@ static void UartRx_Task(void *pvParameters)
       switch (data_heading)
       {
       case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
-      xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT );
+        xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT);
         break;
 
       case HEADING_RECEIVE_NAME_WIFI_SCAN:
-      xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
+        xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
         break;
 
       case HEADING_RECEIVE_CONNECT_WIFI:
-      if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
-      {
-        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
-      }
-      else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
-      {
-        xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
-      }
+        if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+        {
+          xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
+        }
+        else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+        {
+          xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+        }
         break;
 
       case HEADING_RECEIVE_CONNECT_MQTT:
-          if(memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
-          {
-            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
-          }
-          else if(memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
-          {
-            xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
-          }
-          else if(memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
-          {
-            xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
-          }
+        if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+        {
+          xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
+        }
+        else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+        {
+          xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+        }
+        else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
+        {
+          xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
+        }
         break;
 
       case HEADING_MQTT_SUBSCRIBE:
-      xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
+        xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
         break;
 
       default:

@@ -9,9 +9,6 @@
 #include "esp_event.h"
 #include "esp_netif.h"
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/queue.h"
-
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
@@ -27,10 +24,21 @@
 #define TAG  "MQTT"
 
 /**********************
+ *  EXTERN VARIABLES
+ **********************/
+
+extern SemaphoreHandle_t mqtt_semaphore;
+
+/**********************
+ *     VARIABLES
+ **********************/
+
+char data_mqtt [10];
+
+/**********************
  *  STATIC VARIABLES
  **********************/
 
-// static char data [10];
 static int8_t state_connect_mqtt = -1;
 static uint8_t number_mqtt_subscribe = 0;
 
@@ -61,6 +69,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+            sprintf(data_mqtt, "%.*s", event->data_len, event->data);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");
@@ -97,15 +106,6 @@ void MQTT_app_start(MQTT_Client_Data_t *MQTT_Client, char *url)
     esp_mqtt_client_register_event(MQTT_Client->client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(MQTT_Client->client);
 }
-
-// int8_t MQTT_app_get_data(MQTT_Client_Data_t *MQTT_Client)
-// {
-//     if (number_mqtt_subscribe == 0)
-//     {
-        
-//     }
-    
-// }
 
 int8_t MQTT_app_state_connect(void)
 {

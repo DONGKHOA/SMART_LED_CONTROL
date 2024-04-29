@@ -87,7 +87,7 @@ void Error_Handler(void);
 #define NAME_WIFI_SCAN_BIT                (1 << 1)
 #define CONNECT_WIFI_SUCCESSFUL_BIT       (1 << 2)
 #define CONNECT_WIFI_UNSUCCESSFUL_BIT     (1 << 3)
-#define REFUSE_CONNECT_MQTT_BIT           (1 << 4) // if haven't connect wifi
+#define SEND_REFUSE_CONNECT_MQTT_BIT           (1 << 4) // if haven't connect wifi
 #define CONNECT_MQTT_SUCCESSFUL_BIT       (1 << 5)
 #define CONNECT_MQTT_UNSUCCESSFUL_BIT     (1 << 6)
 #define MQTT_SUBSCRIBE_BIT                (1 << 7)

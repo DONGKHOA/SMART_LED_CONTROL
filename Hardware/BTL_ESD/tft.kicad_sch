@@ -1567,7 +1567,7 @@
 		)
 	)
 	(junction
-		(at 88.9 67.31)
+		(at 68.58 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "330218b3-b45c-4114-9daa-a16fd24f80a3")
@@ -1598,7 +1598,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 53.34) (xy 88.9 55.88)
+			(xy 68.58 63.5) (xy 68.58 66.04)
 		)
 		(stroke
 			(width 0)
@@ -1638,7 +1638,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 72.39) (xy 214.63 72.39)
+			(xy 227.33 72.39) (xy 232.41 72.39)
 		)
 		(stroke
 			(width 0)
@@ -1658,7 +1658,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 80.01) (xy 214.63 80.01)
+			(xy 226.06 80.01) (xy 232.41 80.01)
 		)
 		(stroke
 			(width 0)
@@ -1698,7 +1698,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 74.93) (xy 214.63 74.93)
+			(xy 227.33 74.93) (xy 232.41 74.93)
 		)
 		(stroke
 			(width 0)
@@ -1718,7 +1718,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 67.31) (xy 88.9 68.58)
+			(xy 68.58 77.47) (xy 68.58 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1738,7 +1738,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 69.85) (xy 214.63 69.85)
+			(xy 226.06 69.85) (xy 232.41 69.85)
 		)
 		(stroke
 			(width 0)
@@ -1748,7 +1748,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 63.5) (xy 88.9 67.31)
+			(xy 68.58 73.66) (xy 68.58 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1778,7 +1778,7 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 73.66) (xy 71.12 73.66)
+			(xy 46.99 83.82) (xy 50.8 83.82)
 		)
 		(stroke
 			(width 0)
@@ -1788,7 +1788,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 78.74) (xy 88.9 85.09)
+			(xy 68.58 88.9) (xy 68.58 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1798,7 +1798,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 67.31) (xy 106.68 67.31)
+			(xy 68.58 77.47) (xy 86.36 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1828,7 +1828,7 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 73.66) (xy 81.28 73.66)
+			(xy 58.42 83.82) (xy 60.96 83.82)
 		)
 		(stroke
 			(width 0)
@@ -1848,7 +1848,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 67.31) (xy 214.63 67.31)
+			(xy 226.06 67.31) (xy 232.41 67.31)
 		)
 		(stroke
 			(width 0)
@@ -1868,7 +1868,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 77.47) (xy 214.63 77.47)
+			(xy 226.06 77.47) (xy 232.41 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1916,8 +1916,83 @@
 		)
 		(uuid "f6dbca26-a307-4cd8-bdeb-bbb40dc2b860")
 	)
+	(rectangle
+		(start 113.03 52.07)
+		(end 190.5 104.14)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 62f9774f-c782-48ac-9e17-3faf6ef2286c)
+	)
+	(rectangle
+		(start 204.47 52.07)
+		(end 261.62 104.14)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid a3ad1b0d-b70f-4929-8597-c566a48dcf63)
+	)
+	(rectangle
+		(start 36.83 52.07)
+		(end 93.98 104.14)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid fca8cd11-4fca-4d92-9946-9b6b79654b04)
+	)
+	(text "TOUCH"
+		(exclude_from_sim no)
+		(at 227.838 54.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "3abf52f2-3483-4b92-960b-0cd8be1a688c")
+	)
+	(text "DISPLAY"
+		(exclude_from_sim no)
+		(at 147.32 54.356 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "798cf428-619e-4944-81cf-89428e5edc43")
+	)
+	(text "CONTROL BACKLIGHT"
+		(exclude_from_sim no)
+		(at 54.102 54.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "e89c7561-54ac-4c85-a41f-de35afe4867a")
+	)
 	(label "CONTROL_BL"
-		(at 106.68 67.31 180)
+		(at 86.36 77.47 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1940,7 +2015,7 @@
 	)
 	(global_label "TFT_IRQ"
 		(shape output)
-		(at 208.28 67.31 180)
+		(at 226.06 67.31 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1950,7 +2025,7 @@
 		)
 		(uuid "05dd0857-fb5c-4dbe-a9d2-71162242d6d6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 198.0981 67.31 0)
+			(at 215.8781 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1984,7 +2059,7 @@
 	)
 	(global_label "TFT_BL"
 		(shape input)
-		(at 67.31 73.66 180)
+		(at 46.99 83.82 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1994,7 +2069,7 @@
 		)
 		(uuid "3b34bc86-ee88-463a-a9c3-aff06f58f80b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 58.0353 73.66 0)
+			(at 37.7153 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2050,7 +2125,7 @@
 	)
 	(global_label "SPI2_CS"
 		(shape input)
-		(at 209.55 74.93 180)
+		(at 227.33 74.93 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2060,7 +2135,7 @@
 		)
 		(uuid "6ca27e52-64e0-4725-a87d-f41d3500b777")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 198.8239 74.93 0)
+			(at 216.6039 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2072,7 +2147,7 @@
 	)
 	(global_label "SPI2_MOSI"
 		(shape input)
-		(at 209.55 72.39 180)
+		(at 227.33 72.39 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2082,7 +2157,7 @@
 		)
 		(uuid "82e4d99f-566b-4a98-a6ce-b95d70c40eed")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 196.7072 72.39 0)
+			(at 214.4872 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2094,7 +2169,7 @@
 	)
 	(global_label "SPI1_MISO"
 		(shape output)
-		(at 208.28 80.01 180)
+		(at 226.06 80.01 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2104,7 +2179,7 @@
 		)
 		(uuid "94c3baeb-9b93-4cbf-9806-bd9752d20df0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.4372 80.01 0)
+			(at 213.2172 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2138,7 +2213,7 @@
 	)
 	(global_label "SPI2_SCLK"
 		(shape input)
-		(at 208.28 77.47 180)
+		(at 226.06 77.47 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2148,7 +2223,7 @@
 		)
 		(uuid "b72fe9fc-ac23-4f06-84b9-57646e2440d3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.2558 77.47 0)
+			(at 213.0358 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2160,7 +2235,7 @@
 	)
 	(global_label "SPI2_MISO"
 		(shape output)
-		(at 208.28 69.85 180)
+		(at 226.06 69.85 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2170,7 +2245,7 @@
 		)
 		(uuid "b9671ebe-15c9-4982-9341-9e3802dd4306")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.4372 69.85 0)
+			(at 213.2172 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2459,7 +2534,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 74.93 73.66 90)
+		(at 54.61 83.82 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2468,7 +2543,7 @@
 		(fields_autoplaced yes)
 		(uuid "6209751c-3f0a-4914-9f2b-190dc989d13d")
 		(property "Reference" "R22"
-			(at 74.93 67.31 90)
+			(at 54.61 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2476,7 +2551,7 @@
 			)
 		)
 		(property "Value" "1k/1%"
-			(at 74.93 69.85 90)
+			(at 54.61 80.01 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2484,7 +2559,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 75.184 72.644 90)
+			(at 54.864 82.804 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2493,7 +2568,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 74.93 73.66 0)
+			(at 54.61 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2502,7 +2577,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 74.93 73.66 0)
+			(at 54.61 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2511,7 +2586,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/dien-tro-1-kohm-0603-1-"
-			(at 74.93 73.66 0)
+			(at 54.61 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2536,7 +2611,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 88.9 85.09 0)
+		(at 68.58 95.25 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2545,7 +2620,7 @@
 		(fields_autoplaced yes)
 		(uuid "90833a5f-f96b-44af-9d07-2f9e2d437dcb")
 		(property "Reference" "#PWR056"
-			(at 88.9 91.44 0)
+			(at 68.58 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2554,7 +2629,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 88.9 90.17 0)
+			(at 68.58 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2562,7 +2637,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 88.9 85.09 0)
+			(at 68.58 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2571,7 +2646,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 85.09 0)
+			(at 68.58 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2580,7 +2655,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 85.09 0)
+			(at 68.58 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2602,7 +2677,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 88.9 59.69 0)
+		(at 68.58 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2611,7 +2686,7 @@
 		(fields_autoplaced yes)
 		(uuid "a3dd7392-c895-40c8-9fd1-f2bf23d37542")
 		(property "Reference" "R23"
-			(at 91.44 58.42 0)
+			(at 71.12 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2620,7 +2695,7 @@
 			)
 		)
 		(property "Value" "10k/1%"
-			(at 91.44 60.96 0)
+			(at 71.12 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2629,7 +2704,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 89.916 59.944 90)
+			(at 69.596 70.104 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2638,7 +2713,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 88.9 59.69 0)
+			(at 68.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2647,7 +2722,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 59.69 0)
+			(at 68.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2656,7 +2731,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/dien-tro-10-kohm-0603-1-"
-			(at 88.9 59.69 0)
+			(at 68.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2813,7 +2888,7 @@
 	)
 	(symbol
 		(lib_id "MMBT2222A:MMBT2222A")
-		(at 85.09 73.66 0)
+		(at 64.77 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2822,7 +2897,7 @@
 		(fields_autoplaced yes)
 		(uuid "c42713ce-b3bc-49cc-8fdd-a1537393c533")
 		(property "Reference" "Q1"
-			(at 91.44 72.39 0)
+			(at 71.12 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2831,7 +2906,7 @@
 			)
 		)
 		(property "Value" "MMBT2222A"
-			(at 91.44 74.93 0)
+			(at 71.12 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2840,7 +2915,7 @@
 			)
 		)
 		(property "Footprint" "MMBT2222A:SOT103P240X110-3N"
-			(at 82.55 62.23 0)
+			(at 62.23 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2850,7 +2925,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 85.09 73.66 0)
+			(at 64.77 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2859,7 +2934,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 85.09 73.66 0)
+			(at 64.77 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2887,7 +2962,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 88.9 53.34 0)
+		(at 68.58 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2896,7 +2971,7 @@
 		(fields_autoplaced yes)
 		(uuid "f3f404fb-d7ef-4840-9eca-058b09be3e6c")
 		(property "Reference" "#PWR055"
-			(at 88.9 57.15 0)
+			(at 68.58 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2905,7 +2980,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 88.9 48.26 0)
+			(at 68.58 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2913,7 +2988,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 88.9 53.34 0)
+			(at 68.58 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2922,7 +2997,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 53.34 0)
+			(at 68.58 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2931,7 +3006,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 53.34 0)
+			(at 68.58 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2953,7 +3028,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x06_Socket")
-		(at 219.71 72.39 0)
+		(at 237.49 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2962,7 +3037,7 @@
 		(fields_autoplaced yes)
 		(uuid "fd6e63d1-3fa8-4705-bcd9-d0fd2130e3b6")
 		(property "Reference" "J5"
-			(at 220.98 72.39 0)
+			(at 238.76 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2971,7 +3046,7 @@
 			)
 		)
 		(property "Value" "Socket_TFT_2"
-			(at 220.98 74.93 0)
+			(at 238.76 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2980,7 +3055,7 @@
 			)
 		)
 		(property "Footprint" "XH_2_54:au_XH_2.54mm_6_Chan_Dan_SMD_Nam_Ngang"
-			(at 219.71 72.39 0)
+			(at 237.49 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2989,7 +3064,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 219.71 72.39 0)
+			(at 237.49 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2998,7 +3073,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 219.71 72.39 0)
+			(at 237.49 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3007,7 +3082,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/dau-xh-2-54mm-6-chan-dan-smd-nam-ngang"
-			(at 219.71 72.39 0)
+			(at 237.49 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)

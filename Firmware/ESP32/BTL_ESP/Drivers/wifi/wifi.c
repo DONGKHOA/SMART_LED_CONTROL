@@ -34,16 +34,12 @@
 #define NUM_WIFI_KEY "Num_ssid_key"
 #define SSID_NVS "ssid_nvs"
 #define PASS_NVS "pass_nvs"
-/**********************
- *     VARIABLES
- **********************/
-
-static WIFI_Status_t state_connected_wifi = CONNECT_FAIL;
 
 /**********************
  *  STATIC VARIABLES
  **********************/
 
+static WIFI_Status_t state_connected_wifi = CONNECT_FAIL;
 static uint8_t s_retry_num = 0;
 static uint8_t volatile num_wifi = 0;
 static EventGroupHandle_t s_wifi_event_group;

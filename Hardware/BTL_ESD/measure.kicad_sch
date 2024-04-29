@@ -1244,88 +1244,88 @@
 		)
 	)
 	(junction
-		(at 228.6 73.66)
+		(at 205.74 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "06d8452f-59d9-4074-a369-9996b034c473")
 	)
 	(junction
-		(at 228.6 99.06)
+		(at 237.49 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2a018381-21a2-4b7e-9085-5cd4813e853d")
 	)
 	(junction
-		(at 133.35 78.74)
+		(at 120.65 80.01)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "41cb54f8-23b1-4143-994e-31f21c4a1bf6")
 	)
 	(junction
-		(at 91.44 102.87)
+		(at 78.74 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6f3ecfc7-963d-42df-89fd-47d55e055920")
 	)
 	(junction
-		(at 228.6 63.5)
+		(at 205.74 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "818469a4-6cde-4b13-9509-ab2fe080ff12")
 	)
 	(junction
-		(at 101.6 91.44)
+		(at 88.9 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "85dfcff4-e6c1-4377-ab53-64a7d96471e1")
 	)
 	(junction
-		(at 228.6 109.22)
+		(at 237.49 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9f399ee8-567e-4724-8889-14507633b85b")
 	)
 	(junction
-		(at 133.35 90.17)
+		(at 120.65 91.44)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c9603c11-2653-4859-9c32-9d592ef1566c")
 	)
 	(junction
-		(at 116.84 91.44)
+		(at 104.14 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "da4f8682-eb85-455e-a64b-bc318d7bf6f6")
 	)
 	(junction
-		(at 101.6 102.87)
+		(at 88.9 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e3943265-bfc9-4ad9-9063-2c2e9d67f6e1")
 	)
 	(junction
-		(at 91.44 91.44)
+		(at 78.74 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ec03cb0c-40d2-4afd-a7e6-f17125b2a557")
 	)
 	(junction
-		(at 116.84 102.87)
+		(at 104.14 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f03dd09b-55d2-4e3f-babb-89f07a24a728")
 	)
 	(no_connect
-		(at 127 72.39)
+		(at 114.3 73.66)
 		(uuid "9357b2dd-29b9-4186-8308-2e450e0322af")
 	)
 	(no_connect
-		(at 81.28 88.9)
+		(at 68.58 90.17)
 		(uuid "ee4f4d08-c22a-4351-a112-8c917ff0800e")
 	)
 	(wire
 		(pts
-			(xy 101.6 91.44) (xy 116.84 91.44)
+			(xy 88.9 92.71) (xy 104.14 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1335,7 +1335,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 62.23) (xy 228.6 63.5)
+			(xy 205.74 92.71) (xy 205.74 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1345,7 +1345,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 96.52) (xy 142.24 96.52)
+			(xy 120.65 97.79) (xy 129.54 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1355,7 +1355,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 91.44) (xy 133.35 93.98)
+			(xy 120.65 92.71) (xy 120.65 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1365,7 +1365,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 102.87) (xy 101.6 101.6)
+			(xy 88.9 104.14) (xy 88.9 102.87)
 		)
 		(stroke
 			(width 0)
@@ -1375,7 +1375,7 @@
 	)
 	(wire
 		(pts
-			(xy 96.52 77.47) (xy 101.6 77.47)
+			(xy 83.82 78.74) (xy 88.9 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1385,7 +1385,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 99.06) (xy 236.22 99.06)
+			(xy 237.49 93.98) (xy 245.11 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1395,7 +1395,7 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 100.33) (xy 116.84 102.87)
+			(xy 104.14 101.6) (xy 104.14 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1405,7 +1405,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 91.44) (xy 101.6 91.44)
+			(xy 78.74 92.71) (xy 88.9 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1415,7 +1415,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 63.5) (xy 220.98 66.04)
+			(xy 198.12 93.98) (xy 198.12 96.52)
 		)
 		(stroke
 			(width 0)
@@ -1425,7 +1425,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 63.5) (xy 236.22 63.5)
+			(xy 205.74 93.98) (xy 213.36 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1435,7 +1435,7 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 80.01) (xy 181.61 77.47)
+			(xy 168.91 81.28) (xy 168.91 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1445,7 +1445,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 101.6) (xy 81.28 102.87)
+			(xy 68.58 102.87) (xy 68.58 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1455,7 +1455,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 102.87) (xy 91.44 102.87)
+			(xy 68.58 104.14) (xy 78.74 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1465,7 +1465,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 102.87) (xy 116.84 102.87)
+			(xy 88.9 104.14) (xy 104.14 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1475,7 +1475,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 109.22) (xy 228.6 110.49)
+			(xy 237.49 104.14) (xy 237.49 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1485,7 +1485,7 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 91.44) (xy 86.36 95.25)
+			(xy 73.66 92.71) (xy 73.66 96.52)
 		)
 		(stroke
 			(width 0)
@@ -1495,7 +1495,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 78.74) (xy 142.24 82.55)
+			(xy 129.54 80.01) (xy 129.54 83.82)
 		)
 		(stroke
 			(width 0)
@@ -1505,7 +1505,7 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 91.44) (xy 133.35 91.44)
+			(xy 104.14 92.71) (xy 120.65 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1515,7 +1515,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 90.17) (xy 142.24 90.17)
+			(xy 120.65 91.44) (xy 129.54 91.44)
 		)
 		(stroke
 			(width 0)
@@ -1525,7 +1525,7 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 100.33) (xy 181.61 97.79)
+			(xy 168.91 101.6) (xy 168.91 99.06)
 		)
 		(stroke
 			(width 0)
@@ -1535,7 +1535,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 90.17) (xy 142.24 87.63)
+			(xy 129.54 91.44) (xy 129.54 88.9)
 		)
 		(stroke
 			(width 0)
@@ -1545,7 +1545,7 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 100.33) (xy 177.8 100.33)
+			(xy 168.91 101.6) (xy 165.1 101.6)
 		)
 		(stroke
 			(width 0)
@@ -1555,7 +1555,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 109.22) (xy 236.22 106.68)
+			(xy 245.11 104.14) (xy 245.11 101.6)
 		)
 		(stroke
 			(width 0)
@@ -1565,7 +1565,7 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 95.25) (xy 116.84 91.44)
+			(xy 104.14 96.52) (xy 104.14 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1575,7 +1575,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 109.22) (xy 236.22 109.22)
+			(xy 237.49 104.14) (xy 245.11 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1585,7 +1585,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 77.47) (xy 101.6 91.44)
+			(xy 88.9 78.74) (xy 88.9 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1595,7 +1595,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 71.12) (xy 220.98 73.66)
+			(xy 198.12 101.6) (xy 198.12 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1605,7 +1605,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 80.01) (xy 181.61 80.01)
+			(xy 165.1 81.28) (xy 168.91 81.28)
 		)
 		(stroke
 			(width 0)
@@ -1615,7 +1615,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 91.44) (xy 101.6 93.98)
+			(xy 88.9 92.71) (xy 88.9 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1625,7 +1625,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 78.74) (xy 142.24 78.74)
+			(xy 120.65 80.01) (xy 129.54 80.01)
 		)
 		(stroke
 			(width 0)
@@ -1635,7 +1635,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 111.76) (xy 101.6 102.87)
+			(xy 88.9 113.03) (xy 88.9 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1645,7 +1645,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 63.5) (xy 220.98 63.5)
+			(xy 205.74 93.98) (xy 198.12 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1655,7 +1655,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 109.22) (xy 228.6 109.22)
+			(xy 229.87 104.14) (xy 237.49 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1665,7 +1665,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 102.87) (xy 101.6 102.87)
+			(xy 78.74 104.14) (xy 88.9 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1675,7 +1675,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 73.66) (xy 236.22 73.66)
+			(xy 205.74 104.14) (xy 213.36 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1685,7 +1685,7 @@
 	)
 	(wire
 		(pts
-			(xy 127 90.17) (xy 133.35 90.17)
+			(xy 114.3 91.44) (xy 120.65 91.44)
 		)
 		(stroke
 			(width 0)
@@ -1695,7 +1695,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 99.06) (xy 228.6 99.06)
+			(xy 229.87 93.98) (xy 237.49 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1705,7 +1705,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 102.87) (xy 133.35 96.52)
+			(xy 120.65 104.14) (xy 120.65 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1715,7 +1715,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 66.04) (xy 236.22 63.5)
+			(xy 213.36 96.52) (xy 213.36 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1725,7 +1725,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 73.66) (xy 228.6 73.66)
+			(xy 198.12 104.14) (xy 205.74 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1735,7 +1735,7 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 102.87) (xy 133.35 102.87)
+			(xy 104.14 104.14) (xy 120.65 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1745,7 +1745,7 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 91.44) (xy 91.44 91.44)
+			(xy 73.66 92.71) (xy 78.74 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1755,7 +1755,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 97.79) (xy 228.6 99.06)
+			(xy 237.49 92.71) (xy 237.49 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1765,7 +1765,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 73.66) (xy 236.22 71.12)
+			(xy 213.36 104.14) (xy 213.36 101.6)
 		)
 		(stroke
 			(width 0)
@@ -1775,7 +1775,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 99.06) (xy 236.22 101.6)
+			(xy 245.11 93.98) (xy 245.11 96.52)
 		)
 		(stroke
 			(width 0)
@@ -1785,7 +1785,7 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 78.74) (xy 133.35 78.74)
+			(xy 119.38 80.01) (xy 120.65 80.01)
 		)
 		(stroke
 			(width 0)
@@ -1795,7 +1795,7 @@
 	)
 	(wire
 		(pts
-			(xy 133.35 93.98) (xy 142.24 93.98)
+			(xy 120.65 95.25) (xy 129.54 95.25)
 		)
 		(stroke
 			(width 0)
@@ -1805,7 +1805,7 @@
 	)
 	(wire
 		(pts
-			(xy 127 90.17) (xy 127 85.09)
+			(xy 114.3 91.44) (xy 114.3 86.36)
 		)
 		(stroke
 			(width 0)
@@ -1815,7 +1815,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 106.68) (xy 220.98 109.22)
+			(xy 229.87 101.6) (xy 229.87 104.14)
 		)
 		(stroke
 			(width 0)
@@ -1825,7 +1825,7 @@
 	)
 	(wire
 		(pts
-			(xy 185.42 85.09) (xy 177.8 85.09)
+			(xy 172.72 86.36) (xy 165.1 86.36)
 		)
 		(stroke
 			(width 0)
@@ -1835,7 +1835,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 73.66) (xy 228.6 74.93)
+			(xy 205.74 104.14) (xy 205.74 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1845,7 +1845,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 105.41) (xy 142.24 101.6)
+			(xy 129.54 106.68) (xy 129.54 102.87)
 		)
 		(stroke
 			(width 0)
@@ -1855,7 +1855,7 @@
 	)
 	(wire
 		(pts
-			(xy 220.98 101.6) (xy 220.98 99.06)
+			(xy 229.87 96.52) (xy 229.87 93.98)
 		)
 		(stroke
 			(width 0)
@@ -1863,9 +1863,59 @@
 		)
 		(uuid "eb2edbc0-ffc8-48d1-9bd5-47a8bb6d49d2")
 	)
-	(global_label "ADC1_0"
+	(rectangle
+		(start 52.07 67.31)
+		(end 185.42 123.19)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 7099e4d3-74bb-42b3-98ab-fb0e3e8df87f)
+	)
+	(rectangle
+		(start 193.04 81.28)
+		(end 261.112 115.57)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid b95d16ca-2432-4e49-a108-ebd7aff99b9c)
+	)
+	(text "MEASURE RESISTOR"
+		(exclude_from_sim no)
+		(at 111.76 70.104 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "0f160dbe-5a1e-4d85-b283-47b70a70a164")
+	)
+	(text "FILTER"
+		(exclude_from_sim no)
+		(at 222.758 83.566 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "446143f8-c234-4a3a-81e5-3f862018ecee")
+	)
+	(global_label "ADC2_0"
 		(shape output)
-		(at 185.42 85.09 0)
+		(at 172.72 86.36 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1875,7 +1925,7 @@
 		)
 		(uuid "8dade9ce-a560-44fa-9436-ae15f016da4e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.4204 85.09 0)
+			(at 182.7204 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1887,7 +1937,7 @@
 	)
 	(global_label "CURRENT_SUPPLY"
 		(shape input)
-		(at 96.52 77.47 180)
+		(at 83.82 78.74 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1897,7 +1947,7 @@
 		)
 		(uuid "990dcebb-6faf-47b7-b0dd-f373681211bd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 76.7829 77.47 0)
+			(at 64.0829 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1909,7 +1959,7 @@
 	)
 	(symbol
 		(lib_id "INA128UA:INA128UA")
-		(at 160.02 90.17 0)
+		(at 147.32 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1918,7 +1968,7 @@
 		(fields_autoplaced yes)
 		(uuid "12a17a83-de5a-4396-8ccf-4428e24d61d6")
 		(property "Reference" "U7"
-			(at 160.02 72.39 0)
+			(at 147.32 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1926,7 +1976,7 @@
 			)
 		)
 		(property "Value" "INA128UA"
-			(at 160.02 74.93 0)
+			(at 147.32 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1934,7 +1984,7 @@
 			)
 		)
 		(property "Footprint" "INA128UA:SOIC127P599X175-8N"
-			(at 160.02 90.17 0)
+			(at 147.32 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1944,7 +1994,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 90.17 0)
+			(at 147.32 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1953,7 +2003,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 90.17 0)
+			(at 147.32 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1996,7 +2046,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 220.98 104.14 0)
+		(at 229.87 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2005,7 +2055,7 @@
 		(fields_autoplaced yes)
 		(uuid "1b5ab5ea-20f6-4758-9f02-d4644fca05ac")
 		(property "Reference" "C50"
-			(at 223.52 102.8763 0)
+			(at 232.41 97.7963 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2014,7 +2064,7 @@
 			)
 		)
 		(property "Value" "10uF/16V"
-			(at 223.52 105.4163 0)
+			(at 232.41 100.3363 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2023,7 +2073,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 220.98 104.14 0)
+			(at 229.87 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2032,7 +2082,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 220.98 104.14 0)
+			(at 229.87 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2041,7 +2091,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 220.98 104.14 0)
+			(at 229.87 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2050,7 +2100,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/tu-gom-0603-10uf-16v"
-			(at 220.98 104.14 0)
+			(at 229.87 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2075,7 +2125,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 91.44 91.44 0)
+		(at 78.74 92.71 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2084,7 +2134,7 @@
 		(fields_autoplaced yes)
 		(uuid "1c25da2c-fcd5-4d5a-a8f1-a79e512c8672")
 		(property "Reference" "TP6"
-			(at 93.98 86.868 0)
+			(at 81.28 88.138 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2093,7 +2143,7 @@
 			)
 		)
 		(property "Value" "V_P"
-			(at 93.98 89.408 0)
+			(at 81.28 90.678 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2102,7 +2152,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
-			(at 96.52 91.44 0)
+			(at 83.82 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2111,7 +2161,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 96.52 91.44 0)
+			(at 83.82 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2120,7 +2170,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 91.44 91.44 0)
+			(at 78.74 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2142,7 +2192,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 228.6 62.23 0)
+		(at 205.74 92.71 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2151,7 +2201,7 @@
 		(fields_autoplaced yes)
 		(uuid "2373e45c-75ed-4920-a2b7-07c972d4b4a7")
 		(property "Reference" "#PWR071"
-			(at 228.6 66.04 0)
+			(at 205.74 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2160,7 +2210,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 228.6 57.15 0)
+			(at 205.74 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2168,7 +2218,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 62.23 0)
+			(at 205.74 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2177,7 +2227,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 62.23 0)
+			(at 205.74 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2186,7 +2236,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 228.6 62.23 0)
+			(at 205.74 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2208,7 +2258,7 @@
 	)
 	(symbol
 		(lib_id "power:-5V")
-		(at 181.61 97.79 0)
+		(at 168.91 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2217,7 +2267,7 @@
 		(fields_autoplaced yes)
 		(uuid "3a41b264-3aba-49ba-a186-acc07f00a3df")
 		(property "Reference" "#PWR070"
-			(at 181.61 95.25 0)
+			(at 168.91 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2226,7 +2276,7 @@
 			)
 		)
 		(property "Value" "-5V"
-			(at 181.61 92.71 0)
+			(at 168.91 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2234,7 +2284,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 181.61 97.79 0)
+			(at 168.91 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2243,7 +2293,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 181.61 97.79 0)
+			(at 168.91 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2252,7 +2302,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 181.61 97.79 0)
+			(at 168.91 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2274,7 +2324,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 133.35 90.17 0)
+		(at 120.65 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2283,7 +2333,7 @@
 		(fields_autoplaced yes)
 		(uuid "449a7eb0-ac58-4c60-8a36-5d6b6b4a2d44")
 		(property "Reference" "TP9"
-			(at 135.89 85.598 0)
+			(at 123.19 86.868 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2292,7 +2342,7 @@
 			)
 		)
 		(property "Value" "RG_2"
-			(at 135.89 88.138 0)
+			(at 123.19 89.408 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2301,7 +2351,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
-			(at 138.43 90.17 0)
+			(at 125.73 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2310,7 +2360,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 138.43 90.17 0)
+			(at 125.73 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2319,7 +2369,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 133.35 90.17 0)
+			(at 120.65 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2341,7 +2391,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 116.84 97.79 0)
+		(at 104.14 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2350,7 +2400,7 @@
 		(fields_autoplaced yes)
 		(uuid "502b3a26-734f-4b5d-ba18-94e74dc6bbb6")
 		(property "Reference" "C48"
-			(at 119.38 96.5263 0)
+			(at 106.68 97.7963 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2359,7 +2409,7 @@
 			)
 		)
 		(property "Value" "1uF/16V"
-			(at 119.38 99.0663 0)
+			(at 106.68 100.3363 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2368,7 +2418,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 116.84 97.79 0)
+			(at 104.14 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2377,7 +2427,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 116.84 97.79 0)
+			(at 104.14 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2386,7 +2436,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 116.84 97.79 0)
+			(at 104.14 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2395,7 +2445,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/tu-gom-0603-1uf-16v"
-			(at 116.84 97.79 0)
+			(at 104.14 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2420,7 +2470,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 220.98 68.58 0)
+		(at 198.12 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2429,7 +2479,7 @@
 		(fields_autoplaced yes)
 		(uuid "53f9bd7c-f5d6-42d5-8602-ff68966a78ac")
 		(property "Reference" "C49"
-			(at 223.52 67.3163 0)
+			(at 200.66 97.7963 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2438,7 +2488,7 @@
 			)
 		)
 		(property "Value" "10uF/16V"
-			(at 223.52 69.8563 0)
+			(at 200.66 100.3363 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2447,7 +2497,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 220.98 68.58 0)
+			(at 198.12 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2456,7 +2506,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 220.98 68.58 0)
+			(at 198.12 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2465,7 +2515,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 220.98 68.58 0)
+			(at 198.12 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2474,7 +2524,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/tu-gom-0603-10uf-16v"
-			(at 220.98 68.58 0)
+			(at 198.12 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2499,7 +2549,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 91.44 102.87 0)
+		(at 78.74 104.14 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2508,7 +2558,7 @@
 		(fields_autoplaced yes)
 		(uuid "72a0a461-5514-42c6-978d-a664116cc112")
 		(property "Reference" "TP7"
-			(at 93.98 98.298 0)
+			(at 81.28 99.568 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2517,7 +2567,7 @@
 			)
 		)
 		(property "Value" "V_N"
-			(at 93.98 100.838 0)
+			(at 81.28 102.108 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2526,7 +2576,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
-			(at 96.52 102.87 0)
+			(at 83.82 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2535,7 +2585,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 96.52 102.87 0)
+			(at 83.82 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2544,7 +2594,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 91.44 102.87 0)
+			(at 78.74 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2566,7 +2616,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 142.24 105.41 0)
+		(at 129.54 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2575,7 +2625,7 @@
 		(fields_autoplaced yes)
 		(uuid "744df324-f294-485f-8892-ea2056130ffc")
 		(property "Reference" "#PWR068"
-			(at 142.24 111.76 0)
+			(at 129.54 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2584,7 +2634,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 142.24 110.49 0)
+			(at 129.54 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2592,7 +2642,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 142.24 105.41 0)
+			(at 129.54 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2601,7 +2651,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 105.41 0)
+			(at 129.54 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2610,7 +2660,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 142.24 105.41 0)
+			(at 129.54 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2632,7 +2682,7 @@
 	)
 	(symbol
 		(lib_id "EVM_3E:EVM-3E")
-		(at 127 99.06 90)
+		(at 114.3 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2641,7 +2691,7 @@
 		(fields_autoplaced yes)
 		(uuid "7750f36b-3e2f-43b6-9097-8445cf6497ae")
 		(property "Reference" "VR2"
-			(at 124.46 77.47 90)
+			(at 111.76 78.74 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -2650,7 +2700,7 @@
 			)
 		)
 		(property "Value" "50k/0.15W"
-			(at 124.46 80.01 90)
+			(at 111.76 81.28 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -2659,7 +2709,7 @@
 			)
 		)
 		(property "Footprint" "footprints:EVM-3E"
-			(at 142.24 92.71 0)
+			(at 129.54 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2669,7 +2719,7 @@
 			)
 		)
 		(property "Datasheet" "EVM-3ESX50B14"
-			(at 142.24 92.71 0)
+			(at 129.54 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2679,7 +2729,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 127 99.06 0)
+			(at 114.3 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2688,7 +2738,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/evm3e-503-bien-tro-50-kohm-nut-ao-smd-0-15w"
-			(at 127 99.06 0)
+			(at 114.3 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2716,7 +2766,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 101.6 111.76 0)
+		(at 88.9 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2725,7 +2775,7 @@
 		(fields_autoplaced yes)
 		(uuid "8bed9036-2604-49a9-9666-b46396469c53")
 		(property "Reference" "#PWR067"
-			(at 101.6 118.11 0)
+			(at 88.9 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2734,7 +2784,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 101.6 116.84 0)
+			(at 88.9 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2742,7 +2792,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 101.6 111.76 0)
+			(at 88.9 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2751,7 +2801,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 101.6 111.76 0)
+			(at 88.9 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2760,7 +2810,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 101.6 111.76 0)
+			(at 88.9 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2782,7 +2832,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 133.35 78.74 0)
+		(at 120.65 80.01 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2791,7 +2841,7 @@
 		(fields_autoplaced yes)
 		(uuid "94470285-f5a9-4642-a529-56bf903da8f5")
 		(property "Reference" "TP8"
-			(at 135.89 74.168 0)
+			(at 123.19 75.438 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2800,7 +2850,7 @@
 			)
 		)
 		(property "Value" "RG_1"
-			(at 135.89 76.708 0)
+			(at 123.19 77.978 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2809,7 +2859,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D2.5mm"
-			(at 138.43 78.74 0)
+			(at 125.73 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2818,7 +2868,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 138.43 78.74 0)
+			(at 125.73 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2827,7 +2877,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 133.35 78.74 0)
+			(at 120.65 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2849,7 +2899,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 236.22 104.14 0)
+		(at 245.11 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2858,7 +2908,7 @@
 		(fields_autoplaced yes)
 		(uuid "a5335bfd-cfe3-49aa-b42f-7be1b495000e")
 		(property "Reference" "C52"
-			(at 238.76 102.8763 0)
+			(at 247.65 97.7963 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2867,7 +2917,7 @@
 			)
 		)
 		(property "Value" "100nF/16V"
-			(at 238.76 105.4163 0)
+			(at 247.65 100.3363 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2876,7 +2926,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 236.22 104.14 0)
+			(at 245.11 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2885,7 +2935,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 236.22 104.14 0)
+			(at 245.11 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2894,7 +2944,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 236.22 104.14 0)
+			(at 245.11 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2903,7 +2953,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-16v"
-			(at 236.22 104.14 0)
+			(at 245.11 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2928,7 +2978,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 228.6 110.49 0)
+		(at 237.49 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2937,7 +2987,7 @@
 		(fields_autoplaced yes)
 		(uuid "a620bf45-1b8d-466e-a378-11a20d36f31f")
 		(property "Reference" "#PWR074"
-			(at 228.6 116.84 0)
+			(at 237.49 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2946,7 +2996,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 228.6 115.57 0)
+			(at 237.49 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2954,7 +3004,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 110.49 0)
+			(at 237.49 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2963,7 +3013,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 110.49 0)
+			(at 237.49 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2972,7 +3022,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 228.6 110.49 0)
+			(at 237.49 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2994,7 +3044,7 @@
 	)
 	(symbol
 		(lib_id "EVM_3E:EVM-3E")
-		(at 81.28 115.57 90)
+		(at 68.58 116.84 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3003,7 +3053,7 @@
 		(fields_autoplaced yes)
 		(uuid "d1e9f4e5-c6a9-43b6-a2eb-ff622d0c5c20")
 		(property "Reference" "VR1"
-			(at 78.74 93.98 90)
+			(at 66.04 95.25 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -3012,7 +3062,7 @@
 			)
 		)
 		(property "Value" "50k/0.15W"
-			(at 78.74 96.52 90)
+			(at 66.04 97.79 90)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -3021,7 +3071,7 @@
 			)
 		)
 		(property "Footprint" "footprints:EVM-3E"
-			(at 96.52 109.22 0)
+			(at 83.82 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3031,7 +3081,7 @@
 			)
 		)
 		(property "Datasheet" "EVM-3ESX50B14"
-			(at 96.52 109.22 0)
+			(at 83.82 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3041,7 +3091,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 81.28 115.57 0)
+			(at 68.58 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3050,7 +3100,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/evm3e-503-bien-tro-50-kohm-nut-ao-smd-0-15w"
-			(at 81.28 115.57 0)
+			(at 68.58 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3078,7 +3128,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 228.6 74.93 0)
+		(at 205.74 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3087,7 +3137,7 @@
 		(fields_autoplaced yes)
 		(uuid "e79b7a1d-a5f6-4e08-adbf-113bb3e86373")
 		(property "Reference" "#PWR072"
-			(at 228.6 81.28 0)
+			(at 205.74 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3096,7 +3146,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 228.6 80.01 0)
+			(at 205.74 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3104,7 +3154,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 74.93 0)
+			(at 205.74 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3113,7 +3163,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 74.93 0)
+			(at 205.74 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3122,7 +3172,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 228.6 74.93 0)
+			(at 205.74 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3144,7 +3194,7 @@
 	)
 	(symbol
 		(lib_id "power:-5V")
-		(at 228.6 97.79 0)
+		(at 237.49 92.71 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3153,7 +3203,7 @@
 		(fields_autoplaced yes)
 		(uuid "f537bf7d-411f-4e3f-b0b3-df430fbfc81f")
 		(property "Reference" "#PWR073"
-			(at 228.6 95.25 0)
+			(at 237.49 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3162,7 +3212,7 @@
 			)
 		)
 		(property "Value" "-5V"
-			(at 228.6 92.71 0)
+			(at 237.49 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3170,7 +3220,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 97.79 0)
+			(at 237.49 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3179,7 +3229,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 97.79 0)
+			(at 237.49 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3188,7 +3238,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 228.6 97.79 0)
+			(at 237.49 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3210,7 +3260,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Variable_US")
-		(at 101.6 97.79 0)
+		(at 88.9 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3219,7 +3269,7 @@
 		(fields_autoplaced yes)
 		(uuid "f7750e22-e891-4144-8a4c-2df410fe25fe")
 		(property "Reference" "R29"
-			(at 105.41 96.4819 0)
+			(at 92.71 97.7519 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3228,7 +3278,7 @@
 			)
 		)
 		(property "Value" "GL5528 "
-			(at 105.41 99.0219 0)
+			(at 92.71 100.2919 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3237,7 +3287,7 @@
 			)
 		)
 		(property "Footprint" "OptoDevice:R_LDR_5.0x4.1mm_P3mm_Vertical"
-			(at 99.822 97.79 90)
+			(at 87.122 99.06 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3246,7 +3296,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 101.6 97.79 0)
+			(at 88.9 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3255,7 +3305,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 101.6 97.79 0)
+			(at 88.9 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3264,7 +3314,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/gl5528-quang-tro-5mm"
-			(at 101.6 97.79 0)
+			(at 88.9 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3289,7 +3339,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 181.61 77.47 0)
+		(at 168.91 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3298,7 +3348,7 @@
 		(fields_autoplaced yes)
 		(uuid "f9195742-a479-481c-a6e3-5707585dbce1")
 		(property "Reference" "#PWR069"
-			(at 181.61 81.28 0)
+			(at 168.91 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3307,7 +3357,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 181.61 72.39 0)
+			(at 168.91 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3315,7 +3365,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 181.61 77.47 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3324,7 +3374,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 181.61 77.47 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3333,7 +3383,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 181.61 77.47 0)
+			(at 168.91 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3355,7 +3405,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 236.22 68.58 0)
+		(at 213.36 99.06 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3364,7 +3414,7 @@
 		(fields_autoplaced yes)
 		(uuid "fb0eec3a-7ad8-4709-a1f1-374e751ca20c")
 		(property "Reference" "C51"
-			(at 238.76 67.3163 0)
+			(at 215.9 97.7963 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3373,7 +3423,7 @@
 			)
 		)
 		(property "Value" "100nF/16V"
-			(at 238.76 69.8563 0)
+			(at 215.9 100.3363 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3382,7 +3432,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 236.22 68.58 0)
+			(at 213.36 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3391,7 +3441,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 236.22 68.58 0)
+			(at 213.36 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3400,7 +3450,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 236.22 68.58 0)
+			(at 213.36 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3409,7 +3459,7 @@
 			)
 		)
 		(property "URL" "https://www.thegioiic.com/tu-gom-0603-100nf-0-1uf-16v"
-			(at 236.22 68.58 0)
+			(at 213.36 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
