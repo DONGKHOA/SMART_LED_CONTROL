@@ -10,6 +10,8 @@ extern ADC_HandleTypeDef hadc2;
 extern uint8_t autocontrol;
 int low_threshold = 10;
 int high_threshold = 875;
+extern volatile uint8_t led_state = 0; 
+extern volatile uint8_t auto_control = 0;
 
 
 float voltage_adc()
@@ -64,11 +66,13 @@ int illuminance_signal()
 void turnOnLight()
 {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+	led_state = 1;
 }
 
 void turnOffLight()
 {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+	led_state = 0;
 }
 
 void autocontrol_mode()
