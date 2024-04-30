@@ -76,12 +76,9 @@ UART_HandleTypeDef huart4;
 
 extern float Temperature;
 extern int16_t Ev;
-<<<<<<< HEAD
 extern uint8_t check_state_led; 
 extern uint8_t check_state_auto; 
-=======
 extern uint8_t autocontrol;
->>>>>>> 329eee12d5afb511891550253ae507fde22b6264
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -642,7 +639,7 @@ static void Screen_Task(void *pvParameters)
   while (1)
   {
     // state machine ui_screen (choose ui screen)
-    EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | NAME_WIFI_SCAN_BIT | CONNECT_WIFI_SUCCESSFUL_BIT | DETECT_TOUCH_SCREEN_BIT | CONNECT_WIFI_UNSUCCESSFUL_BIT | SEND_REFUSE_CONNECT_MQTT_BIT | CONNECT_MQTT_SUCCESSFUL_BIT | CONNECT_MQTT_UNSUCCESSFUL_BIT | REFRESH_DISPLAY_BIT,
+    EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | NAME_WIFI_SCAN_BIT | CONNECT_WIFI_SUCCESSFUL_BIT | DETECT_TOUCH_SCREEN_BIT | CONNECT_WIFI_UNSUCCESSFUL_BIT | REFUSE_CONNECT_MQTT_BIT | CONNECT_MQTT_SUCCESSFUL_BIT | CONNECT_MQTT_UNSUCCESSFUL_BIT | REFRESH_DISPLAY_BIT,
                                              pdTRUE, pdFALSE,
                                              portMAX_DELAY);
     if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
@@ -689,98 +686,98 @@ static void UartTx_Task(void *pvParameters)
 {
   while (1)
   {
-    EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
-                                             ON_WIFI_BIT |
-                                                 OFF_WIFI_BIT |
-                                                 CONNECT_WIFI_BIT |
-                                                 CONNECT_MQTT_BIT |
-                                                 MQTT_PUBLISH_BIT,
-                                             pdTRUE, pdFALSE,
-                                             portMAX_DELAY);
-    if (uxBits & ON_WIFI_BIT)
-    {
-      sprintf((char *)buffer_uart_tx, "%s", "ON");
-      buffer_uart_tx[2] = '\0';
-      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-    }
+//     EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
+//                                              ON_WIFI_BIT |
+//                                                  OFF_WIFI_BIT |
+//                                                  CONNECT_WIFI_BIT |
+//                                                  CONNECT_MQTT_BIT |
+//                                                  MQTT_PUBLISH_BIT,
+//                                              pdTRUE, pdFALSE,
+//                                              portMAX_DELAY);
+//     if (uxBits & ON_WIFI_BIT)
+//     {
+//       sprintf((char *)buffer_uart_tx, "%s", "ON");
+//       buffer_uart_tx[2] = '\0';
+//       transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+//     }
 
-    if (uxBits & OFF_WIFI_BIT)
-    {
-      sprintf((char *)buffer_uart_tx, "%s", "OFF");
-      buffer_uart_tx[3] = '\0';
-      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-    }
+//     if (uxBits & OFF_WIFI_BIT)
+//     {
+//       sprintf((char *)buffer_uart_tx, "%s", "OFF");
+//       buffer_uart_tx[3] = '\0';
+//       transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+//     }
 
-    if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
-    {
-      transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
-    }
+//     if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
+//     {
+//       transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
+//     }
 
-    if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
-    {
-      memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
-      buffer_uart_tx[16] = '\0';
-      transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
-    }
+//     if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
+//     {
+//       memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
+//       buffer_uart_tx[16] = '\0';
+//       transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
+//     }
 
-<<<<<<< HEAD
-        if (uxBits & MQTT_PUBLISH_BIT) 
-        {
-            char state_led[4], state_auto[4];
-            uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-            if (pinValue == GPIO_PIN_SET) 
-            {
-                strcpy(state_led, "ON");
-                state_led[2] = '\0';
-            } 
-            else 
-            {
-                strcpy(state_led, "OFF");
-                state_led[3] = '\0';
-            }
+// <<<<<<< HEAD
+//         if (uxBits & MQTT_PUBLISH_BIT) 
+//         {
+//             char state_led[4], state_auto[4];
+//             uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+//             if (pinValue == GPIO_PIN_SET) 
+//             {
+//                 strcpy(state_led, "ON");
+//                 state_led[2] = '\0';
+//             } 
+//             else 
+//             {
+//                 strcpy(state_led, "OFF");
+//                 state_led[3] = '\0';
+//             }
             
-            if (check_state_autol)
-            {
-                strcpy(state_auto, "ON");
-                state_auto[2] = '\0';
-            } 
-            else 
-            {
-                strcpy(state_auto, "OFF");
-                state_auto[3] = '\0';
-            }
-=======
-    if (uxBits & MQTT_PUBLISH_BIT)
-    {
-      char state_led[4], state_auto[4];
-      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-      if (pinValue == GPIO_PIN_SET)
-      {
-        strcpy(state_led, "ON");
-        state_led[2] = '\0';
-      }
-      else
-      {
-        strcpy(state_led, "OFF");
-        state_led[3] = '\0';
-      }
->>>>>>> 329eee12d5afb511891550253ae507fde22b6264
+//             if (check_state_autol)
+//             {
+//                 strcpy(state_auto, "ON");
+//                 state_auto[2] = '\0';
+//             } 
+//             else 
+//             {
+//                 strcpy(state_auto, "OFF");
+//                 state_auto[3] = '\0';
+//             }
+// =======
+//     if (uxBits & MQTT_PUBLISH_BIT)
+//     {
+//       char state_led[4], state_auto[4];
+//       uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+//       if (pinValue == GPIO_PIN_SET)
+//       {
+//         strcpy(state_led, "ON");
+//         state_led[2] = '\0';
+//       }
+//       else
+//       {
+//         strcpy(state_led, "OFF");
+//         state_led[3] = '\0';
+//       }
+// >>>>>>> 329eee12d5afb511891550253ae507fde22b6264
 
-      if (autocontrol)
-      {
-        strcpy(state_auto, "ON");
-        state_auto[2] = '\0';
-      }
-      else
-      {
-        strcpy(state_auto, "OFF");
-        state_auto[3] = '\0';
-      }
+//       if (autocontrol)
+//       {
+//         strcpy(state_auto, "ON");
+//         state_auto[2] = '\0';
+//       }
+//       else
+//       {
+//         strcpy(state_auto, "OFF");
+//         state_auto[3] = '\0';
+//       }
 
-      //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
-      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
-    }
-  }
+//       //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+//       transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+//     }
+//   }
 }
 
 static void UartRx_Task(void *pvParameters)
