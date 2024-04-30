@@ -851,6 +851,7 @@ static void ADC_Task(void *pvParameters)
       voltage_adc();
       Temperature = calculate_temperature();
       adjust_Ev();
+      autocontrol_mode();
     }
   }
 }
