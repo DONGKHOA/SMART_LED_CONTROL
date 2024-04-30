@@ -78,7 +78,6 @@ extern float Temperature;
 extern int16_t Ev;
 extern uint8_t check_state_led;
 extern uint8_t check_state_auto;
-extern uint8_t autocontrol;
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -711,7 +710,7 @@ static void UartTx_Task(void *pvParameters)
       transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
     }
 
-    if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
+    if (uxBits & CONNECT_MQTT_BIT) // send ip of mqtt from event_screen_5
     {
       memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
       buffer_uart_tx[16] = '\0';
@@ -733,18 +732,7 @@ static void UartTx_Task(void *pvParameters)
         state_led[3] = '\0';
       }
 
-      if (check_state_auto)
-      {
-        strcpy(state_auto, "ON");
-        state_auto[2] = '\0';
-      }
-      else
-      {
-        strcpy(state_auto, "OFF");
-        state_auto[3] = '\0';
-      }
-
-      if (autocontrol)
+      if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
       {
         strcpy(state_auto, "ON");
         state_auto[2] = '\0';

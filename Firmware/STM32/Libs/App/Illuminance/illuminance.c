@@ -11,8 +11,9 @@ extern uint8_t autocontrol;
 int low_threshold = 10;
 int high_threshold = 875;
 extern volatile uint8_t led_state; 
-extern volatile uint8_t auto_control;
+extern uint8_t check_state_auto;
 
+extern QueueHandle_t queue_control_led;
 
 float voltage_adc()
 {
@@ -77,7 +78,7 @@ void turnOffLight()
 
 void autocontrol_mode()
 {
-	if (autocontrol)
+	if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
 	{
 		if (illuminance_signal() )
 		turnOnLight();
