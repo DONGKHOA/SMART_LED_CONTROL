@@ -7,12 +7,10 @@ int16_t var;
 int16_t var_after;
 int16_t Ev;
 extern ADC_HandleTypeDef hadc2;
-extern uint8_t autocontrol;
 int low_threshold = 10;
 int high_threshold = 875;
 extern volatile uint8_t led_state; 
 extern uint8_t check_state_auto;
-
 extern QueueHandle_t queue_control_led;
 
 float voltage_adc()

@@ -698,17 +698,17 @@ static void UartTx_Task(void *pvParameters)
       transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
     }
 
-//     if (uxBits & OFF_WIFI_BIT)
-//     {
-//       sprintf((char *)buffer_uart_tx, "%s", "OFF");
-//       buffer_uart_tx[3] = '\0';
-//       transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-//     }
+    if (uxBits & OFF_WIFI_BIT)
+    {
+      sprintf((char *)buffer_uart_tx, "%s", "OFF");
+      buffer_uart_tx[3] = '\0';
+      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+    }
 
-//     if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
-//     {
-//       transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
-//     }
+    if (uxBits & CONNECT_WIFI_BIT) // send ssid-pass from event_screen_3
+    {
+      transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
+    }
 
     if (uxBits & CONNECT_MQTT_BIT) // send ip of mqtt from event_screen_5
     {
@@ -754,22 +754,25 @@ static void UartRx_Task(void *pvParameters)
   uint8_t buffer_temp[RX_BUFFER_SIZE + 1];
   uint16_t pos_buffer_uart_rx = 0;
   uint8_t enable_bit = 0;
-  uart_rx_heading_t data_heading;
+  int8_t data_heading = -1;
+  uint16_t i;
+
+  memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
 
   while (1)
   {
     uint32_t rxBytes = UARTRead((char *)buffer_temp);
-    data_heading = buffer_temp[0];
+
     if (rxBytes > 0)
     {
-      memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
-      for (uint16_t i = 0; i < rxBytes; i++)
+      for (i = 0; i < rxBytes; i++)
       {
-        buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i + 1];
+        buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i];
         if (buffer_uart_rx[pos_buffer_uart_rx] == '\n')
         {
           enable_bit = 1;
           buffer_uart_rx[pos_buffer_uart_rx] = '\0';
+          pos_buffer_uart_rx = 0;
           break;
         }
         pos_buffer_uart_rx++;
@@ -779,7 +782,15 @@ static void UartRx_Task(void *pvParameters)
       {
         continue;
       }
+      
+      data_heading = buffer_uart_rx[0];
+      uint8_t size_buffer = strlen(buffer_uart_rx);
 
+      for (i = 0; i < size_buffer; i++)
+        {
+            buffer_uart_rx[i] = buffer_uart_rx[i + 1];
+        }
+      
       switch (data_heading)
       {
       case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
@@ -812,7 +823,7 @@ static void UartRx_Task(void *pvParameters)
         }
         else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
         {
-          xEventGroupSetBits(event_uart_rx, SEND_REFUSE_CONNECT_MQTT_BIT);
+          xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
         }
         break;
 
