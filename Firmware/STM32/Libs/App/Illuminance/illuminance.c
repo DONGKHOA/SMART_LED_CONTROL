@@ -76,11 +76,7 @@ void turnOffLight()
 
 void autocontrol_mode()
 {
-	if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
-	{
-		if (illuminance_signal() )
-		turnOnLight();
-		else turnOffLight();
-	}
+	if (illuminance_signal() )
+	turnOnLight();
 	else turnOffLight();
 }
