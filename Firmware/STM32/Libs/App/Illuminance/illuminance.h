@@ -8,6 +8,8 @@
 #include "event.h"
 #include "stdio.h"
 #include "math.h"
+#include "queue.h"
+
 
 float voltage_adc();
 float illuminance_adc();

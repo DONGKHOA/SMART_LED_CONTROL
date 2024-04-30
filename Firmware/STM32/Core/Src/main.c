@@ -76,9 +76,8 @@ UART_HandleTypeDef huart4;
 
 extern float Temperature;
 extern int16_t Ev;
-extern uint8_t check_state_led; 
-extern uint8_t check_state_auto; 
-extern uint8_t autocontrol;
+extern uint8_t check_state_led;
+extern uint8_t check_state_auto;
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -105,7 +104,7 @@ int16_t y;
 char buffer_uart_rx[RX_BUFFER_SIZE + 1];
 char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
-//QueueHandle
+// QueueHandle
 QueueHandle_t queue_data_tx = NULL;
 QueueHandle_t queue_data_rx = NULL;
 QueueHandle_t queue_control_led = NULL;
@@ -220,7 +219,6 @@ int main(void)
   queue_data_rx = xQueueCreate(1024, sizeof(uint8_t));
   queue_data_tx = xQueueCreate(1024, sizeof(uint8_t));
   queue_control_led = xQueueCreate(1024, sizeof(uint8_t));
-
 
   event_uart_tx = xEventGroupCreate();
   event_uart_rx = xEventGroupCreate();
@@ -632,7 +630,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 static void Screen_Task(void *pvParameters)
 {
 
@@ -686,20 +683,20 @@ static void UartTx_Task(void *pvParameters)
 {
   while (1)
   {
-//     EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
-//                                              ON_WIFI_BIT |
-//                                                  OFF_WIFI_BIT |
-//                                                  CONNECT_WIFI_BIT |
-//                                                  CONNECT_MQTT_BIT |
-//                                                  MQTT_PUBLISH_BIT,
-//                                              pdTRUE, pdFALSE,
-//                                              portMAX_DELAY);
-//     if (uxBits & ON_WIFI_BIT)
-//     {
-//       sprintf((char *)buffer_uart_tx, "%s", "ON");
-//       buffer_uart_tx[2] = '\0';
-//       transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
-//     }
+    EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx,
+                                             ON_WIFI_BIT |
+                                             OFF_WIFI_BIT |
+                                             CONNECT_WIFI_BIT |
+                                             CONNECT_MQTT_BIT |
+                                             MQTT_PUBLISH_BIT,
+                                             pdTRUE, pdFALSE,
+                                             portMAX_DELAY);
+    if (uxBits & ON_WIFI_BIT)
+    {
+      sprintf((char *)buffer_uart_tx, "%s", "ON");
+      buffer_uart_tx[2] = '\0';
+      transmitdata(HEADING_WIFI, (char *)buffer_uart_tx);
+    }
 
 //     if (uxBits & OFF_WIFI_BIT)
 //     {
@@ -713,71 +710,43 @@ static void UartTx_Task(void *pvParameters)
 //       transmitdata(HEADING_CONNECT_WIFI, (char *)buffer_uart_tx);
 //     }
 
-//     if (uxBits & CONNECT_MQTT_BIT) // sent ip of mqtt from event_screen_5
-//     {
-//       memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
-//       buffer_uart_tx[16] = '\0';
-//       transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
-//     }
+    if (uxBits & CONNECT_MQTT_BIT) // send ip of mqtt from event_screen_5
+    {
+      memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
+      buffer_uart_tx[16] = '\0';
+      transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
+    }
 
-// <<<<<<< HEAD
-//         if (uxBits & MQTT_PUBLISH_BIT) 
-//         {
-//             char state_led[4], state_auto[4];
-//             uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-//             if (pinValue == GPIO_PIN_SET) 
-//             {
-//                 strcpy(state_led, "ON");
-//                 state_led[2] = '\0';
-//             } 
-//             else 
-//             {
-//                 strcpy(state_led, "OFF");
-//                 state_led[3] = '\0';
-//             }
-            
-//             if (check_state_autol)
-//             {
-//                 strcpy(state_auto, "ON");
-//                 state_auto[2] = '\0';
-//             } 
-//             else 
-//             {
-//                 strcpy(state_auto, "OFF");
-//                 state_auto[3] = '\0';
-//             }
-// =======
-//     if (uxBits & MQTT_PUBLISH_BIT)
-//     {
-//       char state_led[4], state_auto[4];
-//       uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-//       if (pinValue == GPIO_PIN_SET)
-//       {
-//         strcpy(state_led, "ON");
-//         state_led[2] = '\0';
-//       }
-//       else
-//       {
-//         strcpy(state_led, "OFF");
-//         state_led[3] = '\0';
-//       }
-// >>>>>>> 329eee12d5afb511891550253ae507fde22b6264
+    if (uxBits & MQTT_PUBLISH_BIT)
+    {
+      char state_led[4], state_auto[4];
+      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+      if (pinValue == GPIO_PIN_SET)
+      {
+        strcpy(state_led, "ON");
+        state_led[2] = '\0';
+      }
+      else
+      {
+        strcpy(state_led, "OFF");
+        state_led[3] = '\0';
+      }
 
-//       if (autocontrol)
-//       {
-//         strcpy(state_auto, "ON");
-//         state_auto[2] = '\0';
-//       }
-//       else
-//       {
-//         strcpy(state_auto, "OFF");
-//         state_auto[3] = '\0';
-//       }
+      if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
+      {
+        strcpy(state_auto, "ON");
+        state_auto[2] = '\0';
+      }
+      else
+      {
+        strcpy(state_auto, "OFF");
+        state_auto[3] = '\0';
+      }
 
-//       //           sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
-//       transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
-//     }
-//   }
+      sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+    }
+  }
 }
 
 static void UartRx_Task(void *pvParameters)
@@ -843,7 +812,7 @@ static void UartRx_Task(void *pvParameters)
         }
         else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
         {
-          xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
+          xEventGroupSetBits(event_uart_rx, SEND_REFUSE_CONNECT_MQTT_BIT);
         }
         break;
 
@@ -866,11 +835,11 @@ static void ADC_Task(void *pvParameters)
 {
   while (1)
   {
-     if(xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
+    if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
     {
-		voltage_adc();
-		Temperature = calculate_temperature();
-		adjust_Ev();
+      voltage_adc();
+      Temperature = calculate_temperature();
+      adjust_Ev();
     }
   }
 }
@@ -878,11 +847,11 @@ static void ControlLed_Task(void *pvParameters)
 {
   while (1)
   {
-    if( xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS )
+    if (xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS)
     {
-      if(check_state_led)
+      if (check_state_led)
       {
-         turnOnLight();
+        turnOnLight();
       }
       else
       {
@@ -891,7 +860,6 @@ static void ControlLed_Task(void *pvParameters)
     }
   }
 }
-
 
 /* USER CODE END 4 */
 

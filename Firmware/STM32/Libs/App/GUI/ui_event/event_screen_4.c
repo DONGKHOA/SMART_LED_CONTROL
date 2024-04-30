@@ -10,6 +10,8 @@ extern QueueHandle_t queue_control_led;
 uint8_t autocontrol = 0;
 volatile uint8_t led_state = 0; 
 volatile uint8_t auto_control = 0;
+uint8_t check_state_led;
+uint8_t check_state_auto;
  
 
 
@@ -28,7 +30,7 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/
 		{
-			uint8_t check_state_led = (led_state == 0) ? 1 : 0; 
+			check_state_led = (led_state == 0) ? 1 : 0; 
 			xQueueSend(queue_control_led, &check_state_led, portMAX_DELAY);
 			if(check_state_led)
 			{
@@ -41,7 +43,7 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else /*Automatically turn on or off the light according to brightness if pressed icon_auto*/
 		{
-			uint8_t check_state_auto = (auto_control == 0) ? 1 : 0;
+			check_state_auto = (auto_control == 0) ? 1 : 0;
 			xQueueSend(queue_control_led, &check_state_auto, portMAX_DELAY);
 			if (check_state_auto)
 			{

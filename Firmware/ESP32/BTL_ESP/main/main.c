@@ -17,8 +17,6 @@ SemaphoreHandle_t mqtt_semaphore;
  *  STATIC VARIABLES
  **********************/
 
-static int8_t volatile data_heading = -1;
-
 static uint8_t volatile ssid[32];
 static uint8_t volatile pass[32];
 static uint8_t flag_connect_success = 0;
@@ -154,22 +152,25 @@ static void startUartRxTask(void *arg)
     uint8_t buffer_temp[RX_BUF_SIZE + 1];
     uint16_t pos_buffer_uart_rx = 0;
     uint8_t enable_bit = 0;
+    int8_t data_heading = -1;
+    uint16_t i;
+
+    memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
 
     while (1)
     {
         uint16_t rxBytes = uart_read_bytes(UART_NUM_2, &buffer_temp,
                                            RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
-        data_heading = buffer_temp[0];
         if (rxBytes > 0)
         {
-            memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
-            for (uint16_t i = 0; i < rxBytes; i++)
+            for (i = 0; i < rxBytes; i++)
             {
-                buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i + 1];
+                buffer_uart_rx[pos_buffer_uart_rx] = buffer_temp[i];
                 if (buffer_uart_rx[pos_buffer_uart_rx] == '\n')
                 {
                     enable_bit = 1;
                     buffer_uart_rx[pos_buffer_uart_rx] = '\0';
+                    pos_buffer_uart_rx = 0;
                     break;
                 }
                 pos_buffer_uart_rx++;
@@ -178,6 +179,14 @@ static void startUartRxTask(void *arg)
             if (enable_bit == 0)
             {
                 continue;
+            }
+
+            data_heading = buffer_uart_rx[0];
+            uint8_t size_buffer = strlen(buffer_uart_rx);
+
+            for (i = 0; i < size_buffer; i++)
+            {
+                buffer_uart_rx[i] = buffer_uart_rx[i + 1];
             }
 
             switch (data_heading)
@@ -191,21 +200,30 @@ static void startUartRxTask(void *arg)
                 {
                     xEventGroupSetBits(event_uart_rx_heading, ON_WIFI_BIT);
                 }
+                else
+                {
+                    memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
+                }
                 break;
 
             case HEADING_CONNECT_WIFI:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
                 break;
+
             case HEADING_CONNECT_MQTT:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_MQTT_BIT);
                 break;
+
             case HEADING_MQTT_PUBLISH:
                 uint8_t buffer = MQTT_PUBLISH;
                 xQueueSend(mqtt_queue, &buffer, 0);
                 break;
-            default:
 
+            default:
+                enable_bit = 0;
+                memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
                 break;
+
                 memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
             }
 
@@ -475,12 +493,13 @@ static void startMQTTControlDataTask(void *arg)
                 char state_led[10];
                 char state_auto_nodered[10];
                 esp_mqtt_client_subscribe(mqtt_client_0.client, "button", 0);
-                esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
-
                 xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
                 strcpy(state_led, data_mqtt);
+
+                esp_mqtt_client_subscribe(mqtt_client_0.client, "state_auto_nodered", 0);
                 xSemaphoreTake(mqtt_semaphore, portMAX_DELAY);
                 strcpy(state_auto_nodered, data_mqtt);
+                
                 sprintf(buffer_uart_tx, "%s\r%s", state_led, state_auto_nodered);
                 xEventGroupSetBits(event_uart_tx_heading,
                                    SEND_MQTT_SUBSCRIBE);
