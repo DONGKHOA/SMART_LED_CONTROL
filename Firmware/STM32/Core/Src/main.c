@@ -157,6 +157,13 @@ void vBacklightTimerCallback(TimerHandle_t xTimer)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
 }
 
+void TempReadingCallBack(TimerHandle_t xTimer)
+{
+	voltage_adc();
+	adjust_Ev();
+	illuminance_signal();
+	Temperature = calculate_temperature();
+}
 /* USER CODE END 0 */
 
 /**
@@ -226,6 +233,7 @@ int main(void)
   timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCallBack);
   timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, (void *)0, functionRequestCallBack);
   timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCallback);
+  timer_read_temp = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, TempReadingCallBack);
   // init task
 
   xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, &screen_task);
@@ -848,9 +856,7 @@ static void ADC_Task(void *pvParameters)
   {
     if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
     {
-      voltage_adc();
-      Temperature = calculate_temperature();
-      adjust_Ev();
+      xTimerStart(timer_read_temp, 0);
       autocontrol_mode();
     }
   }
