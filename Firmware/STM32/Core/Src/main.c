@@ -247,6 +247,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   xTimerStart(timer_refresh_display, 0);
+  xTimerStart(timer_read_temp, 0);
 
   vTaskStartScheduler();
   while (1)
@@ -856,7 +857,6 @@ static void ADC_Task(void *pvParameters)
   {
     if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
     {
-      xTimerStart(timer_read_temp, 0);
       autocontrol_mode();
     }
   }
