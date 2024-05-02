@@ -5,12 +5,13 @@
 #include "ili9341.h"
 #include "stm32f1xx_hal.h"
 #include <stdbool.h>
-
+#include "delay_timer.h"
 /**********************
  *  EXTERN VARIABLES
  **********************/
 
 extern SPI_HandleTypeDef hspi1;
+extern TIM_HandleTypeDef htim1;
 
 /**********************
  *  STATIC VARIABLES
@@ -37,9 +38,9 @@ static void WriteData(uint8_t data);
 void ILI9341Reset(void)
 {
 	HAL_GPIO_WritePin(ILI9341_RST_PORT, ILI9341_RST_PIN, GPIO_PIN_RESET);
-	HAL_Delay(200UL);
+	DELAY_Tim_Ms(&htim1, 200UL);
 	HAL_GPIO_WritePin(ILI9341_RST_PORT, ILI9341_RST_PIN, GPIO_PIN_SET);
-	HAL_Delay(200UL);
+	DELAY_Tim_Ms(&htim1, 200UL);
 }
 
 /**
@@ -51,7 +52,7 @@ void ILI9341Init(void)
 	HAL_GPIO_WritePin(ILI9341_CS_PORT, ILI9341_CS_PIN, GPIO_PIN_RESET);
 
 	WriteCommand(0x01U);
-	HAL_Delay(1000UL);
+	DELAY_Tim_Ms(&htim1, 1000UL);
 	WriteCommand(0xCBU);
 	WriteData(0x39U);
 	WriteData(0x2CU);
@@ -133,7 +134,7 @@ void ILI9341Init(void)
 	WriteData(0x36U);
 	WriteData(0x0FU);
 	WriteCommand(0x11U);
-	HAL_Delay(120UL);
+	DELAY_Tim_Ms(&htim1, 120UL);
 	WriteCommand(0x29U);
 	WriteCommand(0x36U);
 	WriteData(0x48U);

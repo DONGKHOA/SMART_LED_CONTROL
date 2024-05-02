@@ -13,8 +13,6 @@ volatile uint8_t auto_control = 0;
 uint8_t check_state_led;
 uint8_t check_state_auto;
  
-
-
 void check_event_screen_4(screen_state_t *screen)
 {
 	touch_icon_screen4_t touch = check_event_icon_screen4(x, y);

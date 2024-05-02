@@ -10,6 +10,7 @@
 #include "timers.h"
 #include "event_groups.h"
 #include "main.h"
+#include <stdio.h>
 
 /*********************
  *      DEFINES
@@ -131,9 +132,11 @@ void TouchCalibrate(void)
 	}
 	raw_points[0].x = (INT_32)x;
 	raw_points[0].y = (INT_32)y;
+
 	while (TouchIsTouched() == true)
 	{
 	}
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
     /* second point */
 	DrawCross(200, 40, 40);
@@ -145,9 +148,11 @@ void TouchCalibrate(void)
 	}
 	raw_points[1].x = (INT_32)x;
 	raw_points[1].y = (INT_32)y;
+
 	while (TouchIsTouched() == true)
 	{
 	}
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
     /* third point */
 	DrawCross(200, 280, 40);
@@ -163,6 +168,12 @@ void TouchCalibrate(void)
 	{
 	}
 
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+
+	char data[20];
+	sprintf(data, "%ld, %ld, %ld, %ld, %ld, %ld," ,raw_points[0].x, raw_points[0].y, raw_points[1].x, raw_points[1].y, raw_points[2].x, raw_points[2].y);
+
+	GraphicsStandardString(50, 250, data, BLACK);
 	(void)setCalibrationMatrix(display_points, raw_points, &matrix);
 }
 
@@ -172,7 +183,7 @@ void TouchCalibrate(void)
 
 /**
  * The function TouchIsTouched returns the state of touch input.
- * 
+ *
  * @return The function `TouchIsTouched` is returning the value of the variable `state_touch`, which is
  * of type `bool`.
  */
@@ -184,10 +195,10 @@ static bool TouchIsTouched(void)
 /**
  * The function `SpiTransfer` sends and receives a single byte over SPI communication using the HAL
  * library.
- * 
+ *
  * @param byte The `byte` parameter is the data byte that you want to send over SPI for transmission
  * and receive.
- * 
+ *
  * @return The function `SpiTransfer` is returning the `result` variable, which is of type `uint8_t`.
  */
 static uint8_t SpiTransfer(uint8_t byte)
@@ -202,7 +213,7 @@ static uint8_t SpiTransfer(uint8_t byte)
 /**
  * The DrawCross function draws a cross shape centered at the specified coordinates with the given
  * length.
- * 
+ *
  * @param x The x-coordinate of the center of the cross.
  * @param y The parameter `y` in the `DrawCross` function represents the vertical position where the
  * center of the cross will be drawn on the screen.
@@ -215,13 +226,13 @@ static void DrawCross(int16_t x, int16_t y, int16_t length)
 	GraphicsClear(WHITE);
 	GraphicsHline(x - length / 2, x + length / 2, y, BLACK);
 	GraphicsVline(x, y - length / 2, y + length / 2, BLACK);
-	GraphicsStandardString(50, 150, "Touch center of cross", BLACK);
+	GraphicsStandardString(50, 150, "Touch centre of cross", BLACK);
 }
 
 /**
  * The function `GetPointRaw` reads touch coordinates, sorts the readings, and returns the averaged
  * middle two readings.
- * 
+ *
  * @param x The function `GetPointRaw` reads touch coordinates from a touch sensor and sorts the
  * readings before calculating the averaged middle 2 readings for x and y coordinates. The x and y
  * coordinates are then stored in the variables `x` and `y` respectively.
@@ -229,7 +240,7 @@ static void DrawCross(int16_t x, int16_t y, int16_t length)
  * readings before calculating the averaged middle 2 readings for both x and y coordinates. The `x` and
  * `y` parameters are pointers to `uint16_t` variables where the function will store the calculated x
  * and
- * 
+ *
  * @return The function `GetPointRaw` returns a boolean value, either `true` or `false`.
  */
 static bool GetPointRaw(uint16_t* x, uint16_t* y)

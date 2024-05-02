@@ -40,7 +40,7 @@ extern EventGroupHandle_t event_uart_tx;
 extern char text_sc5[14];
 extern EventBits_t bitsScreen5;
 
-uint8_t connected_MQTT = 0;
+uint8_t state_connected_MQTT = 0;
 
 /*MQTT screen are similar to Wifi screen in terms of functionality*/
 void check_event_screen_5(screen_state_t *screen)
@@ -98,7 +98,8 @@ void check_event_screen_5(screen_state_t *screen)
     }
     if(bitsScreen5 & CONNECT_MQTT_SUCCESSFUL_BIT)
     {
-        bit_map_screen_1.connected_MQTT = 1;
+        bit_map_screen_5.MQTT_Connected = 1;
+        bit_map_screen_1.state_connected_MQTT = 1;
         bit_map_screen_1.screen = 1;
         bit_map_screen_1.wifi = 1;
         bit_map_screen_1.home = 1;

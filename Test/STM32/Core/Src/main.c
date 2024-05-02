@@ -104,13 +104,13 @@ int main(void)
 //	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
 //	  temp = '\n';
 //	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
-//	  HAL_Delay(5000);
+//	  vTaskDelay(5000);
 	  temp = 0x01;
 	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
 	  HAL_UART_Transmit(&huart1, &data, 2, 100);
 	  temp = '\n';
 	  HAL_UART_Transmit(&huart1, &temp, 1, 100);
-	  HAL_Delay(5000);
+	  vTaskDelay(5000);
   }
   /* USER CODE END 3 */
 }
