@@ -57,15 +57,23 @@ int16_t adjust_Ev()
 
 int illuminance_signal()
 {
+	static int previous_State = -1;
+
 	if (Ev < 250)
 	{
-		return 1; //Turn the light on
+	        previous_State = 1; // Turn the light On
+		return 1;
 	}
 	else if (Ev > 400)
 	{
-		return 0; //Turn the light off
+	        previous_State = 0; // Turn the light Off
+	        return 0;
 	}
-	//if the illumination is from 250 - 400, keep the previous state
+	else
+	{
+	    	//if the illumination is from 250 - 400, keep the previous state
+	        return previous_State;
+	}
 }
 
 void turnOnLight()
