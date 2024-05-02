@@ -57,9 +57,15 @@ int16_t adjust_Ev()
 
 int illuminance_signal()
 {
-	if (volt < 9)
+	if (Ev < 250)
+	{
+		return 1; //Turn the light on
+	}
+	else if (Ev > 400)
+	{
 		return 0; //Turn the light off
-	else return 1; //Turn the light on
+	}
+	//if the illumination is from 250 - 400, keep the previous state
 }
 
 void turnOnLight()
