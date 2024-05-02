@@ -666,7 +666,7 @@ static void Screen_Task(void *pvParameters)
 
       case SCREEN_KEYPAD:
         check_event_screen_3(&screen_current);
-        screen_3(uxBits);
+        screen_3(uxBits); 
         break;
 
       case SCREEN_MAIN:

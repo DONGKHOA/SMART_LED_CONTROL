@@ -21,17 +21,17 @@ void screen_1(EventBits_t uxBits)
 	}
 	if (bit_map_screen_1.wifi == 1)
 	{
-		GraphicsColourBitmap(99, 75, 41, 39, icon_wifi);
+		GraphicsColourBitmap(99, 51, 41, 39, icon_wifi);
 		bit_map_screen_1.wifi = 0;
 	}
 	if (bit_map_screen_1.home == 1)
 	{
-		GraphicsColourBitmap(95, 154, 50, 48, icon_home);
+		GraphicsColourBitmap(90, 129, 50, 48, icon_home);
 		bit_map_screen_1.home = 0;
 	}
 	if (bit_map_screen_1.MQTT == 1)
 	{
-		GraphicsColourBitmap(94, 150, 216, 255, icon_MQTT);
+		GraphicsColourBitmap(94, 208, 46, 44, icon_MQTT);
 		bit_map_screen_1.MQTT = 0;
 	}
 	if(bit_map_screen_1.connected_MQTT == 1)
@@ -41,7 +41,7 @@ void screen_1(EventBits_t uxBits)
 	}
 	if(bit_map_screen_1.connected_WIFI == 1)
 	{
-		GraphicsCircle(140, 52, 3, GREEN);
+		GraphicsCircle(145, 208, 3, GREEN);
 		bit_map_screen_1.connected_WIFI = 0;
 	}
 }
