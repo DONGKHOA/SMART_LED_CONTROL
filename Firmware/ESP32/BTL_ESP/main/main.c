@@ -20,11 +20,11 @@ SemaphoreHandle_t mqtt_semaphore;
 static uint8_t volatile ssid[32];
 static uint8_t volatile pass[32];
 static uint8_t flag_connect_success = 0;
-
 static uint8_t num_wifi_scan = 0;
 
 static char url_mqtt[30] = "mqtt://172.16.0.181:1883";
 static MQTT_Client_Data_t mqtt_client_0;
+static uint8_t is_publish = 0;
 
 // Task Handle
 
@@ -200,14 +200,12 @@ static void startUartRxTask(void *arg)
                 {
                     xEventGroupSetBits(event_uart_rx_heading, ON_WIFI_BIT);
                 }
-                else
-                {
-                    memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
-                }
+                
                 break;
 
             case HEADING_CONNECT_WIFI:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
+                flag_connect_success = 0;
                 break;
 
             case HEADING_CONNECT_MQTT:
@@ -307,7 +305,6 @@ static void startUartTxTask(void *arg)
 
 static void startWifiScan(void *arg)
 {
-    uint8_t flag_off_wifi = 1;
     while (1)
     {
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
@@ -329,12 +326,12 @@ static void startWifiScan(void *arg)
             num_wifi_scan = WIFI_Scan(buffer_uart_tx);
             buffer_uart_tx[strlen(buffer_uart_tx) + 2] = num_wifi_scan;
 
-            if (WIFI_state_connect() == CONNECT_OK)
-            {
-                xEventGroupSetBits(event_uart_tx_heading,
-                                   SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT);
-                continue;
-            }
+            // if (WIFI_state_connect() == CONNECT_OK)
+            // {
+            //     xEventGroupSetBits(event_uart_tx_heading,
+            //                        SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT);
+            //     continue;
+            // }
 
             if (matchingWIFIScan(buffer_uart_tx, (uint8_t *)ssid, (uint8_t *)pass) != -1)
             {
@@ -345,17 +342,11 @@ static void startWifiScan(void *arg)
             xEventGroupSetBits(event_uart_tx_heading,
                                SEND_NUMBER_NAME_WIFI_SCAN_BIT);
 
-            flag_off_wifi = 1;
         }
 
         if (uxBits & OFF_WIFI_BIT)
         {
-            if (flag_off_wifi == 1)
-            {
-                esp_wifi_stop();
-                flag_connect_success = 0;
-                flag_off_wifi = 0;
-            }
+            esp_wifi_stop();
         }
     }
 }
@@ -378,10 +369,6 @@ static void startWifiConnectTask(void *arg)
                 - Connect unsuccessful -> set bit SEND_CONNECT_WIFI_UNSUCCESSFUL
             */
             getSSID_PASS((uint8_t *)buffer_uart_rx, (uint8_t *)ssid, (uint8_t *)pass);
-            if (WIFI_state_connect() == CONNECT_OK)
-            {
-                continue;
-            }
 
             if (WIFI_Connect((uint8_t *)ssid, (uint8_t *)pass) == CONNECT_OK)
             {
@@ -439,7 +426,6 @@ static void startMQTTConnectTask(void *arg)
             {
                 sprintf(url_mqtt, "mqtt://%.*s:1883", strlen(buffer_uart_rx), buffer_uart_rx);
                 MQTT_app_start(&mqtt_client_0, url_mqtt);
-                xTimerReset(mqtt_subscribe_timer, 0);
             }
             else
             {
@@ -459,21 +445,25 @@ static void startMQTTControlDataTask(void *arg)
     {
         if (xQueueReceive(mqtt_queue, &buffer, portMAX_DELAY) == pdPASS)
         {
+            if (WIFI_state_connect() != CONNECT_OK)
+            {
+                is_publish = 0;
+                strcpy(buffer_uart_tx, "FAILED");
+                xTimerStop(mqtt_subscribe_timer, 0);
+                xEventGroupSetBits(event_uart_tx_heading,
+                                   SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT);
+                continue;
+            }
 
             if (MQTT_app_state_connect() != 1)
             {
-                strcpy(buffer_uart_tx, "FALSE");
+                is_publish = 0;
+                xTimerStop(mqtt_subscribe_timer, 0);
+                strcpy(buffer_uart_tx, "FAILED");
                 xEventGroupSetBits(event_uart_tx_heading,
                                    SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT);
                 continue;
             }
-
-            // if (WIFI_state_connect() != CONNECT_OK)
-            // {
-            //     xEventGroupSetBits(event_uart_tx_heading,
-            //                        SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT);
-            //     continue;
-            // }
 
             if (buffer == MQTT_PUBLISH)
             {
@@ -487,6 +477,11 @@ static void startMQTTControlDataTask(void *arg)
                 esp_mqtt_client_publish(mqtt_client_0.client, "state_led", (const char *)&state_led, 0, 1, 0);
                 esp_mqtt_client_publish(mqtt_client_0.client, "state_auto_stm32", (const char *)&state_auto, 0, 1, 0);
                 esp_mqtt_client_publish(mqtt_client_0.client, "lux", (const char *)&lux, 0, 1, 0);
+                if (is_publish == 0)
+                {
+                    xTimerReset(mqtt_subscribe_timer, 0);
+                    is_publish = 1;
+                }
             }
             else if (buffer == MQTT_SUBSCRIBE)
             {

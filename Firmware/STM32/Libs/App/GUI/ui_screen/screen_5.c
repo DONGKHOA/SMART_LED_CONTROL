@@ -54,11 +54,17 @@ void screen_5(EventBits_t uxBits)
 		bit_map_screen_5.key = 0;
 	}
 
-	bitsScreen5 = uxBits;
-
 	if (uxBits & CONNECT_MQTT_UNSUCCESSFUL_BIT)
 	{
 		strcpy(text_sc5, "re-enter MQTT");
 		bit_map_screen_5.text = 1;
 	}
+
+	if (uxBits & REFUSE_CONNECT_MQTT_BIT)
+	{
+		strcpy(text_sc5, "Connect Wifi!");
+		bit_map_screen_5.text = 1;
+	}
+
+	bitsScreen5 = uxBits;
 }
