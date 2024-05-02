@@ -57,7 +57,7 @@ int16_t adjust_Ev()
 
 int illuminance_signal()
 {
-	static int previous_State = -1;
+	static int previous_State = 0;
 
 	if (Ev < 250)
 	{
