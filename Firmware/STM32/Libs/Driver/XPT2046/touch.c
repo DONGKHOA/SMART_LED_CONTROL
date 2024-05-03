@@ -60,9 +60,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		state_touch = !state_touch;
 		if (state_touch == 1)
 		{
-			BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-			xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
-			portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//			BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
+//			xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
+//			portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 		}
 	}
 }

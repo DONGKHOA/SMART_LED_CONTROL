@@ -77,25 +77,25 @@ UART_HandleTypeDef huart4;
  *  EXTERN VARIABLES
  **********************/
 
-extern float Temperature;
-extern int16_t Ev;
-extern uint8_t check_state_led;
-extern uint8_t check_state_auto;
-extern uint8_t MQTT[15];
-extern uint8_t MQTT_pos;
+//extern float Temperature;
+//extern int16_t Ev;
+//extern uint8_t check_state_led;
+//extern uint8_t check_state_auto;
+//extern uint8_t MQTT[15];
+//extern uint8_t MQTT_pos;
 
 /**********************
  *  STATIC VARIABLES
  **********************/
 // Task Handle
-static TaskHandle_t uart_rx_task;
-static TaskHandle_t uart_tx_task;
-static TaskHandle_t control_led_task;
-static TaskHandle_t read_adc_task;
-static TaskHandle_t screen_task;
-
-static screen_state_t screen_current = SCREEN_START;
-static TimerHandle_t timer_refresh_display;
+//static TaskHandle_t uart_rx_task;
+//static TaskHandle_t uart_tx_task;
+//static TaskHandle_t control_led_task;
+//static TaskHandle_t read_adc_task;
+//static TaskHandle_t screen_task;
+//
+//static screen_state_t screen_current = SCREEN_START;
+//static TimerHandle_t timer_refresh_display;
 
 /**********************
  *  GLOBAL VARIABLES
@@ -104,23 +104,23 @@ static TimerHandle_t timer_refresh_display;
 int16_t x;
 int16_t y;
 
-char buffer_uart_rx[RX_BUFFER_SIZE + 1];
-char buffer_uart_tx[RX_BUFFER_SIZE + 1];
+//char buffer_uart_rx[RX_BUFFER_SIZE + 1];
+//char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
 // QueueHandle
 QueueHandle_t queue_control_led = NULL;
 QueueHandle_t queue_control_auto = NULL;
 
 // EventGroup Handle
-EventGroupHandle_t event_uart_tx;
-EventGroupHandle_t event_uart_rx;
+//EventGroupHandle_t event_uart_tx;
+//EventGroupHandle_t event_uart_rx;
 
 // Timer Handle
-TimerHandle_t timer_request_scan_wifi;
-TimerHandle_t timer_wait_off_screen;
-TimerHandle_t timer_read_temp;
+//TimerHandle_t timer_request_scan_wifi;
+//TimerHandle_t timer_wait_off_screen;
+//TimerHandle_t timer_read_temp;
 
-BaseType_t ret_main;
+//BaseType_t ret_main;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -136,44 +136,44 @@ static void MX_TIM1_Init(void);
 static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
-static void Screen_Task(void *pvParameters);
-static void UartTx_Task(void *pvParameters);
-static void UartRx_Task(void *pvParameters);
-static void ADC_Task(void *pvParameters);
-static void ControlLed_Task(void *pvParameters);
+//static void Screen_Task(void *pvParameters);
+//static void UartTx_Task(void *pvParameters);
+//static void UartRx_Task(void *pvParameters);
+//static void ADC_Task(void *pvParameters);
+//static void ControlLed_Task(void *pvParameters);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void functionRequestCb(TimerHandle_t xTimer)
-{
-  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-  xEventGroupSetBitsFromISR(event_uart_rx, ON_WIFI_BIT, &xHigherPriorityTaskWoken);
-  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//void functionRequestCb(TimerHandle_t xTimer)
+//{
+//  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
+//  xEventGroupSetBitsFromISR(event_uart_rx, ON_WIFI_BIT, &xHigherPriorityTaskWoken);
+//  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//
+//  xTimerReset(timer_request_scan_wifi, 0);
+//}
 
-  xTimerReset(timer_request_scan_wifi, 0);
-}
-
-void timerRefreshDisplayCb(TimerHandle_t xTimer)
-{
-  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-  xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
-  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-}
-
-void vBacklightTimerCb(TimerHandle_t xTimer)
-{
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
-}
-
-void TempReadingCb(TimerHandle_t xTimer)
-{
-	voltage_adc();
-	adjust_Ev();
-	illuminance_signal();
-	Temperature = calculate_temperature();
-}
+//void timerRefreshDisplayCb(TimerHandle_t xTimer)
+//{
+//  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
+//  xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
+//  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//}
+//
+//void vBacklightTimerCb(TimerHandle_t xTimer)
+//{
+//  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
+//}
+//
+//void TempReadingCb(TimerHandle_t xTimer)
+//{
+//	voltage_adc();
+//	adjust_Ev();
+//	illuminance_signal();
+//	Temperature = calculate_temperature();
+//}
 /* USER CODE END 0 */
 
 /**
@@ -226,20 +226,20 @@ int main(void)
 
   GraphicsInit();
   TouchCalibrate();
-  UARTConfig(&huart4, 64);
+//  UARTConfig(&huart4, 64);
 
   // Init application
 
-  bit_map_screen_1.screen = 1;
-  bit_map_screen_1.wifi = 1;
-  bit_map_screen_1.home = 1;
-  bit_map_screen_1.MQTT = 1;
-  bit_map_screen_1.state_connected_WIFI = 1;
-  bit_map_screen_1.state_connected_MQTT = 1;
-
-  bit_map_screen_5.MQTT_Connected = 0;
-
-  bit_map_screen_2.WIFI_Connected = 0;
+//  bit_map_screen_1.screen = 1;
+//  bit_map_screen_1.wifi = 1;
+//  bit_map_screen_1.home = 1;
+//  bit_map_screen_1.MQTT = 1;
+//  bit_map_screen_1.state_connected_WIFI = 1;
+//  bit_map_screen_1.state_connected_MQTT = 1;
+//
+//  bit_map_screen_5.MQTT_Connected = 0;
+//
+//  bit_map_screen_2.WIFI_Connected = 0;
 
   // init temperature
   temperature_sensor_init(&hadc1, &htim3);
@@ -259,10 +259,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  ret_main = xTimerStart(timer_refresh_display, 0);
-  ret_main = xTimerStart(timer_read_temp, 0);
-
-  vTaskStartScheduler();
+//  ret_main = xTimerStart(timer_refresh_display, 0);
+//  ret_main = xTimerStart(timer_read_temp, 0);
+//
+//  vTaskStartScheduler();
   while (1)
   {
     /* USER CODE END WHILE */
