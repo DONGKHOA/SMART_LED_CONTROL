@@ -20,7 +20,6 @@ SemaphoreHandle_t mqtt_semaphore;
 static uint8_t volatile ssid[32];
 static uint8_t volatile pass[32];
 static uint8_t flag_connect_success = 0;
-static uint8_t num_wifi_scan = 0;
 
 static char url_mqtt[30] = "mqtt://172.16.0.181:1883";
 static MQTT_Client_Data_t mqtt_client_0;
@@ -83,7 +82,7 @@ void app_main(void)
 
     mqtt_subscribe_timer = xTimerCreate("time mqtt subscribe",
                                         TIME_MQTT_SUBSCRIBE / portTICK_PERIOD_MS,
-                                        pdFALSE, (void *)0, MQTT_timer_cb);
+                                        pdTRUE, (void *)0, MQTT_timer_cb);
 
     mqtt_queue = xQueueCreate(2, sizeof(uint8_t));
 
@@ -142,9 +141,11 @@ void app_main(void)
 
 static void MQTT_timer_cb(TimerHandle_t xTimer)
 {
-    xTimerReset(mqtt_subscribe_timer, 0);
     uint8_t buffer = MQTT_SUBSCRIBE;
-    xQueueSend(mqtt_queue, &buffer, 0);
+
+    BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
+    xQueueSendFromISR(mqtt_queue, &buffer, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 static void startUartRxTask(void *arg)
@@ -305,6 +306,7 @@ static void startUartTxTask(void *arg)
 
 static void startWifiScan(void *arg)
 {
+    uint8_t num_wifi_scan = 0;
     while (1)
     {
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,

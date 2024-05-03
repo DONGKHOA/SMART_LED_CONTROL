@@ -10,7 +10,7 @@ extern int16_t y;
 extern QueueHandle_t queue_control_led;
 extern QueueHandle_t queue_control_auto;
 uint8_t autocontrol = 0;
- 
+
 void check_event_screen_4(screen_state_t *screen)
 {
 	touch_icon_screen4_t touch = check_event_icon_screen4(x, y);
@@ -41,7 +41,7 @@ void check_event_screen_4(screen_state_t *screen)
 			// xQueueSend(queue_control_led, &check_state_auto, portMAX_DELAY);
 			// if (check_state_auto)
 			// {
-			// 	bit_map_screen_4.on_auto = 1;	
+			// 	bit_map_screen_4.on_auto = 1;
 			// }
 			// else
 			// {

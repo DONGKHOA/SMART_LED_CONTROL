@@ -253,8 +253,8 @@ int main(void)
   xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 6, NULL, 3, &screen_task);
   xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_tx_task);
   xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_rx_task);
-  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, &read_adc_task);
-  xTaskCreate(ControlLed_Task, "led_Task", configMINIMAL_STACK_SIZE, NULL, 2, &control_led_task);
+//  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, &read_adc_task);
+//  xTaskCreate(ControlLed_Task, "led_Task", configMINIMAL_STACK_SIZE, NULL, 2, &control_led_task);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -724,7 +724,7 @@ static void Screen_Task(void *pvParameters)
 
       case SCREEN_KEYPAD:
         check_event_screen_3(&screen_current);
-        screen_3(uxBits);
+        screen_3(uxBits); 
         break;
 
       case SCREEN_MAIN:
@@ -783,35 +783,35 @@ static void UartTx_Task(void *pvParameters)
       transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
     }
 
-    if (uxBits & MQTT_PUBLISH_BIT)
-    {
-      char state_led[4], state_auto[4];
-      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-      if (pinValue == GPIO_PIN_SET)
-      {
-        strcpy(state_led, "ON");
-        state_led[2] = '\0';
-      }
-      else
-      {
-        strcpy(state_led, "OFF");
-        state_led[3] = '\0';
-      }
-
-      if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
-      {
-        strcpy(state_auto, "ON");
-        state_auto[2] = '\0';
-      }
-      else
-      {
-        strcpy(state_auto, "OFF");
-        state_auto[3] = '\0';
-      }
-
-      sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
-      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
-    }
+//    if (uxBits & MQTT_PUBLISH_BIT)
+//    {
+//      char state_led[4], state_auto[4];
+//      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+//      if (pinValue == GPIO_PIN_SET)
+//      {
+//        strcpy(state_led, "ON");
+//        state_led[2] = '\0';
+//      }
+//      else
+//      {
+//        strcpy(state_led, "OFF");
+//        state_led[3] = '\0';
+//      }
+//
+//      if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
+//      {
+//        strcpy(state_auto, "ON");
+//        state_auto[2] = '\0';
+//      }
+//      else
+//      {
+//        strcpy(state_auto, "OFF");
+//        state_auto[3] = '\0';
+//      }
+//
+//      sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+//      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+//    }
   }
 }
 
@@ -908,33 +908,33 @@ static void UartRx_Task(void *pvParameters)
   }
 }
 
-static void ADC_Task(void *pvParameters)
-{
-  while (1)
-  {
-    if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
-    {
-      autocontrol_mode();
-    }
-  }
-}
-static void ControlLed_Task(void *pvParameters)
-{
-  while (1)
-  {
-    if (xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS)
-    {
-      if (check_state_led)
-      {
-        turnOnLight();
-      }
-      else
-      {
-        turnOffLight();
-      }
-    }
-  }
-}
+//static void ADC_Task(void *pvParameters)
+//{
+//  while (1)
+//  {
+//    if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
+//    {
+//      autocontrol_mode();
+//    }
+//  }
+//}
+//static void ControlLed_Task(void *pvParameters)
+//{
+//  while (1)
+//  {
+//    if (xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS)
+//    {
+//      if (check_state_led)
+//      {
+//        turnOnLight();
+//      }
+//      else
+//      {
+//        turnOffLight();
+//      }
+//    }
+//  }
+//}
 
 /* USER CODE END 4 */
 
