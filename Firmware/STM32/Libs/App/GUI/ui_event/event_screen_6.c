@@ -5,8 +5,6 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 
-extern EventGroupHandle_t event_uart_rx;
-extern TimerHandle_t timer_wait_off_screen;
 EventBits_t uxBits;
 
 void check_event_screen_6(screen_state_t *screen)
@@ -22,7 +20,5 @@ void check_event_screen_6(screen_state_t *screen)
         bit_map_screen_1.state_connected_MQTT = 1;
         bit_map_screen_1.state_connected_WIFI = 1;
         *screen = SCREEN_START;
-
-        xTimerReset( timer_wait_off_screen, 10 );   // reset Timer
     }
 }

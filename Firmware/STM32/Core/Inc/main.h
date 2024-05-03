@@ -66,10 +66,10 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define RX_BUFFER_SIZE 					          100
 
-#define TIME_REQUEST_SCAN                 5000
+#define TIME_REQUEST_SCAN                 1000
 #define TIME_REFRESH_DISPLAY              100
 #define TIME_WAIT                         30000
-#define TIME_READ						  1000
+#define TIME_READ						              1000
 
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)
@@ -109,6 +109,18 @@ typedef enum
   HEADING_RECEIVE_CONNECT_MQTT,
   HEADING_MQTT_SUBSCRIBE,
 } uart_rx_heading_t;
+
+typedef enum
+{
+  LED_ON,
+  LED_OFF,
+} control_led_t;
+
+typedef enum
+{
+  AUTO_ON,
+  AUTO_OFF,
+} control_auto_t;
 
 /*********************
  *   INLINE FUNCTION

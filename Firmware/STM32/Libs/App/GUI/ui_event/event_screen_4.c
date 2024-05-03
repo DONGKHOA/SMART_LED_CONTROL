@@ -3,15 +3,13 @@
 #include "screen.h"
 #include "graphics.h"
 #include "queue.h"
+#include "main.h"
 
 extern int16_t x;
 extern int16_t y;
 extern QueueHandle_t queue_control_led;
+extern QueueHandle_t queue_control_auto;
 uint8_t autocontrol = 0;
-volatile uint8_t led_state = 0; 
-volatile uint8_t auto_control = 0;
-uint8_t check_state_led;
-uint8_t check_state_auto;
  
 void check_event_screen_4(screen_state_t *screen)
 {
@@ -28,29 +26,27 @@ void check_event_screen_4(screen_state_t *screen)
 		}
 		else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/
 		{
-			check_state_led = (led_state == 0) ? 1 : 0; 
-			xQueueSend(queue_control_led, &check_state_led, portMAX_DELAY);
-			if(check_state_led)
-			{
-				bit_map_screen_4.ON = 1; // if Button on
-			}
-			else
-			{
-				bit_map_screen_4.OFF = 1; // if Button off
-			}
+			// xQueueSend(queue_control_led, &check_state_led, portMAX_DELAY);
+			// if(check_state_led)
+			// {
+			// 	bit_map_screen_4.ON = 1; // if Button on
+			// }
+			// else
+			// {
+			// 	bit_map_screen_4.OFF = 1; // if Button off
+			// }
 		}
 		else /*Automatically turn on or off the light according to brightness if pressed icon_auto*/
 		{
-			check_state_auto = (auto_control == 0) ? 1 : 0;
-			xQueueSend(queue_control_led, &check_state_auto, portMAX_DELAY);
-			if (check_state_auto)
-			{
-				bit_map_screen_4.on_auto = 1;	
-			}
-			else
-			{
-				bit_map_screen_4.off_auto = 1;
-			}
+			// xQueueSend(queue_control_led, &check_state_auto, portMAX_DELAY);
+			// if (check_state_auto)
+			// {
+			// 	bit_map_screen_4.on_auto = 1;	
+			// }
+			// else
+			// {
+			// 	bit_map_screen_4.off_auto = 1;
+			// }
 			// draw one note to display on or off mode auto
 		}
 	}

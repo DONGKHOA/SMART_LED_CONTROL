@@ -9,9 +9,6 @@ int16_t Ev;
 extern ADC_HandleTypeDef hadc2;
 int low_threshold = 10;
 int high_threshold = 875;
-extern volatile uint8_t led_state; 
-extern uint8_t check_state_auto;
-extern QueueHandle_t queue_control_led;
 
 float voltage_adc()
 {
@@ -65,13 +62,11 @@ int illuminance_signal()
 void turnOnLight()
 {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-	led_state = 1;
 }
 
 void turnOffLight()
 {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-	led_state = 0;
 }
 
 void autocontrol_mode()

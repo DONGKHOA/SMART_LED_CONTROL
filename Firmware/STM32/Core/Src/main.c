@@ -108,9 +108,8 @@ char buffer_uart_rx[RX_BUFFER_SIZE + 1];
 char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
 // QueueHandle
-QueueHandle_t queue_data_tx = NULL;
-QueueHandle_t queue_data_rx = NULL;
 QueueHandle_t queue_control_led = NULL;
+QueueHandle_t queue_control_auto = NULL;
 
 // EventGroup Handle
 EventGroupHandle_t event_uart_tx;
@@ -217,10 +216,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // init service
-
-  queue_data_rx = xQueueCreate(100, sizeof(uint8_t));
-  queue_data_tx = xQueueCreate(100, sizeof(uint8_t));
-  queue_control_led = xQueueCreate(100, sizeof(uint8_t));
+  queue_control_led = xQueueCreate(2, sizeof(control_led_t));
+  queue_control_auto = xQueueCreate(2, sizeof(control_auto_t));
 
   event_uart_tx = xEventGroupCreate();
   event_uart_rx = xEventGroupCreate();
@@ -712,6 +709,7 @@ static void Screen_Task(void *pvParameters)
       bit_map_screen_2.WIFI_Connected = 0;
     if ((uxBits & DETECT_TOUCH_SCREEN_BIT) || (uxBits & REFRESH_DISPLAY_BIT))
     {
+      xTimerReset( timer_wait_off_screen, 10 );   // reset Timer
       switch (screen_current)
       {
       case SCREEN_START:
