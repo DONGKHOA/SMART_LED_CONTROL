@@ -1,58 +1,30 @@
 #include "illuminance.h"
+#include "calibrate_adc.h"
+#include "read_adc.h"
 
-float volt;
-float Ev_before;
-int16_t var;
-int16_t var_after;
-int16_t Ev;
+
+/*********************
+ *      DEFINES
+ *********************/
+
+#define LOW_THRESHOLD 10
+#define HIGH_THRESHOLD 875
+
 extern ADC_HandleTypeDef hadc2;
-int low_threshold = 10;
-int high_threshold = 875;
 
-float voltage_adc()
-{
-	var = read_adc(&hadc2);
-	var_after = calibrate_adc(var);
-	volt = (((float)var_after * 3.3) / 4096);
-	volt = volt / 6;
-	return volt;
-}
+/******************************
+ *  STATIC PROTOTYPE FUNCTION
+ ******************************/
 
-float illuminance_adc()
-{
-	float R = volt * 10; // I=100uA, (The unit of R is KOhm)
-	Ev_before = R - 4.6974;
-	Ev_before = Ev_before / (-1.02 * 10e-4);
-	Ev_before = Ev_before / 5;
-	if (Ev_before < 800)
-		Ev_before = Ev_before - 500;
+static float voltage_adc();
+static float illuminance_adc();
+static int16_t myRound(double x);
 
-	if (Ev_before < low_threshold)
-	{
-		Ev_before = low_threshold;
-	}
-	else if (Ev_before > high_threshold)
-	{
-		Ev_before = 1000;
-	}
-	return Ev_before;
-}
+/**********************
+ *   GLOBAL FUNCTIONS
+ **********************/
 
-int16_t adjust_Ev()
-{
-	Ev = round((double)Ev_before / 10) * 10;
-	if (Ev < low_threshold)
-	{
-		Ev = low_threshold;
-	}
-	else if (Ev > high_threshold)
-	{
-		Ev = 1000;
-	}
-	return Ev;
-}
-
-int illuminance_signal()
+uint8_t illuminance_signal(int16_t Ev)
 {
 	static int previous_State = 0;
 
@@ -73,20 +45,72 @@ int illuminance_signal()
 	}
 }
 
-void turnOnLight()
+int16_t adjust_Ev()
 {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
+	int16_t Ev;
+    Ev = myRound((double)illuminance_adc() / 10) * 10;
+    if (Ev < LOW_THRESHOLD) {
+        Ev = LOW_THRESHOLD;
+    } else if (Ev > HIGH_THRESHOLD) {
+        Ev = 1000;
+    }
+    return Ev;
 }
 
-void turnOffLight()
+/**********************
+ *   STATIC FUNCTIONS
+ **********************/
+
+/**
+ * The function `voltage_adc` reads an ADC value, calibrates it, and calculates the corresponding
+ * voltage.
+ * 
+ * @return The function `voltage_adc()` is returning a floating-point value representing the voltage
+ * read from an ADC (Analog-to-Digital Converter) after calibration and conversion.
+ */
+static float voltage_adc()
 {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
+	float volt;
+	int16_t var;
+	int16_t var_after;
+	var = read_adc(&hadc2);
+	var_after = calibrate_adc(var);
+	volt = (((float)var_after * 3.3) / 4096);
+	volt = volt / 6;
+	return volt;
 }
 
-void autocontrol_mode()
+/**
+ * The function `illuminance_adc` calculates illuminance based on the voltage read from an ADC.
+ * 
+ * @return The function `illuminance_adc()` is returning the calculated illuminance value `Ev_before`.
+ */
+static float illuminance_adc()
 {
-	if (illuminance_signal())
-		turnOnLight();
-	else
-		turnOffLight();
+	float Ev_before;
+	float R = voltage_adc() * 10; // I=100uA, (The unit of R is KOhm)
+	Ev_before = R - 4.6974;
+	Ev_before = Ev_before / (-1.02 * 10e-4);
+	Ev_before = Ev_before / 5;
+	if (Ev_before < 800)	Ev_before = Ev_before - 500;
+	return Ev_before;
+}
+
+/**
+ * The function `myRound` rounds a double value to the nearest integer using a simple method.
+ * 
+ * @param x The function `myRound` takes a `double` value `x` as input and rounds it to the nearest
+ * integer using the conventional rounding method (rounding halves away from zero). The result is then
+ * cast to an `int16_t` type before being returned.
+ * 
+ * @return The function `myRound` takes a `double` input `x`, rounds it to the nearest integer, and
+ * returns the result as a 16-bit signed integer (`int16_t`).
+ */
+static int16_t myRound(double x)
+{
+    if (x >= 0) {
+        return (int16_t)(x + 0.5);
+    } else {
+        return (int16_t)(x - 0.5);
+    }
 }

@@ -296,7 +296,7 @@ static void deleteDuplicateSubstrings(char *str, char *result)
  **********************/
 
 /**
- * The function WIFI_StaInit initializes the WiFi station interface on an ESP32 device.
+ * The function `WIFI_StaInit` initializes the WiFi station mode on an ESP32 device.
  */
 void WIFI_StaInit(void)
 {
@@ -304,6 +304,14 @@ void WIFI_StaInit(void)
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
     assert(sta_netif);
+
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_start());
+
+    esp_wifi_stop();
 }
 
 /**

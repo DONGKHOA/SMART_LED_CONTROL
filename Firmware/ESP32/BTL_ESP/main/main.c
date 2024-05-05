@@ -42,6 +42,7 @@ static EventGroupHandle_t event_uart_tx_heading;
 // Timer Handle
 
 static TimerHandle_t mqtt_subscribe_timer;
+static TimerHandle_t scan_wifi_timer;
 
 // Queue Handle
 
@@ -52,6 +53,8 @@ static QueueHandle_t mqtt_queue;
  ******************************/
 
 static void MQTT_timer_cb(TimerHandle_t xTimer);
+static void SCAN_Wifi_timer_cb(TimerHandle_t xTimer);
+
 static void startUartRxTask(void *arg);
 static void startUartTxTask(void *arg);
 static void startWifiScan(void *arg);
@@ -83,6 +86,9 @@ void app_main(void)
     mqtt_subscribe_timer = xTimerCreate("time mqtt subscribe",
                                         TIME_MQTT_SUBSCRIBE / portTICK_PERIOD_MS,
                                         pdTRUE, (void *)0, MQTT_timer_cb);
+    scan_wifi_timer = xTimerCreate("timer scan",
+                                        TIME_REQUEST_SCAN / portTICK_PERIOD_MS,
+                                        pdTRUE, (void *)0, SCAN_Wifi_timer_cb);
 
     mqtt_queue = xQueueCreate(2, sizeof(uint8_t));
 
@@ -146,6 +152,12 @@ static void MQTT_timer_cb(TimerHandle_t xTimer)
     BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
     xQueueSendFromISR(mqtt_queue, &buffer, &xHigherPriorityTaskWoken);
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    xQueueSend(mqtt_queue, &buffer, 0);
+}
+
+static void SCAN_Wifi_timer_cb(TimerHandle_t xTimer)
+{
+
 }
 
 static void startUartRxTask(void *arg)

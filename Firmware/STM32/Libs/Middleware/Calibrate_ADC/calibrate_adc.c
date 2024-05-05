@@ -1,6 +1,5 @@
 #include "calibrate_adc.h"
 
-//int16_t var_after;
 
 int16_t calibrate_adc(int16_t var)
 {

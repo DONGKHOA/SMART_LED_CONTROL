@@ -6,8 +6,8 @@
 #include "main.h"
 
 
-extern control_led_t led_state;
-extern control_auto_t auto_state;
+control_led_t led_state = LED_OFF;
+control_auto_t auto_state = AUTO_OFF;
 
 extern int16_t x;
 extern int16_t y;
@@ -36,7 +36,7 @@ void check_event_screen_4(screen_state_t *screen)
 				if (led_state == LED_OFF) led_state = LED_ON;
 				else led_state = LED_OFF;
 
-				xQueueSend(queue_control_led, &led_state, portMAX_DELAY);
+				xQueueSend(queue_control_led, &led_state, 0);
 
 				if(led_state == LED_ON)
 				{
@@ -52,7 +52,7 @@ void check_event_screen_4(screen_state_t *screen)
 				if (auto_state == AUTO_OFF) auto_state = AUTO_ON;
 				else auto_state = AUTO_OFF;
 
-//				xQueueSend(queue_control_auto, &auto_state, portMAX_DELAY);
+				xQueueSend(queue_control_auto, &auto_state, 0);
 				if (auto_state == AUTO_ON)
 				{
 					bit_map_screen_4.on_auto = 1;
@@ -70,6 +70,7 @@ void check_event_screen_4(screen_state_t *screen)
 	}
 	else
 	{
+		if (auto_state == AUTO_ON) xQueueSend(queue_control_auto, &auto_state, 0);
 		flag_is_touch = 0;
 	}
 }

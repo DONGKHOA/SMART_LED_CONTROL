@@ -42,6 +42,8 @@
 #define MIN_STACK_SIZE                          1024
 
 #define TIME_MQTT_SUBSCRIBE                     1000
+#define TIME_REQUEST_SCAN                       3000
+
 #define MQTT_PUBLISH                            0
 #define MQTT_SUBSCRIBE                          1
 
