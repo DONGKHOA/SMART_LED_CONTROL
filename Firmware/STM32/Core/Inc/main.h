@@ -71,6 +71,9 @@ void Error_Handler(void);
 #define TIME_WAIT                         30000
 #define TIME_READ						              1000
 
+//coordinate screen
+#define RESET_COORDINATE                  1000
+
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)
 #define OFF_WIFI_BIT                      (1 << 1)

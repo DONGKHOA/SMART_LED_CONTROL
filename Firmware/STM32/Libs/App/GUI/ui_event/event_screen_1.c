@@ -76,8 +76,8 @@ void check_event_screen_1(screen_state_t *screen)
 			}
 			flag_is_touch = 1;
 		}
-		x = 1000;
-		y = 1000;
+		x = RESET_COORDINATE;
+		y = RESET_COORDINATE;
 	}
 	else
 	{

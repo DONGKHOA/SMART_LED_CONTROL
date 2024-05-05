@@ -52,8 +52,8 @@ void check_event_screen_2(screen_state_t *screen)
 			bit_map_screen_1.MQTT = 1;
 			*screen = SCREEN_START;
 
-			x = 1000;
-			y = 1000;
+			x = RESET_COORDINATE;
+			y = RESET_COORDINATE;
 			flag_is_touch = 1;
 		}
 		break;
@@ -74,8 +74,8 @@ void check_event_screen_2(screen_state_t *screen)
 				xEventGroupSetBits(event_uart_tx, OFF_WIFI_BIT);
 			}
 
-			x = 1000;
-			y = 1000;
+			x = RESET_COORDINATE;
+			y = RESET_COORDINATE;
 			flag_is_touch = 1;
 		}
 		break;
@@ -84,8 +84,8 @@ void check_event_screen_2(screen_state_t *screen)
 		{
 			if(numPage < limitNumPage) numPage++;
 
-			x = 1000;
-			y = 1000;
+			x = RESET_COORDINATE;
+			y = RESET_COORDINATE;
 		}
 		break;
 	case BACK:
@@ -93,8 +93,8 @@ void check_event_screen_2(screen_state_t *screen)
 		{
 			if(numPage > 0) numPage--;
 
-			x = 1000;
-			y = 1000;
+			x = RESET_COORDINATE;
+			y = RESET_COORDINATE;
 			flag_is_touch = 1;
 		}
 		break;
@@ -119,8 +119,8 @@ void check_event_screen_2(screen_state_t *screen)
 			else if (touch == WIFI4)	strcpy(ssid, ssid4);
 			else if (touch == WIFI5)	strcpy(ssid, ssid5);
 
-			x = 1000;
-			y = 1000;
+			x = RESET_COORDINATE;
+			y = RESET_COORDINATE;
 			flag_is_touch = 1;
 		}
 		break;
