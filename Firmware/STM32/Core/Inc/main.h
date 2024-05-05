@@ -112,14 +112,14 @@ typedef enum
 
 typedef enum
 {
+  LED_OFF = 0,
   LED_ON,
-  LED_OFF,
 } control_led_t;
 
 typedef enum
 {
+  AUTO_OFF = 0,
   AUTO_ON,
-  AUTO_OFF,
 } control_auto_t;
 
 /*********************

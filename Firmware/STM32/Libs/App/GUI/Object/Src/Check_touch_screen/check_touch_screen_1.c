@@ -11,9 +11,9 @@
 
 /* position of each icon screen_1 */
 static const uint16_t icon_pos[3][4] = {
-    {99, 140, 75, 39},   // icon wifi
-    {95, 145, 154, 202}, // icon home
-    {94, 140, 216, 255}, // icon MQTT
+    {95, 136, 51, 90},   // icon wifi
+    {90, 140, 129, 177}, // icon home
+    {94, 140, 208, 252}, // icon MQTT
 };
 
 /* check touch icon */

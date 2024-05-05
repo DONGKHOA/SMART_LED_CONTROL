@@ -77,25 +77,23 @@ UART_HandleTypeDef huart4;
  *  EXTERN VARIABLES
  **********************/
 
-//extern float Temperature;
-//extern int16_t Ev;
-//extern uint8_t check_state_led;
-//extern uint8_t check_state_auto;
-//extern uint8_t MQTT[15];
-//extern uint8_t MQTT_pos;
+extern float Temperature;
+extern int16_t Ev;
+extern uint8_t MQTT[15];
+extern uint8_t MQTT_pos;
 
 /**********************
  *  STATIC VARIABLES
  **********************/
 // Task Handle
-//static TaskHandle_t uart_rx_task;
-//static TaskHandle_t uart_tx_task;
-//static TaskHandle_t control_led_task;
-//static TaskHandle_t read_adc_task;
-//static TaskHandle_t screen_task;
-//
-//static screen_state_t screen_current = SCREEN_START;
-//static TimerHandle_t timer_refresh_display;
+static TaskHandle_t uart_rx_task;
+static TaskHandle_t uart_tx_task;
+static TaskHandle_t control_led_task;
+static TaskHandle_t read_adc_task;
+static TaskHandle_t screen_task;
+
+static screen_state_t screen_current = SCREEN_START;
+static TimerHandle_t timer_refresh_display;
 
 /**********************
  *  GLOBAL VARIABLES
@@ -103,24 +101,28 @@ UART_HandleTypeDef huart4;
 
 int16_t x;
 int16_t y;
+uint8_t flag_is_touch = 0;
 
-//char buffer_uart_rx[RX_BUFFER_SIZE + 1];
-//char buffer_uart_tx[RX_BUFFER_SIZE + 1];
+char buffer_uart_rx[RX_BUFFER_SIZE + 1];
+char buffer_uart_tx[RX_BUFFER_SIZE + 1];
 
 // QueueHandle
 QueueHandle_t queue_control_led = NULL;
 QueueHandle_t queue_control_auto = NULL;
 
 // EventGroup Handle
-//EventGroupHandle_t event_uart_tx;
-//EventGroupHandle_t event_uart_rx;
+EventGroupHandle_t event_uart_tx;
+EventGroupHandle_t event_uart_rx;
 
 // Timer Handle
-//TimerHandle_t timer_request_scan_wifi;
-//TimerHandle_t timer_wait_off_screen;
-//TimerHandle_t timer_read_temp;
+TimerHandle_t timer_request_scan_wifi;
+TimerHandle_t timer_wait_off_screen;
+TimerHandle_t timer_read_temp;
 
-//BaseType_t ret_main;
+BaseType_t ret_main;
+
+control_led_t led_state = LED_OFF;
+control_auto_t auto_state = AUTO_OFF;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -136,44 +138,40 @@ static void MX_TIM1_Init(void);
 static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
-//static void Screen_Task(void *pvParameters);
-//static void UartTx_Task(void *pvParameters);
-//static void UartRx_Task(void *pvParameters);
-//static void ADC_Task(void *pvParameters);
-//static void ControlLed_Task(void *pvParameters);
+static void Screen_Task(void *pvParameters);
+static void UartTx_Task(void *pvParameters);
+static void UartRx_Task(void *pvParameters);
+static void ADC_Task(void *pvParameters);
+static void ControlLed_Task(void *pvParameters);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//void functionRequestCb(TimerHandle_t xTimer)
-//{
-//  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-//  xEventGroupSetBitsFromISR(event_uart_rx, ON_WIFI_BIT, &xHigherPriorityTaskWoken);
-//  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-//
-//  xTimerReset(timer_request_scan_wifi, 0);
-//}
+void functionRequestCb(TimerHandle_t xTimer)
+{
+  xTimerReset(timer_request_scan_wifi, 0);
+  xEventGroupSetBits(event_uart_rx, ON_WIFI_BIT);
+}
 
-//void timerRefreshDisplayCb(TimerHandle_t xTimer)
-//{
-//  BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-//  xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
-//  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-//}
-//
-//void vBacklightTimerCb(TimerHandle_t xTimer)
-//{
-//  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
-//}
-//
-//void TempReadingCb(TimerHandle_t xTimer)
-//{
-//	voltage_adc();
-//	adjust_Ev();
-//	illuminance_signal();
-//	Temperature = calculate_temperature();
-//}
+void timerRefreshDisplayCb(TimerHandle_t xTimer)
+{
+	xEventGroupSetBits(event_uart_rx, REFRESH_DISPLAY_BIT);
+}
+
+void vBacklightTimerCb(TimerHandle_t xTimer)
+{
+	screen_current = SCREEN_OFF;
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
+}
+
+void TempReadingCb(TimerHandle_t xTimer)
+{
+	voltage_adc();
+	adjust_Ev();
+	illuminance_signal();
+	Temperature = calculate_temperature();
+}
 /* USER CODE END 0 */
 
 /**
@@ -215,54 +213,53 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
-  // init service
-  queue_control_led = xQueueCreate(2, sizeof(control_led_t));
-  queue_control_auto = xQueueCreate(2, sizeof(control_auto_t));
-
-  event_uart_tx = xEventGroupCreate();
-  event_uart_rx = xEventGroupCreate();
 
   // Init driver
 
   GraphicsInit();
   TouchCalibrate();
-//  UARTConfig(&huart4, 64);
+  UARTConfig(&huart4, 200);
 
   // Init application
 
-//  bit_map_screen_1.screen = 1;
-//  bit_map_screen_1.wifi = 1;
-//  bit_map_screen_1.home = 1;
-//  bit_map_screen_1.MQTT = 1;
-//  bit_map_screen_1.state_connected_WIFI = 1;
-//  bit_map_screen_1.state_connected_MQTT = 1;
-//
-//  bit_map_screen_5.MQTT_Connected = 0;
-//
-//  bit_map_screen_2.WIFI_Connected = 0;
+  bit_map_screen_1.screen = 1;
+  bit_map_screen_1.wifi = 1;
+  bit_map_screen_1.home = 1;
+  bit_map_screen_1.MQTT = 1;
+
+  bit_map_screen_5.MQTT_Connected = 0;
+
+  bit_map_screen_2.WIFI_Connected = 0;
 
   // init temperature
-  temperature_sensor_init(&hadc1, &htim3);
+//  temperature_sensor_init(&hadc1, &htim3);
 
-  timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCb);
-  timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, (void *)0, timerRefreshDisplayCb);
-  timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCb);
-  timer_read_temp = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, TempReadingCb);
+  // init service
+	queue_control_led = xQueueCreate(1, sizeof(control_led_t));
+	queue_control_auto = xQueueCreate(1, sizeof(control_auto_t));
+
+	event_uart_tx = xEventGroupCreate();
+	event_uart_rx = xEventGroupCreate();
+
+	timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, functionRequestCb);
+	timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, 0, timerRefreshDisplayCb);
+	timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCb);
+	timer_read_temp = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, TempReadingCb);
   // init task
 
-  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 6, NULL, 3, &screen_task);
-  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_tx_task);
-  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE, NULL, 1, &uart_rx_task);
-//  xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 1, &read_adc_task);
-//  xTaskCreate(ControlLed_Task, "led_Task", configMINIMAL_STACK_SIZE, NULL, 2, &control_led_task);
+  xTaskCreate(Screen_Task, "Screen_Task", configMINIMAL_STACK_SIZE * 15, NULL, 4, &screen_task);
+  xTaskCreate(UartTx_Task, "Transmit_Task", configMINIMAL_STACK_SIZE, NULL, 2, &uart_tx_task);
+  xTaskCreate(UartRx_Task, "Receive_Task", configMINIMAL_STACK_SIZE * 3, NULL, 2, &uart_rx_task);
+//   xTaskCreate(ADC_Task, "ADC_Task", configMINIMAL_STACK_SIZE, NULL, 2, &read_adc_task);
+   xTaskCreate(ControlLed_Task, "led_Task", configMINIMAL_STACK_SIZE, NULL, 3, &control_led_task);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  ret_main = xTimerStart(timer_refresh_display, 0);
+
 //  ret_main = xTimerStart(timer_read_temp, 0);
 //
-//  vTaskStartScheduler();
+  vTaskStartScheduler();
   while (1)
   {
     /* USER CODE END WHILE */
@@ -604,7 +601,7 @@ static void MX_UART4_Init(void)
 
   /* USER CODE END UART4_Init 1 */
   huart4.Instance = UART4;
-  huart4.Init.BaudRate = 115200;
+  huart4.Init.BaudRate = 4800;
   huart4.Init.WordLength = UART_WORDLENGTH_8B;
   huart4.Init.StopBits = UART_STOPBITS_1;
   huart4.Init.Parity = UART_PARITY_NONE;
@@ -658,12 +655,15 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, TFT_DC_RS_Pin|TFT_RESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7|GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PA1 */
   GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : TFT_DC_RS_Pin TFT_RESET_Pin */
@@ -680,10 +680,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
@@ -691,56 +687,64 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 static void Screen_Task(void *pvParameters)
 {
+	xTimerStart(timer_refresh_display, 0);
+	xTimerStart(timer_wait_off_screen, 0);
   while (1)
   {
     // state machine ui_screen (choose ui screen)
     EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT | 
               NAME_WIFI_SCAN_BIT | 
               CONNECT_WIFI_SUCCESSFUL_BIT | 
-              DETECT_TOUCH_SCREEN_BIT | 
               CONNECT_WIFI_UNSUCCESSFUL_BIT | 
               REFUSE_CONNECT_MQTT_BIT | 
               CONNECT_MQTT_SUCCESSFUL_BIT | 
               CONNECT_MQTT_UNSUCCESSFUL_BIT | 
               REFRESH_DISPLAY_BIT,
-                                             pdTRUE, pdFALSE,
+                                             pdFALSE, pdFALSE,
                                              portMAX_DELAY);
     if (uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT)
       bit_map_screen_2.WIFI_Connected = 0;
-    if ((uxBits & DETECT_TOUCH_SCREEN_BIT) || (uxBits & REFRESH_DISPLAY_BIT))
+    if (uxBits & REFRESH_DISPLAY_BIT)
     {
-      xTimerReset( timer_wait_off_screen, 10 );   // reset Timer
+    	if (flag_is_touch == 1)
+      {
+        xTimerReset( timer_wait_off_screen, 0 );   // reset Timer
+      }
+
+      TouchGetCalibratedPoint(&x, &y);
+
       switch (screen_current)
       {
-      case SCREEN_START:
-        check_event_screen_1(&screen_current);
-        screen_1(uxBits);
-        break;
+        case SCREEN_START:
+          check_event_screen_1(&screen_current);
+          screen_1(uxBits);
+          break;
 
-      case SCREEN_WIFI:
-        check_event_screen_2(&screen_current);
-        screen_2(uxBits);
-        break;
+        case SCREEN_WIFI:
+          check_event_screen_2(&screen_current);
+          screen_2(uxBits);
+          break;
 
-      case SCREEN_KEYPAD:
-        check_event_screen_3(&screen_current);
-        screen_3(uxBits); 
-        break;
+        case SCREEN_KEYPAD:
+          check_event_screen_3(&screen_current);
+          screen_3(uxBits);
+          break;
 
-      case SCREEN_MAIN:
-        check_event_screen_4(&screen_current);
-        screen_4(uxBits);
-        break;
+        case SCREEN_MAIN:
+          check_event_screen_4(&screen_current);
+          screen_4(uxBits);
+          break;
 
-      case SCREEN_MQTT:
-        check_event_screen_5(&screen_current);
-        screen_5(uxBits);
-        break;
+        case SCREEN_MQTT:
+          check_event_screen_5(&screen_current);
+          screen_5(uxBits);
+          break;
 
-      case SCREEN_OFF:
-        check_event_screen_6(&screen_current);
-        break;
+        case SCREEN_OFF:
+          check_event_screen_6(&screen_current);
+          break;
       }
+      xEventGroupClearBits(event_uart_rx, REFRESH_DISPLAY_BIT);
     }
   }
 }
@@ -783,21 +787,21 @@ static void UartTx_Task(void *pvParameters)
       transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
     }
 
-//    if (uxBits & MQTT_PUBLISH_BIT)
-//    {
-//      char state_led[4], state_auto[4];
-//      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
-//      if (pinValue == GPIO_PIN_SET)
-//      {
-//        strcpy(state_led, "ON");
-//        state_led[2] = '\0';
-//      }
-//      else
-//      {
-//        strcpy(state_led, "OFF");
-//        state_led[3] = '\0';
-//      }
-//
+    if (uxBits & MQTT_PUBLISH_BIT)
+    {
+      char state_led[4], state_auto[4];
+      uint8_t pinValue = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7);
+      if (pinValue == GPIO_PIN_SET)
+      {
+        strcpy(state_led, "ON");
+        state_led[2] = '\0';
+      }
+      else
+      {
+        strcpy(state_led, "OFF");
+        state_led[3] = '\0';
+      }
+
 //      if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
 //      {
 //        strcpy(state_auto, "ON");
@@ -808,10 +812,10 @@ static void UartTx_Task(void *pvParameters)
 //        strcpy(state_auto, "OFF");
 //        state_auto[3] = '\0';
 //      }
-//
-//      sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
-//      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
-//    }
+
+      sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, Ev, Temperature);
+      transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
+    }
   }
 }
 
@@ -848,7 +852,7 @@ static void UartRx_Task(void *pvParameters)
       {
         continue;
       }
-      
+      vTaskSuspend(screen_task);
       data_heading = buffer_uart_rx[0];
       uint8_t size_buffer = strlen(buffer_uart_rx);
 
@@ -859,49 +863,50 @@ static void UartRx_Task(void *pvParameters)
       
       switch (data_heading)
       {
-      case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
-        xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT);
-        break;
+		  case HEADING_RECEIVE_NUMBER_WIFI_SCAN:
+			xEventGroupSetBits(event_uart_rx, NUMBER_WIFI_SCAN_BIT);
+			break;
 
-      case HEADING_RECEIVE_NAME_WIFI_SCAN:
-        xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
-        break;
+		  case HEADING_RECEIVE_NAME_WIFI_SCAN:
+			 xEventGroupSetBits(event_uart_rx, NAME_WIFI_SCAN_BIT);
+			break;
 
-      case HEADING_RECEIVE_CONNECT_WIFI:
-        if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
-        {
-          xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
-        }
-        else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
-        {
-          xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
-        }
-        break;
+		  case HEADING_RECEIVE_CONNECT_WIFI:
+			if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+			{
+			  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
+			}
+			else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+			{
+			  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+			}
+			break;
 
-      case HEADING_RECEIVE_CONNECT_MQTT:
-        if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
-        {
-          xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
-        }
-        else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
-        {
-          xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
-        }
-        else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
-        {
-          xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
-        }
-        break;
+		  case HEADING_RECEIVE_CONNECT_MQTT:
+			if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
+			{
+			  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
+			}
+			else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+			{
+			  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
+			}
+			else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
+			{
+			  xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
+			}
+			break;
 
-      case HEADING_MQTT_SUBSCRIBE:
-        xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
-        break;
+		  case HEADING_MQTT_SUBSCRIBE:
+			xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
+			break;
 
-      default:
+		  default:
 
-        break;
-        memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
+			break;
       }
+      vTaskResume(screen_task);
+	memset((void *)buffer_uart_rx, '\0', sizeof(buffer_uart_rx));
       enable_bit = 0;
     }
     vTaskDelay(50);
@@ -910,31 +915,33 @@ static void UartRx_Task(void *pvParameters)
 
 //static void ADC_Task(void *pvParameters)
 //{
+//	control_auto_t check_state_auto;
 //  while (1)
 //  {
-//    if (xQueueReceive(queue_control_led, &check_state_auto, portMAX_DELAY) == pdPASS)
-//    {
-//      autocontrol_mode();
-//    }
+//   if (xQueueReceive(queue_control_auto, &check_state_auto, portMAX_DELAY) == pdPASS)
+//   {
+//     autocontrol_mode();
+//   }
 //  }
 //}
-//static void ControlLed_Task(void *pvParameters)
-//{
-//  while (1)
-//  {
-//    if (xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS)
-//    {
-//      if (check_state_led)
-//      {
-//        turnOnLight();
-//      }
-//      else
-//      {
-//        turnOffLight();
-//      }
-//    }
-//  }
-//}
+static void ControlLed_Task(void *pvParameters)
+{
+	control_led_t check_state_led;
+  while (1)
+  {
+  if (xQueueReceive(queue_control_led, &check_state_led, portMAX_DELAY) == pdPASS)
+  {
+    if (check_state_led == LED_ON)
+    {
+      turnOnLight();
+    }
+    else
+    {
+      turnOffLight();
+    }
+  }
+  }
+}
 
 /* USER CODE END 4 */
 

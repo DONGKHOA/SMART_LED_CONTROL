@@ -99,11 +99,11 @@ void check_event_screen_5(screen_state_t *screen)
     if(bitsScreen5 & CONNECT_MQTT_SUCCESSFUL_BIT)
     {
         bit_map_screen_5.MQTT_Connected = 1;
-        bit_map_screen_1.state_connected_MQTT = 1;
         bit_map_screen_1.screen = 1;
         bit_map_screen_1.wifi = 1;
         bit_map_screen_1.home = 1;
         bit_map_screen_1.MQTT = 1;
         *screen = SCREEN_START;
+        xEventGroupClearBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
     }
 }

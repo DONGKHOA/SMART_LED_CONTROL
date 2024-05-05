@@ -36,7 +36,6 @@ extern EventGroupHandle_t event_uart_rx;
  **********************/
 
 static MATRIX matrix;
-static bool state_touch = 0;
 
 /******************************
  *  STATIC PROTOTYPE FUNCTION
@@ -45,27 +44,10 @@ static bool state_touch = 0;
 static void DrawCross(int16_t x, int16_t y, int16_t length);
 static uint8_t SpiTransfer(uint8_t byte);
 static bool GetPointRaw(uint16_t* x, uint16_t* y);
-static bool TouchIsTouched(void);
-static bool TouchIsTouched(void);
 
 /**********************
  *   CALLBACK FUNCTIONS
  **********************/
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-
-	if (GPIO_Pin == TOUCH_IRQ_PIN)
-	{
-		state_touch = !state_touch;
-		if (state_touch == 1)
-		{
-//			BaseType_t	xHigherPriorityTaskWoken = pdFALSE;
-//			xEventGroupSetBitsFromISR(event_uart_rx, DETECT_TOUCH_SCREEN_BIT, &xHigherPriorityTaskWoken);
-//			portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-		}
-	}
-}
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -132,11 +114,9 @@ void TouchCalibrate(void)
 	}
 	raw_points[0].x = (INT_32)x;
 	raw_points[0].y = (INT_32)y;
-
 	while (TouchIsTouched() == true)
 	{
 	}
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
     /* second point */
 	DrawCross(200, 40, 40);
@@ -148,11 +128,9 @@ void TouchCalibrate(void)
 	}
 	raw_points[1].x = (INT_32)x;
 	raw_points[1].y = (INT_32)y;
-
 	while (TouchIsTouched() == true)
 	{
 	}
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
     /* third point */
 	DrawCross(200, 280, 40);
@@ -168,12 +146,6 @@ void TouchCalibrate(void)
 	{
 	}
 
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-
-	char data[20];
-	sprintf(data, "%ld, %ld, %ld, %ld, %ld, %ld," ,raw_points[0].x, raw_points[0].y, raw_points[1].x, raw_points[1].y, raw_points[2].x, raw_points[2].y);
-
-	GraphicsStandardString(50, 250, data, BLACK);
 	(void)setCalibrationMatrix(display_points, raw_points, &matrix);
 }
 
@@ -181,15 +153,10 @@ void TouchCalibrate(void)
  *  STATIC FUNCTION
  ********************/
 
-/**
- * The function TouchIsTouched returns the state of touch input.
- *
- * @return The function `TouchIsTouched` is returning the value of the variable `state_touch`, which is
- * of type `bool`.
- */
-static bool TouchIsTouched(void)
+ bool TouchIsTouched(void)
 {
-	return state_touch;
+	GPIO_PinState pin_state = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1);
+	return pin_state == GPIO_PIN_RESET;
 }
 
 /**

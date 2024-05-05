@@ -13,6 +13,8 @@
  *     VARIABLES
  **********************/
 
+extern EventGroupHandle_t event_uart_rx;
+
 field_bit_screen5_t bit_map_screen_5;
 char text_sc5[14];
 EventBits_t bitsScreen5;
@@ -58,12 +60,14 @@ void screen_5(EventBits_t uxBits)
 	{
 		strcpy(text_sc5, "re-enter MQTT");
 		bit_map_screen_5.text = 1;
+		xEventGroupClearBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
 	}
 
 	if (uxBits & REFUSE_CONNECT_MQTT_BIT)
 	{
 		strcpy(text_sc5, "Connect Wifi!");
 		bit_map_screen_5.text = 1;
+		xEventGroupClearBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
 	}
 
 	bitsScreen5 = uxBits;

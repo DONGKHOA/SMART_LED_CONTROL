@@ -14,7 +14,7 @@ static void startUartTxTask(void *arg)
 
 void app_main(void)
 {
-    uartDriverInit(UART_NUM_2, TXD_PIN, RXD_PIN, 
+    uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN, 
                     115200, UART_DATA_8_BITS,
                     UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE, 
                     UART_STOP_BITS_1);

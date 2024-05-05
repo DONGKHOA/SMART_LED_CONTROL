@@ -16,6 +16,7 @@
 
 extern int16_t x;
 extern int16_t y;
+extern uint8_t flag_is_touch;
 
 extern uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
 extern uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
@@ -43,50 +44,88 @@ void check_event_screen_2(screen_state_t *screen)
 	switch (touch)
 	{
 	case ICON_RETURN:
-		bit_map_screen_1.screen = 1;
-		bit_map_screen_1.wifi = 1;
-		bit_map_screen_1.home = 1;
-		bit_map_screen_1.MQTT = 1;
-		*screen = SCREEN_START;
+		if (flag_is_touch == 0)
+		{
+			bit_map_screen_1.screen = 1;
+			bit_map_screen_1.wifi = 1;
+			bit_map_screen_1.home = 1;
+			bit_map_screen_1.MQTT = 1;
+			*screen = SCREEN_START;
+
+			x = 1000;
+			y = 1000;
+			flag_is_touch = 1;
+		}
 		break;
 	case ON_OFF_WIFI:
-		bit_map_screen_2.on_off_wifi = 1; // draw button on off wifi
-		state_wifi = !state_wifi;
-		if (state_wifi == 1)
+		if (flag_is_touch == 0)
 		{
-			xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
-		}
-		else
-		{
-			xEventGroupSetBits(event_uart_tx, OFF_WIFI_BIT);
+			bit_map_screen_2.on_off_wifi = 1; // draw button on off wifi
+
+			if(state_wifi == 1)	state_wifi = 0;
+			else state_wifi = 1;
+
+			if (state_wifi == 1)
+			{
+				xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
+			}
+			else
+			{
+				xEventGroupSetBits(event_uart_tx, OFF_WIFI_BIT);
+			}
+
+			x = 1000;
+			y = 1000;
+			flag_is_touch = 1;
 		}
 		break;
 	case NEXT:
-		if(numPage < limitNumPage) numPage++;
+		if (flag_is_touch == 0)
+		{
+			if(numPage < limitNumPage) numPage++;
+
+			x = 1000;
+			y = 1000;
+		}
 		break;
 	case BACK:
-		if(numPage > 0) numPage--;
+		if (flag_is_touch == 0)
+		{
+			if(numPage > 0) numPage--;
+
+			x = 1000;
+			y = 1000;
+			flag_is_touch = 1;
+		}
 		break;
 	case WIFI1:
 	case WIFI2:
 	case WIFI3:
 	case WIFI4:
 	case WIFI5:
-		strcpy(text, "enter password");
-		bit_map_screen_3.screen = 1;
-		bit_map_screen_3.ret = 1;
-		bit_map_screen_3.text = 1;
-		bit_map_screen_3.frame = 1;
-		bit_map_screen_3.key =1;
-		*screen = SCREEN_KEYPAD;
-	
-	if (touch == WIFI1)			strcpy(ssid, ssid1);
-	else if (touch == WIFI2)	strcpy(ssid, ssid2);
-	else if (touch == WIFI3)	strcpy(ssid, ssid3);
-	else if (touch == WIFI4)	strcpy(ssid, ssid4);
-	else if (touch == WIFI5)	strcpy(ssid, ssid5);
+		if (flag_is_touch == 0)
+		{
+			strcpy(text, "enter password");
+			bit_map_screen_3.screen = 1;
+			bit_map_screen_3.ret = 1;
+			bit_map_screen_3.text = 1;
+			bit_map_screen_3.frame = 1;
+			bit_map_screen_3.key =1;
+			*screen = SCREEN_KEYPAD;
+		
+			if (touch == WIFI1)			strcpy(ssid, ssid1);
+			else if (touch == WIFI2)	strcpy(ssid, ssid2);
+			else if (touch == WIFI3)	strcpy(ssid, ssid3);
+			else if (touch == WIFI4)	strcpy(ssid, ssid4);
+			else if (touch == WIFI5)	strcpy(ssid, ssid5);
+
+			x = 1000;
+			y = 1000;
+			flag_is_touch = 1;
+		}
 		break;
 	case NO_TOUCH_ICON_SC2:
+		flag_is_touch = 0;
 		return;
 	}
 }

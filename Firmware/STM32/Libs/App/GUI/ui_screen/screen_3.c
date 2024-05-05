@@ -13,6 +13,8 @@
  *     VARIABLES
  **********************/
 
+extern EventGroupHandle_t event_uart_rx;
+
 field_bit_screen3_t bit_map_screen_3;
 char text[18];
 EventBits_t bitsScreen3;
@@ -60,5 +62,6 @@ void screen_3(EventBits_t uxBits)
 	{
 		strcpy(text, "re-enter password");
 		bit_map_screen_3.text = 1;
+		xEventGroupClearBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
 	}
 }

@@ -5,9 +5,14 @@
 #include "event.h"
 #include "check_touch_screen/check_touch_screen.h"
 #include "screen.h"
+#include "main.h"
 
 extern int16_t x;
 extern int16_t y;
+extern uint8_t flag_is_touch;
+
+extern control_led_t led_state;
+extern control_auto_t auto_state;
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -28,39 +33,54 @@ void check_event_screen_1(screen_state_t *screen)
 	touch_icon_screen1_t touch = check_event_icon_screen1(x, y);
 	if (touch != NO_TOUCH_ICON_SC1)
 	{
-		if (touch == ICON_WIFI) /*if touch icon wifi*/
+		if (flag_is_touch == 0)
 		{
-			bit_map_screen_2.screen = 1;
-			bit_map_screen_2.ret = 1;
-			bit_map_screen_2.on_off_wifi = 1;
-			bit_map_screen_2.text1 = 1;
-			bit_map_screen_2.text2 = 1;
-			bit_map_screen_2.WIFI1 = 1;
-			bit_map_screen_2.WIFI2 = 1;
-			bit_map_screen_2.WIFI3 = 1;
-			bit_map_screen_2.WIFI4 = 1;
-			bit_map_screen_2.WIFI5 = 1;
-			bit_map_screen_2.NEXT = 1;
-		
-			*screen = SCREEN_WIFI;
-		}
-		else if (touch == ICON_HOME) /*if touch icon home*/
-		{
-			bit_map_screen_4.ret = 1;
-			bit_map_screen_4.control = 1;
-			bit_map_screen_4.automode = 1;
+			if (touch == ICON_WIFI) /*if touch icon wifi*/
+			{
+				bit_map_screen_2.screen = 1;
+				bit_map_screen_2.ret = 1;
+				bit_map_screen_2.on_off_wifi = 1;
+				bit_map_screen_2.text1 = 1;
+				bit_map_screen_2.text2 = 1;
+				bit_map_screen_2.WIFI1 = 1;
+				bit_map_screen_2.WIFI2 = 1;
+				bit_map_screen_2.WIFI3 = 1;
+				bit_map_screen_2.WIFI4 = 1;
+				bit_map_screen_2.WIFI5 = 1;
+				bit_map_screen_2.NEXT = 1;
+			
+				*screen = SCREEN_WIFI;
+			}
+			else if (touch == ICON_HOME) /*if touch icon home*/
+			{
+				bit_map_screen_4.screen = 1;
+				bit_map_screen_4.ret = 1;
+				bit_map_screen_4.control = 1;
+				bit_map_screen_4.automode = 1;
+				if (led_state == LED_ON) bit_map_screen_4.ON = 1;
+				else bit_map_screen_4.OFF = 1;
 
-			*screen = SCREEN_MAIN;
-		}
-		else /*if touch icon MQTT*/
-		{
-			bit_map_screen_5.screen = 1;
-			bit_map_screen_5.ret = 1;
-			bit_map_screen_5.text = 1;
-			bit_map_screen_5.frame = 1;
-			bit_map_screen_5.key = 1;
+				if (auto_state == AUTO_ON) bit_map_screen_4.on_auto = 1;
+				else bit_map_screen_4.off_auto = 1;
+				*screen = SCREEN_MAIN;
+			}
+			else /*if touch icon MQTT*/
+			{
+				bit_map_screen_5.screen = 1;
+				bit_map_screen_5.ret = 1;
+				bit_map_screen_5.text = 1;
+				bit_map_screen_5.frame = 1;
+				bit_map_screen_5.key = 1;
 
-			*screen = SCREEN_MQTT;
+				*screen = SCREEN_MQTT;
+			}
+			flag_is_touch = 1;
 		}
+		x = 1000;
+		y = 1000;
+	}
+	else
+	{
+		flag_is_touch = 0;
 	}
 }

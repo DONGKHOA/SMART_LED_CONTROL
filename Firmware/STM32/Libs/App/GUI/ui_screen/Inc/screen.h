@@ -20,8 +20,6 @@ typedef struct
 	uint8_t wifi : 1;
 	uint8_t home : 1;
 	uint8_t MQTT : 1;
-	uint8_t state_connected_WIFI : 1;
-	uint8_t state_connected_MQTT : 1;
 } __attribute__((packed)) field_bit_screen1_t;
 
 typedef struct

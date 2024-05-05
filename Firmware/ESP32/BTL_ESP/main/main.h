@@ -37,7 +37,7 @@
 
 // IO UART
 #define TXD_PIN                                 (GPIO_NUM_17)
-#define RXD_PIN                                 (GPIO_NUM_16)
+#define RXD_PIN                                 (GPIO_NUM_15)
 
 #define MIN_STACK_SIZE                          1024
 
@@ -168,9 +168,9 @@ static inline void processingDataMQTTPublish(char * data, char *state_led,
 
 void transmissionFrameData(uart_tx_heading_t heading, char *data)
 {
-    uartSendData(UART_NUM_2, (char *)&heading);
-    uartSendData(UART_NUM_2, data);
-    uartSendData(UART_NUM_2, "\n");
+    uartSendData(UART_NUM_1, (char *)&heading);
+    uartSendData(UART_NUM_1, data);
+    uartSendData(UART_NUM_1, "\n");
     
 }
 #endif /* MAIN_H */

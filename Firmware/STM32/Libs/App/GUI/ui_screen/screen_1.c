@@ -34,30 +34,22 @@ void screen_1(EventBits_t uxBits)
 		GraphicsColourBitmap(94, 208, 46, 44, icon_MQTT);
 		bit_map_screen_1.MQTT = 0;
 	}
-	if(bit_map_screen_1.state_connected_MQTT == 1)
-	{
-		if (bit_map_screen_2.WIFI_Connected == 1)
-		{
-			GraphicsCircle(145, 209, 3, GREEN);
-		}
-		else
-		{
-			GraphicsCircle(145, 209, 3, RED);
-		}
 
-		bit_map_screen_1.state_connected_MQTT = 0;
+	if (bit_map_screen_2.WIFI_Connected == 1)
+	{
+		GraphicsFilledRectangle(145, 209, 5, 5, GREEN);
 	}
-	if(bit_map_screen_1.state_connected_WIFI == 1)
+	else
 	{
-		if (bit_map_screen_5.MQTT_Connected == 1)
-		{
-			GraphicsCircle(140, 52, 3, GREEN);
-		}
-		else
-		{
-			GraphicsCircle(140, 52, 3, RED);
-		}
+		GraphicsFilledRectangle(145, 209, 5, 5, RED);
+	}
 
-		bit_map_screen_1.state_connected_WIFI = 0;
+	if (bit_map_screen_5.MQTT_Connected == 1)
+	{
+		GraphicsFilledRectangle(140, 52, 5, 5, GREEN);
+	}
+	else
+	{
+		GraphicsFilledRectangle(140, 52, 5, 5, RED);
 	}
 }

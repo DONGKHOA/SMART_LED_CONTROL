@@ -70,8 +70,8 @@ void app_main(void)
     printf("init module in main\n");
     NVS_Init();
     WIFI_StaInit();
-    uartDriverInit(UART_NUM_2, TXD_PIN, RXD_PIN,
-                   115200, UART_DATA_8_BITS,
+    uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN,
+                   4800, UART_DATA_8_BITS,
                    UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE,
                    UART_STOP_BITS_1);
 
@@ -160,7 +160,8 @@ static void startUartRxTask(void *arg)
 
     while (1)
     {
-        uint16_t rxBytes = uart_read_bytes(UART_NUM_2, &buffer_temp,
+        // uartSendData(UART_NUM_1, "hello\n");
+        uint16_t rxBytes = uart_read_bytes(UART_NUM_1, &buffer_temp,
                                            RX_BUF_SIZE, 10 / portTICK_PERIOD_MS);
         if (rxBytes > 0)
         {
@@ -272,6 +273,7 @@ static void startUartTxTask(void *arg)
             }
 
             transmissionFrameData(HEADING_SEND_NUMBER_WIFI_SCAN, buffer_temp);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
             transmissionFrameData(HEADING_SEND_NAME_WIFI_SCAN, buffer_uart_tx);
         }
 

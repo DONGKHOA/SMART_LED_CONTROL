@@ -117,7 +117,6 @@ void check_event_screen_3(screen_state_t *screen)
 	if (bitsScreen3 & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
 		strcpy(ssid_connect, ssid);
-		bit_map_screen_1.state_connected_WIFI = 1;
 		bit_map_screen_2.screen = 1;
 		bit_map_screen_2.ret = 1;
 		bit_map_screen_2.on_off_wifi = 1;

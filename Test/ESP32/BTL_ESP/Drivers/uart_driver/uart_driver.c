@@ -19,7 +19,7 @@
  * parity, flow control, and stop bits.
  * 
  * @param uart_port The `uart_port` parameter specifies which UART port to initialize. It could be
- * something like `UART_NUM_0` or `UART_NUM_2` depending on the specific UART hardware you are working
+ * something like `UART_NUM_0` or `UART_NUM_1` depending on the specific UART hardware you are working
  * with.
  * @param tx_pin The `tx_pin` parameter in the `uartDriverInit` function refers to the GPIO pin number
  * that is used for transmitting data in UART communication. This pin is connected to the transmit (TX)

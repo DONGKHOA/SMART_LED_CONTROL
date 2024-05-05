@@ -5,7 +5,7 @@
 /* position of each icon screen_4 */
 static const uint16_t icon_pos[3][4] = {
     {7, 35, 8, 31},      // icon return
-    {91, 150, 134, 194}, // icon control led
+    {91, 150, 63, 123}, // icon control led
     {89, 150, 176, 236}, // icon auto control
 };
 

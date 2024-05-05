@@ -154,14 +154,14 @@ void transmissionFrameData(uart_tx_heading_t heading, char *data)
 {
     if (heading == HEADING_SEND_NAME_WIFI_SCAN)
     {
-        uartSendData(UART_NUM_2, (char *)&heading);
-        uartSendData(UART_NUM_2, &data);
-        uartSendData(UART_NUM_2, "\n");
+        uartSendData(UART_NUM_1, (char *)&heading);
+        uartSendData(UART_NUM_1, &data);
+        uartSendData(UART_NUM_1, "\n");
     }
     else
     {
-        uartSendData(UART_NUM_2, (char *)&heading);
-        uartSendData(UART_NUM_2, "\n");
+        uartSendData(UART_NUM_1, (char *)&heading);
+        uartSendData(UART_NUM_1, "\n");
     }
     
 }
