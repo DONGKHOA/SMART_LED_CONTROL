@@ -77,9 +77,19 @@ void check_event_screen_3(screen_state_t *screen)
 
 				bit_map_screen_2.screen = 1;
 				bit_map_screen_2.ret = 1;
+				bit_map_screen_2.WIFI_Connected = 1;
 				bit_map_screen_2.on_off_wifi = 1;
 				bit_map_screen_2.text1 = 1;
 				bit_map_screen_2.text2 = 1;
+
+				bit_map_screen_2.WIFI1 = 1;
+				bit_map_screen_2.WIFI2 = 1;
+				bit_map_screen_2.WIFI3 = 1;
+				bit_map_screen_2.WIFI4 = 1;
+				bit_map_screen_2.WIFI5 = 1;
+
+				bit_map_screen_2.TAB_PAGE = 0;
+
 				*screen = SCREEN_WIFI;
 			}
 
