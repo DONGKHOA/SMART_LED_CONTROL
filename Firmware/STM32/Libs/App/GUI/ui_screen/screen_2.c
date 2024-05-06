@@ -63,24 +63,128 @@ extern TimerHandle_t timer_request_scan_wifi;
  */
 void screen_2(EventBits_t uxBits)
 {
-	if (uxBits & SCAN_WIFI_BIT)
-	{
-		char *token;
-		uint8_t position = 0;
-		strcpy(bufferEffectScreen2, buffer_uart_rx);
+	 if (uxBits & SCAN_WIFI_BIT)
+	 {
+	 	char *token;
+	 	uint8_t position = 0;
+	 	numSSIDofPage = 1;
+	 	bit_map_screen_2.WIFI1 = 0;
+	 	bit_map_screen_2.WIFI5 = 0;
+	 	bit_map_screen_2.WIFI3 = 0;
+	 	bit_map_screen_2.WIFI4 = 0;
+	 	bit_map_screen_2.WIFI5 = 0;
 
-		token = strtok(bufferEffectScreen2, "\r");
-		while (token != NULL) 
-		{
-			if ()
-			{
-				
-			}
+        memset((void *)ssid1, '\0', sizeof(ssid1));
+        memset((void *)ssid2, '\0', sizeof(ssid2));
+        memset((void *)ssid3, '\0', sizeof(ssid3));
+        memset((void *)ssid4, '\0', sizeof(ssid4));
+        memset((void *)ssid5, '\0', sizeof(ssid5));
+
+	 	strcpy(bufferEffectScreen2, (char *)buffer_uart_rx);
+	 	token = strtok(bufferEffectScreen2, "\r");
+	 	while (token != NULL)
+	 	{
+	 		if (position == (numSSIDofPage + 2)) break;
+	 		if (position == 6)
+	 		{
+	 			bit_map_screen_2.WIFI5 = 1;
+	 			strcpy(ssid5, token);
+	 		}
 			
-			token = strtok(NULL, "\r");
+	 		else if (position == 5)
+	 		{
+	 			bit_map_screen_2.WIFI4 = 1;
+	 			strcpy(ssid4, token);
+	 		}
+	 		else if (position == 4)
+	 		{
+	 			bit_map_screen_2.WIFI3 = 1;
+	 			strcpy(ssid3, token);
+	 		}
+	 		else if (position == 3)
+	 		{
+	 			bit_map_screen_2.WIFI2 = 1;
+	 			strcpy(ssid2, token);
+	 		}
+	 		else if (position == 2)
+	 		{
+	 			bit_map_screen_2.WIFI1 = 1;
+	 			strcpy(ssid1, token);
+	 		}
+	 		else if (position == 1)
+	 		{
+	 			numSSIDofPage = *token - 48;
+	 		}
+	 		else if (position == 0)
+	 		{
+	 			if (memcmp(token, "START", strlen(token) + 1) == 0) bit_map_screen_2.TAB_PAGE = 0;
+	 			else if (memcmp(token, "MID", strlen(token) + 1) == 0) bit_map_screen_2.TAB_PAGE = 1;
+	 			else if (memcmp(token, "END", strlen(token) + 1) == 0) bit_map_screen_2.TAB_PAGE = 2;
+	 		}
+			
+	 		position++;
+			
+	 		token = strtok(NULL, "\r");
+	 	}
+
+		if (bit_map_screen_2.WIFI1 == 1)
+		{
+			GraphicsFilledRectangle(35, 110, 170, 25, BLACK);
+			GraphicsLargeString(40, 115, ssid1, WHITE); // in ssid 1
 		}
-	}
-	
+		else
+			GraphicsFilledRectangle(35, 110, 170, 25, WHITE);
+
+		if (bit_map_screen_2.WIFI2 == 1)
+		{
+			GraphicsFilledRectangle(35, 145, 170, 25, BLACK);
+			GraphicsLargeString(40, 150, ssid2, WHITE); // in ssid 2
+		}
+		else
+			GraphicsFilledRectangle(35, 145, 170, 25, WHITE);
+
+		if (bit_map_screen_2.WIFI3 == 1)
+		{
+			GraphicsFilledRectangle(35, 180, 170, 25, BLACK);
+			GraphicsLargeString(40, 185, ssid3, WHITE); // in ssid 3
+		}
+		else
+			GraphicsFilledRectangle(35, 180, 170, 25, WHITE);
+
+		if (bit_map_screen_2.WIFI4 == 1)
+		{
+			GraphicsFilledRectangle(35, 215, 170, 25, BLACK);
+			GraphicsLargeString(40, 220, ssid4, WHITE); // in ssid 4
+		}
+		else
+			GraphicsFilledRectangle(35, 215, 170, 25, WHITE);
+
+		if (bit_map_screen_2.WIFI5 == 1)
+		{
+			GraphicsFilledRectangle(35, 250, 170, 25, BLACK);
+			GraphicsLargeString(40, 255, ssid5, WHITE); // in ssid 5
+		}
+		else
+			GraphicsFilledRectangle(35, 250, 170, 25, WHITE);
+
+		
+		if (bit_map_screen_2.TAB_PAGE == 0)
+		{
+			GraphicsLargeString(167, 298, "NEXT->", BLACK);
+			GraphicsLargeString(11, 298, "<-BACK", WHITE);
+		}
+		else if (bit_map_screen_2.TAB_PAGE == 1)
+		{
+			GraphicsLargeString(167, 298, "NEXT->", BLACK);
+			GraphicsLargeString(11, 298, "<-BACK", BLACK);
+		}
+		else if (bit_map_screen_2.TAB_PAGE == 2)
+		{
+			GraphicsLargeString(167, 298, "NEXT->", WHITE);
+			GraphicsLargeString(11, 298, "<-BACK", BLACK);
+		}
+	 }
+
 	if (bit_map_screen_2.screen == 1)
 	{
 		GraphicsClear(WHITE);
@@ -111,113 +215,38 @@ void screen_2(EventBits_t uxBits)
 	{
 		if (state_wifi == 1)
 		{
-			GraphicsRoundedRectangle(174, 8, 22, 22, 3, GREEN); // green if wifi on
+			GraphicsFilledRectangle(165, 8, 40, 25, GREEN); // green if wifi on
 		}
 		else
 		{
-			GraphicsRoundedRectangle(174, 8, 22, 22, 3, RED); // red if wifi off
+			GraphicsFilledRectangle(165, 8, 40, 25, RED); // red if wifi off
 		}
 	}
 
 	if (bit_map_screen_2.WIFI_Connected == 1)
 	{
-		GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
+		GraphicsFilledRectangle(35, 54, 170, 25, BLACK);
 		GraphicsLargeString(40, 57, ssid_connect, WHITE); // in ssid connected
 	}
 	else
-		GraphicsRoundedRectangle(34, 54, 170, 35, 5, WHITE);
+		GraphicsFilledRectangle(35, 54, 170, 25, WHITE);
 
+	
 	if (uxBits & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
 		bit_map_screen_2.WIFI_Connected = 1;
-		GraphicsRoundedRectangle(34, 54, 170, 25, 5, BLACK);
-		GraphicsLargeString(40, 57, ssid_connect, WHITE); // in ssid connected
 	}
-
-	if (state_wifi == 1)
+	
+	if (state_wifi == 0)
 	{
-		if (bit_map_screen_2.WIFI1 == 1)
-		{
-			GraphicsRoundedRectangle(35, 117, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 120, ssid1, WHITE); // in ssid 1
-			bit_map_screen_2.WIFI1 = 0;
-		}
-		else
-			GraphicsRoundedRectangle(35, 117, 170, 25, 5, WHITE);
-
-		if (bit_map_screen_2.WIFI2 == 1)
-		{
-			GraphicsRoundedRectangle(35, 156, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 160, ssid2, WHITE); // in ssid 2
-			bit_map_screen_2.WIFI2 = 0;
-		}
-		else
-			GraphicsRoundedRectangle(34, 156, 170, 25, 5, WHITE);
-
-		if (bit_map_screen_2.WIFI3 == 1)
-		{
-			GraphicsRoundedRectangle(35, 195, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 200, ssid3, WHITE); // in ssid 3
-			bit_map_screen_2.WIFI3 = 0;
-		}
-		else
-			GraphicsRoundedRectangle(35, 195, 170, 25, 5, WHITE);
-
-		if (bit_map_screen_2.WIFI4 == 1)
-		{
-			GraphicsRoundedRectangle(35, 234, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 240, ssid4, WHITE); // in ssid 4
-			bit_map_screen_2.WIFI4 = 0;
-		}
-		else
-			GraphicsRoundedRectangle(35, 234, 170, 25, 5, WHITE);
-
-		if (bit_map_screen_2.WIFI5 == 1)
-		{
-			GraphicsRoundedRectangle(35, 273, 170, 25, 5, BLACK);
-			GraphicsLargeString(40, 280, ssid5, WHITE); // in ssid 5
-			bit_map_screen_2.WIFI5 = 0;
-		}
-		else
-			GraphicsRoundedRectangle(35, 273, 170, 25, 5, WHITE);
-
-		if (bit_map_screen_2.NEXT == 1)
-		{
-			if (numPage == 1)
-			{
-				GraphicsLargeString(182, 298, "NEXT->", WHITE); // write character with WHITE
-			}
-			else
-			{
-				GraphicsLargeString(182, 298, "NEXT->", BLACK); // write character with BLACK
-			}
-
-			bit_map_screen_2.NEXT = 1;
-		}
-
-		if (bit_map_screen_2.BACK == 1)
-		{
-			if (numPage == 1)
-			{
-				GraphicsLargeString(11, 298, "<-BACK", WHITE); // write character with WHITE
-			}
-			else
-			{
-				GraphicsLargeString(11, 298, "<-BACK", BLACK); // write character with BLACK
-			}
-
-			bit_map_screen_2.BACK = 1;
-		}
-	}
-	else
-	{
-		xTimerStop(timer_request_scan_wifi, 0);
 		bit_map_screen_2.WIFI_Connected = 0;
-		GraphicsRoundedRectangle(34, 54, 170, 25, 5, WHITE);
-		GraphicsRoundedRectangle(34, 117, 170, 25, 5, WHITE);
-		GraphicsRoundedRectangle(34, 156, 170, 25, 5, WHITE);
-		GraphicsRoundedRectangle(34, 195, 170, 25, 5, WHITE);
-		GraphicsRoundedRectangle(34, 234, 170, 25, 5, WHITE);
-		GraphicsRoundedRectangle(34, 273, 170, 25, 5, WHITE);
+		GraphicsLargeString(167, 298, "NEXT->", WHITE);
+		GraphicsLargeString(11, 298, "<-BACK", WHITE);
+		GraphicsFilledRectangle(35, 54, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 110, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 145, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 180, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 215, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 250, 170, 25, WHITE);
 	}
 }

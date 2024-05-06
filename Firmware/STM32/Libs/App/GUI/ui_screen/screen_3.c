@@ -45,8 +45,8 @@ void screen_3(EventBits_t uxBits)
 
 	if (bit_map_screen_3.text == 1)
 	{
-		GraphicsFilledRectangle(70, 56, 110, 15, WHITE);
-		GraphicsLargeString(70, 56, text, BLACK);
+		GraphicsFilledRectangle(45, 50, 150, 20, WHITE);
+		GraphicsLargeString(45, 56, text, BLACK);
 		bit_map_screen_3.text = 0;
 	}
 
@@ -62,6 +62,5 @@ void screen_3(EventBits_t uxBits)
 	{
 		strcpy(text, "re-enter password");
 		bit_map_screen_3.text = 1;
-		xEventGroupClearBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
 	}
 }

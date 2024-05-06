@@ -15,8 +15,7 @@
 
 typedef enum
 {
-	NUM_0 = 0,
-	NUM_1,
+	NUM_1 = 0,
 	NUM_2,
 	NUM_3,
 	NUM_4,
@@ -26,6 +25,7 @@ typedef enum
 	NUM_8,
 	NUM_9,
 	NUM_x,
+	NUM_0,
 	NUM_v,
 	ICON_RETURN,
 	NO_TOUCH,

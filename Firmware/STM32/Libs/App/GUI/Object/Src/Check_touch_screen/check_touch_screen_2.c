@@ -4,15 +4,15 @@
 
 /* position of each icon screen_2 */
 static const uint16_t frame_pos[9][4] = {
-    {7, 35, 8, 31},      // icon return
-    {170, 200, 5, 35},   // On_off_wifi
-    {34, 204, 117, 142}, // frame wifi 1
-    {34, 204, 156, 181}, // frame wifi 2
-    {34, 204, 195, 220}, // frame wifi 3
-    {34, 204, 234, 259}, // frame wifi 4
-    {34, 204, 273, 298}, // frame wifi 5
-    {182, 235, 298, 316},// frame next
-    {11, 68, 298, 316},  // frame back
+	{7, 55, 8, 50},		 // icon return
+	{160, 220, 5, 55},   // On_off_wifi
+	{35, 205, 110, 135}, // frame wifi 1    35, 110, 170, 25
+	{35, 205, 145, 170}, // frame wifi 2    35, 145, 170, 25
+	{35, 205, 180, 205}, // frame wifi 3    35, 180, 170, 25
+	{35, 205, 215, 240}, // frame wifi 4    35, 215, 170, 25
+	{35, 205, 250, 275}, // frame wifi 5    35, 250, 170, 25
+	{160, 240, 285, 320},// frame next
+	{0, 60, 285, 320},  // frame back
 };
 
 /* check touch icon */

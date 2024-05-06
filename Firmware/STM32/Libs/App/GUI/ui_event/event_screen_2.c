@@ -8,6 +8,7 @@
 #include "main.h"
 #include <string.h>
 #include "FreeRTOS.h"
+#include "timers.h"
 #include "event_groups.h"
 
 /**********************
@@ -22,6 +23,8 @@ extern uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
 extern uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
 extern EventGroupHandle_t event_uart_tx;
 extern uint8_t state_wifi;
+
+extern TimerHandle_t timer_request_scan_wifi;
 
 extern char text[18];
 extern char ssid[32];
@@ -49,6 +52,7 @@ void check_event_screen_2(screen_state_t *screen)
 			bit_map_screen_1.home = 1;
 			bit_map_screen_1.MQTT = 1;
 			*screen = SCREEN_START;
+			xTimerStop(timer_request_scan_wifi, 0);
 
 			x = RESET_COORDINATE;
 			y = RESET_COORDINATE;
@@ -66,9 +70,11 @@ void check_event_screen_2(screen_state_t *screen)
 			if (state_wifi == 1)
 			{
 				xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
+			 	xTimerStart(timer_request_scan_wifi, 0);
 			}
 			else
 			{
+				xTimerStop(timer_request_scan_wifi, 0);
 				xEventGroupSetBits(event_uart_tx, OFF_WIFI_BIT);
 			}
 
@@ -81,6 +87,7 @@ void check_event_screen_2(screen_state_t *screen)
 		if (flag_is_touch == 0)
 		{
 			xEventGroupSetBits(event_uart_tx, NEXT_PAGE_BIT);
+			xTimerReset(timer_request_scan_wifi, 0);
 
 			x = RESET_COORDINATE;
 			y = RESET_COORDINATE;
@@ -92,6 +99,7 @@ void check_event_screen_2(screen_state_t *screen)
 		if (flag_is_touch == 0)
 		{
 			xEventGroupSetBits(event_uart_tx, BACK_PAGE_BIT);
+			xTimerReset(timer_request_scan_wifi, 0);
 
 			x = RESET_COORDINATE;
 			y = RESET_COORDINATE;
@@ -106,6 +114,7 @@ void check_event_screen_2(screen_state_t *screen)
 	case WIFI5:
 		if (flag_is_touch == 0)
 		{
+			xTimerStop(timer_request_scan_wifi, 0);
 			strcpy(text, "enter password");
 			bit_map_screen_3.screen = 1;
 			bit_map_screen_3.ret = 1;

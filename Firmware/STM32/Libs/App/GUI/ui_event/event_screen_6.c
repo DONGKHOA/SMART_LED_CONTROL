@@ -10,7 +10,6 @@ void check_event_screen_6(screen_state_t *screen)
     if ( TouchIsTouched() == true)
     {
     	flag_is_touch = 1;
-        GraphicsClear(BLACK);
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 0);    //On backlight
 
         bit_map_screen_1.screen = 1;        // return screen_1 if touched_screen

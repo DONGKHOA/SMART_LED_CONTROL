@@ -79,7 +79,7 @@ void app_main(void)
     NVS_Init();
     WIFI_StaInit();
     uartDriverInit(UART_NUM_1, TXD_PIN, RXD_PIN,
-                   4800, UART_DATA_8_BITS,
+                   115200, UART_DATA_8_BITS,
                    UART_PARITY_DISABLE, UART_HW_FLOWCTRL_DISABLE,
                    UART_STOP_BITS_1);
 
@@ -392,7 +392,6 @@ static void startWifiScan(void *arg)
             */
             page = 1;
             num_wifi_scan = WIFI_Scan(buffer_ssid_scan);
-            printf("%d\n", num_wifi_scan);
 
             // if (WIFI_state_connect() == CONNECT_OK)
             // {
@@ -418,6 +417,9 @@ static void startWifiScan(void *arg)
             memset((void *)ssid4, '\0', sizeof(ssid4));
             memset((void *)ssid5, '\0', sizeof(ssid5));
 
+            printf("%d\n", num_wifi_scan);
+            printf("%d\n", limitNumPage);
+
             xEventGroupSetBits(event_uart_tx_heading,
                                SCAN_WIFI_BIT);
 
@@ -441,7 +443,7 @@ static void startWifiScan(void *arg)
             memset((void *)ssid3, '\0', sizeof(ssid3));
             memset((void *)ssid4, '\0', sizeof(ssid4));
             memset((void *)ssid5, '\0', sizeof(ssid5));
-            printf("%d\n", page);
+            printf("next: %s: %d\n",state_page, page);
 
             xEventGroupSetBits(event_uart_tx_heading,
                                SCAN_WIFI_BIT);
@@ -465,7 +467,7 @@ static void startWifiScan(void *arg)
             memset((void *)ssid3, '\0', sizeof(ssid3));
             memset((void *)ssid4, '\0', sizeof(ssid4));
             memset((void *)ssid5, '\0', sizeof(ssid5));
-            printf("%d\n", page);
+            printf("back: %s: %d\n",state_page, page);
 
             xEventGroupSetBits(event_uart_tx_heading,
                                SCAN_WIFI_BIT);
