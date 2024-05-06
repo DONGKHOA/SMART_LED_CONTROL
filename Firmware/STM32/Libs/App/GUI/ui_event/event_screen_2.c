@@ -22,8 +22,6 @@ extern uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
 extern uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
 extern EventGroupHandle_t event_uart_tx;
 extern uint8_t state_wifi;
-extern uint8_t numPage;
-extern uint8_t limitNumPage;
 
 extern char text[18];
 extern char ssid[32];
@@ -82,19 +80,22 @@ void check_event_screen_2(screen_state_t *screen)
 	case NEXT:
 		if (flag_is_touch == 0)
 		{
-			if(numPage < limitNumPage) numPage++;
+			xEventGroupSetBits(event_uart_tx, NEXT_PAGE_BIT);
 
 			x = RESET_COORDINATE;
 			y = RESET_COORDINATE;
+
+			flag_is_touch = 1;
 		}
 		break;
 	case BACK:
 		if (flag_is_touch == 0)
 		{
-			if(numPage > 0) numPage--;
+			xEventGroupSetBits(event_uart_tx, BACK_PAGE_BIT);
 
 			x = RESET_COORDINATE;
 			y = RESET_COORDINATE;
+
 			flag_is_touch = 1;
 		}
 		break;

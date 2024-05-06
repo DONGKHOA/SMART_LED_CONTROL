@@ -43,6 +43,7 @@ static WIFI_Status_t state_connected_wifi = CONNECT_FAIL;
 static uint8_t s_retry_num = 0;
 static uint8_t volatile num_wifi = 0;
 static EventGroupHandle_t s_wifi_event_group;
+static char ssid_name[1024];
 
 /**********************
  *   STATIC FUNCTIONS
@@ -327,7 +328,7 @@ void WIFI_StaInit(void)
  */
 uint8_t WIFI_Scan(char *data_name)
 {
-    char ssid_name[1024];
+
     int i;
     memset(ssid_name, '\0', sizeof(ssid_name));
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();

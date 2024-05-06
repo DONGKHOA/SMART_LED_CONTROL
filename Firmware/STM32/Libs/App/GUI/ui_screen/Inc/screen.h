@@ -30,13 +30,12 @@ typedef struct
 	uint8_t text1 : 1;
 	uint8_t text2 : 1;
 	uint8_t WIFI_Connected : 1;
+	uint8_t TAB_PAGE : 2;	// 00: START	O1: MID		10: END		11: OFF
 	uint8_t WIFI1 : 1;
 	uint8_t WIFI2 : 1;
 	uint8_t WIFI3 : 1;
 	uint8_t WIFI4 : 1;
 	uint8_t WIFI5 : 1;
-	uint8_t NEXT : 1;
-	uint8_t BACK : 1;
 } __attribute__((packed)) field_bit_screen2_t;
 
 typedef struct

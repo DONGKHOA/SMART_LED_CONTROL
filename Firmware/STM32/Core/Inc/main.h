@@ -69,7 +69,7 @@ void Error_Handler(void);
 #define TIME_REQUEST_SCAN                 1000
 #define TIME_REFRESH_DISPLAY              100
 #define TIME_WAIT                         30000
-#define TIME_READ						              1000
+#define TIME_READ						    1000
 
 //coordinate screen
 #define RESET_COORDINATE                  1000
@@ -77,20 +77,21 @@ void Error_Handler(void);
 // UART TX EVENT
 #define ON_WIFI_BIT                       (1 << 0)
 #define OFF_WIFI_BIT                      (1 << 1)
-#define CONNECT_WIFI_BIT                  (1 << 2)
-#define CONNECT_MQTT_BIT                  (1 << 3)
-#define MQTT_PUBLISH_BIT                  (1 << 5)
+#define NEXT_PAGE_BIT						(1 << 2)
+#define BACK_PAGE_BIT						(1 << 3)
+#define CONNECT_WIFI_BIT                 	(1 << 4)
+#define CONNECT_MQTT_BIT                 	(1 << 5)
+#define MQTT_PUBLISH_BIT                 	(1 << 6)
 
 // UART RX EVENT
-#define NUMBER_WIFI_SCAN_BIT              (1 << 0) 
-#define NAME_WIFI_SCAN_BIT                (1 << 1)
+
+#define SCAN_WIFI_BIT						(1 << 0)
 #define CONNECT_WIFI_SUCCESSFUL_BIT       (1 << 2)
 #define CONNECT_WIFI_UNSUCCESSFUL_BIT     (1 << 3)
 #define REFUSE_CONNECT_MQTT_BIT           (1 << 4) // if haven't connect wifi
 #define CONNECT_MQTT_SUCCESSFUL_BIT       (1 << 5)
 #define CONNECT_MQTT_UNSUCCESSFUL_BIT     (1 << 6)
 #define MQTT_SUBSCRIBE_BIT                (1 << 7)
-#define DETECT_TOUCH_SCREEN_BIT           (1 << 8)
 #define REFRESH_DISPLAY_BIT               (1 << 9)
 
 /**********************
@@ -98,31 +99,31 @@ void Error_Handler(void);
  **********************/
 typedef enum 
 {
-  HEADING_WIFI = 0x01,
-  HEADING_CONNECT_WIFI,
-  HEADING_CONNECT_MQTT,
-  HEADING_MQTT_PUBLISH,
+	HEADING_WIFI = 0x01,
+	HEADING_TAB_PAGE,
+	HEADING_CONNECT_WIFI,
+	HEADING_CONNECT_MQTT,
+	HEADING_MQTT_PUBLISH,
 } uart_tx_heading_t;
 
 typedef enum
 {
-  HEADING_RECEIVE_NUMBER_WIFI_SCAN = 0x01,
-  HEADING_RECEIVE_NAME_WIFI_SCAN,
-  HEADING_RECEIVE_CONNECT_WIFI,
-  HEADING_RECEIVE_CONNECT_MQTT,
-  HEADING_MQTT_SUBSCRIBE,
+	HEADING_RECEIVE_SCAN_WIFI = 0X01,
+	HEADING_RECEIVE_CONNECT_WIFI,
+	HEADING_RECEIVE_CONNECT_MQTT,
+	HEADING_MQTT_SUBSCRIBE,
 } uart_rx_heading_t;
 
 typedef enum
 {
-  LED_OFF = 0,
-  LED_ON,
+	LED_OFF = 0,
+	LED_ON,
 } control_led_t;
 
 typedef enum
 {
-  AUTO_OFF = 0,
-  AUTO_ON,
+	AUTO_OFF = 0,
+	AUTO_ON,
 } control_auto_t;
 
 /*********************

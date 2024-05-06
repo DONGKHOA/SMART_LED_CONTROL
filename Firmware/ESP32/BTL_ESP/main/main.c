@@ -10,6 +10,7 @@
 
 char buffer_uart_rx[RX_BUF_SIZE + 1];
 char buffer_uart_tx[RX_BUF_SIZE + 1];
+static char buffer_ssid_scan[200 + 1];
 
 SemaphoreHandle_t mqtt_semaphore;
 
@@ -24,6 +25,11 @@ static uint8_t flag_connect_success = 0;
 static char url_mqtt[30] = "mqtt://172.16.0.181:1883";
 static MQTT_Client_Data_t mqtt_client_0;
 static uint8_t is_publish = 0;
+char ssid1[32];
+char ssid2[32];
+char ssid3[32];
+char ssid4[32];
+char ssid5[32];
 
 // Task Handle
 
@@ -42,7 +48,6 @@ static EventGroupHandle_t event_uart_tx_heading;
 // Timer Handle
 
 static TimerHandle_t mqtt_subscribe_timer;
-static TimerHandle_t scan_wifi_timer;
 
 // Queue Handle
 
@@ -53,7 +58,7 @@ static QueueHandle_t mqtt_queue;
  ******************************/
 
 static void MQTT_timer_cb(TimerHandle_t xTimer);
-static void SCAN_Wifi_timer_cb(TimerHandle_t xTimer);
+static uint8_t getNumPage(uint8_t quantitySSID);
 
 static void startUartRxTask(void *arg);
 static void startUartTxTask(void *arg);
@@ -86,9 +91,6 @@ void app_main(void)
     mqtt_subscribe_timer = xTimerCreate("time mqtt subscribe",
                                         TIME_MQTT_SUBSCRIBE / portTICK_PERIOD_MS,
                                         pdTRUE, (void *)0, MQTT_timer_cb);
-    scan_wifi_timer = xTimerCreate("timer scan",
-                                        TIME_REQUEST_SCAN / portTICK_PERIOD_MS,
-                                        pdTRUE, (void *)0, SCAN_Wifi_timer_cb);
 
     mqtt_queue = xQueueCreate(2, sizeof(uint8_t));
 
@@ -112,7 +114,7 @@ void app_main(void)
 
     xTaskCreate(startWifiScan,
                 "Wifi scan",
-                MIN_STACK_SIZE * 15,
+                MIN_STACK_SIZE * 40,
                 NULL,
                 3,
                 &wifiScan_task);
@@ -155,9 +157,66 @@ static void MQTT_timer_cb(TimerHandle_t xTimer)
     xQueueSend(mqtt_queue, &buffer, 0);
 }
 
-static void SCAN_Wifi_timer_cb(TimerHandle_t xTimer)
+static uint8_t getNumPage(uint8_t quantitySSID)
 {
+	uint8_t quantity = 0;
+	if (quantitySSID == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		quantity = quantitySSID / SSID_IN_PAGE;
+		if ((quantitySSID % SSID_IN_PAGE) > 0)
+			quantity++;
+		return quantity;
+	}
+}
 
+static uint8_t processingSSID(char *src, uint8_t numSSID, uint8_t page)
+{
+	char buffer[200 + 1];
+    memcpy(buffer, src, strlen((char *) src));
+    uint8_t arg_position = 0;
+    
+	// cut string
+	char *temp_token = strtok(buffer, "\r");
+	while (temp_token != NULL)
+	{
+        if (arg_position == (4 + (page - 1) * 5))
+        {
+            memcpy(ssid5, temp_token, strlen((char *)temp_token) + 1);
+        }
+
+        if (arg_position == (3 + (page - 1) * 5))
+        {
+            memcpy(ssid4, temp_token, strlen((char *)temp_token) + 1);
+        }
+
+        if (arg_position == (2 + (page - 1) * 5))
+        {
+            memcpy(ssid3, temp_token, strlen((char *)temp_token) + 1);
+        }
+
+        if (arg_position == (1 + (page - 1) * 5))
+        {
+            memcpy(ssid2, temp_token, strlen((char *)temp_token) + 1);
+        }
+
+        if (arg_position == (0 + (page - 1) * 5))
+        {
+            memcpy(ssid1, temp_token, strlen((char *)temp_token) + 1);
+        }
+		arg_position++;
+        
+		temp_token = strtok(NULL, "\r");
+	}
+
+	// Store data in array and set bit filed
+    uint8_t numSSIDofPage = (numSSID - (page - 1) * SSID_IN_PAGE) > 
+                SSID_IN_PAGE ? SSID_IN_PAGE : (numSSID - (page - 1) * SSID_IN_PAGE);
+
+    return numSSIDofPage;
 }
 
 static void startUartRxTask(void *arg)
@@ -216,6 +275,16 @@ static void startUartRxTask(void *arg)
                 }
                 
                 break;
+            case HEADING_TAB_PAGE:
+                if (memcmp(buffer_uart_rx, "NEXT", strlen(buffer_uart_rx) + 1) == 0)
+                {
+                    xEventGroupSetBits(event_uart_rx_heading, NEXT_PAGE_BIT);
+                }
+                else if (memcmp(buffer_uart_rx, "BACK", strlen(buffer_uart_rx) + 1) == 0)
+                {
+                    xEventGroupSetBits(event_uart_rx_heading, BACK_PAGE_BIT);
+                }
+                break;
 
             case HEADING_CONNECT_WIFI:
                 xEventGroupSetBits(event_uart_rx_heading, CONNECT_WIFI_RX_BIT);
@@ -250,7 +319,7 @@ static void startUartTxTask(void *arg)
     while (1)
     {
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_tx_heading,
-                                                 SEND_NUMBER_NAME_WIFI_SCAN_BIT |
+                                                 SCAN_WIFI_BIT |
                                                      SEND_CONNECT_WIFI_SUCCESSFUL_BIT |
                                                      SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT |
                                                      SEND_REFUSE_CONNECT_MQTT_BIT |
@@ -260,33 +329,9 @@ static void startUartTxTask(void *arg)
                                                  pdTRUE, pdFALSE,
                                                  portMAX_DELAY);
 
-        if (uxBits & SEND_NUMBER_NAME_WIFI_SCAN_BIT)
+        if (uxBits & SCAN_WIFI_BIT)
         {
-            char buffer_temp[4];
-            memset((void *)buffer_temp, '\0', 4);
-            uint8_t buffer_temp_pox = strlen(buffer_uart_tx) + 2;
-            if (buffer_uart_tx[buffer_temp_pox] > 100)
-            {
-                buffer_temp[2] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-                buffer_uart_tx[buffer_temp_pox] /= 10;
-                buffer_temp[1] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-                buffer_uart_tx[buffer_temp_pox] /= 10;
-                buffer_temp[0] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-            }
-            else if (buffer_uart_tx[buffer_temp_pox] > 10)
-            {
-                buffer_temp[1] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-                buffer_uart_tx[buffer_temp_pox] /= 10;
-                buffer_temp[0] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-            }
-            else
-            {
-                buffer_temp[0] = (buffer_uart_tx[buffer_temp_pox] % 10) + 48;
-            }
-
-            transmissionFrameData(HEADING_SEND_NUMBER_WIFI_SCAN, buffer_temp);
-            vTaskDelay(100 / portTICK_PERIOD_MS);
-            transmissionFrameData(HEADING_SEND_NAME_WIFI_SCAN, buffer_uart_tx);
+            transmissionFrameData(HEADING_SEND_SCAN_WIFI, buffer_uart_tx);
         }
 
         if (uxBits & SEND_CONNECT_WIFI_SUCCESSFUL_BIT)
@@ -321,10 +366,16 @@ static void startUartTxTask(void *arg)
 static void startWifiScan(void *arg)
 {
     uint8_t num_wifi_scan = 0;
+    uint8_t limitNumPage = 1; 
+    uint8_t numSSIDofPage;
+    uint8_t page = 0;
+
     while (1)
     {
         EventBits_t uxBits = xEventGroupWaitBits(event_uart_rx_heading,
                                                  ON_WIFI_BIT |
+                                                 NEXT_PAGE_BIT |
+                                                 BACK_PAGE_BIT |
                                                      OFF_WIFI_BIT,
                                                  pdTRUE, pdFALSE,
                                                  portMAX_DELAY);
@@ -339,8 +390,9 @@ static void startWifiScan(void *arg)
                     - Don't matching ssid & pass in nvs ->
                     store ssid & pass in nvs.
             */
-            num_wifi_scan = WIFI_Scan(buffer_uart_tx);
-            buffer_uart_tx[strlen(buffer_uart_tx) + 2] = num_wifi_scan;
+            page = 1;
+            num_wifi_scan = WIFI_Scan(buffer_ssid_scan);
+            printf("%d\n", num_wifi_scan);
 
             // if (WIFI_state_connect() == CONNECT_OK)
             // {
@@ -349,15 +401,74 @@ static void startWifiScan(void *arg)
             //     continue;
             // }
 
-            if (matchingWIFIScan(buffer_uart_tx, (uint8_t *)ssid, (uint8_t *)pass) != -1)
+            if (matchingWIFIScan(buffer_ssid_scan, (uint8_t *)ssid, (uint8_t *)pass) != -1)
             {
                 xEventGroupSetBits(event_uart_rx_heading,
                                    CONNECT_WIFI_SCAN_BIT);
             }
 
-            xEventGroupSetBits(event_uart_tx_heading,
-                               SEND_NUMBER_NAME_WIFI_SCAN_BIT);
+            limitNumPage = getNumPage(num_wifi_scan);
+            numSSIDofPage = processingSSID(buffer_ssid_scan, num_wifi_scan, page);
+            sprintf(buffer_uart_tx,"%s\r%d\r%s\r%s\r%s\r%s\r%s\r", "START", numSSIDofPage, ssid1, 
+                                ssid2, ssid3, ssid4, ssid5);
+            
+            memset((void *)ssid1, '\0', sizeof(ssid1));
+            memset((void *)ssid2, '\0', sizeof(ssid2));
+            memset((void *)ssid3, '\0', sizeof(ssid3));
+            memset((void *)ssid4, '\0', sizeof(ssid4));
+            memset((void *)ssid5, '\0', sizeof(ssid5));
 
+            xEventGroupSetBits(event_uart_tx_heading,
+                               SCAN_WIFI_BIT);
+
+        }
+
+        if (uxBits & NEXT_PAGE_BIT)
+        {
+            char state_page[10];
+            if(page < limitNumPage) page++;
+
+            if (page == 1) strcpy(state_page, "START");
+            else if (page == limitNumPage) strcpy(state_page, "END");
+            else strcpy(state_page, "MID");
+
+            numSSIDofPage = processingSSID(buffer_ssid_scan, num_wifi_scan, page);
+            sprintf(buffer_uart_tx,"%s\r%d\r%s\r%s\r%s\r%s\r%s\r", state_page, numSSIDofPage,ssid1, 
+                                ssid2, ssid3, ssid4, ssid5);
+            
+            memset((void *)ssid1, '\0', sizeof(ssid1));
+            memset((void *)ssid2, '\0', sizeof(ssid2));
+            memset((void *)ssid3, '\0', sizeof(ssid3));
+            memset((void *)ssid4, '\0', sizeof(ssid4));
+            memset((void *)ssid5, '\0', sizeof(ssid5));
+            printf("%d\n", page);
+
+            xEventGroupSetBits(event_uart_tx_heading,
+                               SCAN_WIFI_BIT);
+        }
+
+        if (uxBits & BACK_PAGE_BIT)
+        {
+            char state_page[10];
+            if(page > 1) page--;
+            
+            if (page == 1) strcpy(state_page, "START");
+            else if (page == limitNumPage) strcpy(state_page, "END");
+            else strcpy(state_page, "MID");
+
+            numSSIDofPage = processingSSID(buffer_ssid_scan, num_wifi_scan, page);
+            sprintf(buffer_uart_tx,"%s\r%d\r%s\r%s\r%s\r%s\r%s\r", state_page, numSSIDofPage,ssid1, 
+                                ssid2, ssid3, ssid4, ssid5);
+
+            memset((void *)ssid1, '\0', sizeof(ssid1));
+            memset((void *)ssid2, '\0', sizeof(ssid2));
+            memset((void *)ssid3, '\0', sizeof(ssid3));
+            memset((void *)ssid4, '\0', sizeof(ssid4));
+            memset((void *)ssid5, '\0', sizeof(ssid5));
+            printf("%d\n", page);
+
+            xEventGroupSetBits(event_uart_tx_heading,
+                               SCAN_WIFI_BIT);
         }
 
         if (uxBits & OFF_WIFI_BIT)
