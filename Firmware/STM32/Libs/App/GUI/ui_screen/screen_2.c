@@ -24,6 +24,7 @@
 field_bit_screen2_t bit_map_screen_2;
 uint8_t state_wifi = 0;
 uint8_t numSSIDofPage = 0;
+uint8_t update_state = 0;
 
 char ssid1[32];
 char ssid2[32];
@@ -65,11 +66,12 @@ void screen_2(EventBits_t uxBits)
 {
 	 if (uxBits & SCAN_WIFI_BIT)
 	 {
+		update_state = 1;
 	 	char *token;
 	 	uint8_t position = 0;
 	 	numSSIDofPage = 1;
 	 	bit_map_screen_2.WIFI1 = 0;
-	 	bit_map_screen_2.WIFI5 = 0;
+	 	bit_map_screen_2.WIFI2 = 0;
 	 	bit_map_screen_2.WIFI3 = 0;
 	 	bit_map_screen_2.WIFI4 = 0;
 	 	bit_map_screen_2.WIFI5 = 0;
@@ -229,9 +231,9 @@ void screen_2(EventBits_t uxBits)
 		GraphicsLargeString(40, 57, ssid_connect, WHITE); // in ssid connected
 	}
 	else
-		GraphicsFilledRectangle(35, 54, 170, 25, WHITE);
+		GraphicsFilledRectangle(35, 54, 170, 25, WHITE); 
 
-	
+
 	if (uxBits & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
 		bit_map_screen_2.WIFI_Connected = 1;

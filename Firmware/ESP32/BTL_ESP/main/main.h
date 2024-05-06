@@ -59,13 +59,14 @@
 #define CONNECT_MQTT_BIT                        (1 << 6)
 
 // UART TX EVENT 
-#define SCAN_WIFI_BIT	                          (1 << 0)
+#define SCAN_WIFI_BIT	                        (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_REFUSE_CONNECT_MQTT_BIT            (1 << 3)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 4)
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
 #define SEND_MQTT_SUBSCRIBE                     (1 << 6)
+
 
 /**********************
  *      TYPEDEFS
