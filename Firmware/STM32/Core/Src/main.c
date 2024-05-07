@@ -126,6 +126,7 @@ static control_led_t check_state_led;
 static control_auto_t check_state_auto;
 
  int16_t lux = 0;
+ int16_t value_adc;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -169,7 +170,7 @@ void vBacklightTimerCb(TimerHandle_t xTimer)
 
 void TempReadingCb(TimerHandle_t xTimer)
 {
-	temperature_sensor_enable(&hadc1);
+	temperature_sensor_enable(value_adc, &hadc1);
 }
 /* USER CODE END 0 */
 
@@ -331,12 +332,12 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -344,18 +345,9 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_VREFINT;
+  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -760,7 +752,7 @@ static void UartTx_Task(void *pvParameters)
 		  if (check_state_auto == AUTO_ON) strcpy(state_auto, "ON");
 		  else strcpy(state_auto, "OFF");
 
-		  float Temperature = calculate_temperature();
+		//  Temperature = calculate_temperature(value_adc);
 		  lux = adjust_Ev();
 
 		  sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, lux, Temperature);

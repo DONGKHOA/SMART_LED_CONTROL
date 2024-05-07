@@ -1,6 +1,5 @@
 #include "read_adc.h"
 
-uint16_t ADC_RESULT[2];
 
 int16_t read_adc (ADC_HandleTypeDef* hadc)
 {
@@ -11,7 +10,10 @@ int16_t read_adc (ADC_HandleTypeDef* hadc)
     return var;
 }
 
-void temperature_sensor_enable(ADC_HandleTypeDef* hadc)
+void temperature_sensor_enable(int16_t value_adc , ADC_HandleTypeDef* hadc)
 {
-	 HAL_ADC_Start_DMA(hadc, (uint32_t*)ADC_RESULT, 2);   // Start ADC Conversion
+    HAL_ADC_Start(hadc);
+    HAL_ADC_PollForConversion(hadc, HAL_MAX_DELAY);
+    value_adc = HAL_ADC_GetValue(hadc);
+    HAL_ADC_Stop(hadc);
 }
