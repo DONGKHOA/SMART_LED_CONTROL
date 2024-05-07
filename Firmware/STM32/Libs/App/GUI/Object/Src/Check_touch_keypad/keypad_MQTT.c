@@ -1,7 +1,7 @@
 #include "Keypad/keypad_MQTT.h"
 
 /* position of each element in the keyboard */
-static const uint16_t keypad_MQTT[14][4] = {
+static const uint16_t keypad_MQTT[13][4] = {
 			{50, 85, 125, 150},	  // 1
 			{103, 138, 125, 150}, // 2
 			{155, 190, 125, 150}, // 3

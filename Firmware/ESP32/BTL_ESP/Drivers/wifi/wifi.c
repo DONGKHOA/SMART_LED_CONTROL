@@ -36,6 +36,8 @@
 #define SSID_NVS "ssid_nvs"
 #define PASS_NVS "pass_nvs"
 
+#define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
+
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -51,6 +53,8 @@ static char ssid_name[1024];
  **********************/
 
 extern char ip_ssid_connected[20];
+extern EventGroupHandle_t event_uart_tx_heading;
+extern char buffer_uart_tx[1024 + 1];
 
 /**********************
  *   STATIC FUNCTIONS
@@ -75,6 +79,9 @@ static void event_handler(void *arg, esp_event_base_t event_base,
         {
             state_connected_wifi = CONNECT_FAIL;
             xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
+            strcpy(buffer_uart_tx, "FAILED");
+            xEventGroupSetBits(event_uart_tx_heading,
+                                SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT);
         }
         ESP_LOGE(TAG, "connect to the AP fail");
     }

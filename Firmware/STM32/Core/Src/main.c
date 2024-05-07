@@ -120,7 +120,7 @@ EventGroupHandle_t event_uart_rx;
 // Timer Handle
 TimerHandle_t timer_request_scan_wifi;
 TimerHandle_t timer_wait_off_screen;
-TimerHandle_t timer_read_temp;
+TimerHandle_t timer_request_mqtt_Pub;
 
 static control_led_t check_state_led;
 static control_auto_t check_state_auto;
@@ -168,7 +168,7 @@ void vBacklightTimerCb(TimerHandle_t xTimer)
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, 1);
 }
 
-void TempReadingCb(TimerHandle_t xTimer)
+void timerRequestmqttPub(TimerHandle_t xTimer)
 {
 	temperature_sensor_enable(value_adc, &hadc1);
 }
@@ -240,7 +240,7 @@ int main(void)
 	timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdTRUE, (void *)0, timerRequestScanWifi);
 	timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, 0, timerRefreshDisplayCb);
 	timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCb);
-	timer_read_temp = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, TempReadingCb);
+	timer_request_mqtt_Pub = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, timerRequestmqttPub);
 
   // init task
 
@@ -253,7 +253,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-//	xTimerStart(timer_read_temp, 0);
+//	xTimerStart(timer_request_mqtt_Pub, 0);
 //
   vTaskStartScheduler();
   while (1)
@@ -821,7 +821,7 @@ static void UartRx_Task(void *pvParameters)
 					break;
 
 				case HEADING_RECEIVE_CONNECT_WIFI:
-					if (memcmp(buffer_uart_rx, "FAILED ", strlen(buffer_uart_rx) + 1) == 0)
+					if (memcmp(buffer_uart_rx, "FAILED", strlen(buffer_uart_rx) + 1) == 0)
 					{
 					  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
 					}

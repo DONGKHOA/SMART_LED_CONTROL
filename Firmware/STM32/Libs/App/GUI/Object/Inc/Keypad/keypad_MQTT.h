@@ -14,7 +14,7 @@
 
 typedef enum
 {
-	NUM_1,
+	NUM_1 = 0,
 	NUM_2,
 	NUM_3,
 	NUM_4,
@@ -26,7 +26,6 @@ typedef enum
 	NUM_x,
 	NUM_0,
 	NUM_v,
-	NUM_point,
 	ICON_RETURN,
 	NO_TOUCH,
 } key_MQTT_character_t;

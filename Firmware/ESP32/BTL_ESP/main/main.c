@@ -15,8 +15,8 @@ char ip_ssid_connected[32];
 /**********************
  *  STATIC VARIABLES
  **********************/
-static char buffer_uart_rx[RX_BUF_SIZE + 1];
-static char buffer_uart_tx[RX_BUF_SIZE + 1];
+static char buffer_uart_rx[1024 + 1];
+char buffer_uart_tx[1024 + 1];
 static char buffer_ssid_scan[200 + 1];
 
 static uint8_t ssid[32];
@@ -45,8 +45,8 @@ static TaskHandle_t mqttControlData_task;
 
 // EventGroup Handle
 
-static EventGroupHandle_t event_uart_rx_heading;
-static EventGroupHandle_t event_uart_tx_heading;
+EventGroupHandle_t event_uart_rx_heading;
+EventGroupHandle_t event_uart_tx_heading;
 
 // Timer Handle
 
@@ -259,7 +259,7 @@ static uint8_t processingSSID(char *src, uint8_t numSSID, uint8_t page)
  * @param replace The `replace` parameter in the `configIP_MQTT` function is a string that will be
  * appended to the modified `ip_buffer` before being copied to the `ip_mqtt` parameter.
  */
-static void     (char * ip_ssid, char *ip_mqtt, char * replace)
+static void configIP_MQTT(char * ip_ssid, char *ip_mqtt, char * replace)
 {
     char ip_buffer[20];
     memset(ip_buffer, 0, 20);
@@ -394,6 +394,12 @@ static void startUartTxTask(void *arg)
 
         if (uxBits & SEND_CONNECT_WIFI_SUCCESSFUL_BIT)
         {
+            transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
+        }
+
+        if (uxBits & SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT)
+        {
+            printf("12\n");
             transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
         }
 
