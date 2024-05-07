@@ -57,6 +57,9 @@ void check_event_screen_1(screen_state_t *screen)
 				bit_map_screen_4.ret = 1;
 				bit_map_screen_4.control = 1;
 				bit_map_screen_4.automode = 1;
+				bit_map_screen_4.LUX = 1; 
+				bit_map_screen_4.Temperature = 1;
+
 				if (led_state == LED_ON) bit_map_screen_4.ON = 1;
 				else bit_map_screen_4.OFF = 1;
 

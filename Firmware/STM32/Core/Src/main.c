@@ -36,11 +36,13 @@
 #include "illuminance.h"
 #include "auto_led.h"
 
+
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "queue.h"
 #include "task.h"
 #include "timers.h"
+
 
 #include <string.h>
 
@@ -123,7 +125,7 @@ TimerHandle_t timer_read_temp;
 static control_led_t check_state_led;
 static control_auto_t check_state_auto;
 
-static int16_t lux = 0;
+ int16_t lux = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

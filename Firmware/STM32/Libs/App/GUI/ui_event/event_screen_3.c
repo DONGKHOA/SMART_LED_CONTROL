@@ -116,7 +116,7 @@ void check_event_screen_3(screen_state_t *screen)
 			{
 				password[password_pos] = character_key[key];
 				GraphicsLargeCharacter(x_coordinate, OFFSET_Y,
-									character_key[key], RED);
+									character_key[key], WHITE);
 				password_pos++;
 				x_coordinate += OFFSET_X;
 

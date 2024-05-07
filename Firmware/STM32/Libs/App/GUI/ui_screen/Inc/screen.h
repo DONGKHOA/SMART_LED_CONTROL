@@ -57,6 +57,8 @@ typedef struct
 	uint8_t automode : 1;
 	uint8_t on_auto : 1;
 	uint8_t off_auto : 1;
+	uint8_t LUX : 1;
+	uint8_t Temperature : 1;
 } __attribute__((packed)) field_bit_screen4_t;
 
 typedef struct

@@ -5,11 +5,18 @@
 #include "screen.h"
 #include "graphics.h"
 #include "Icon/icon.h"
+#include "illuminance.h"
+#include "cal_temperature.h"
+#include "main.h"
+
 
 field_bit_screen4_t bit_map_screen_4;
+extern int16_t lux;
+extern float Temperature;
 
 void screen_4(EventBits_t uxBits)
 {
+	adjust_Ev();
 	if (bit_map_screen_4.screen == 1)
 	{
 		GraphicsClear(WHITE);
@@ -58,5 +65,24 @@ void screen_4(EventBits_t uxBits)
 		GraphicsLargeString(108, 29, "OFF", BLACK);
 		GraphicsLargeString(108, 44, "ON", WHITE);
 		bit_map_screen_4.OFF = 0;
+	}
+
+	if(bit_map_screen_4.LUX == 1)
+	{
+		lux = adjust_Ev();
+		char buffer_Lux_screen4[4];
+		sprintf(buffer_Lux_screen4, "%d", lux);
+		GraphicsLargeString(190, 290, "LUX", BLACK);
+		GraphicsLargeString(198, 275, buffer_Lux_screen4, BLACK);
+		bit_map_screen_4.LUX = 0;
+	}
+	if(bit_map_screen_4.Temperature == 1)
+	{
+		Temperature = calculate_temperature();
+		char buffer_temperature_screen4[7];
+		sprintf(buffer_temperature_screen4, "%.2f", Temperature);
+		GraphicsLargeString(32, 290, "TEMPERATURE", BLACK);
+		GraphicsLargeString(66, 275, buffer_temperature_screen4, BLACK);
+		bit_map_screen_4.Temperature = 0;
 	}
 }

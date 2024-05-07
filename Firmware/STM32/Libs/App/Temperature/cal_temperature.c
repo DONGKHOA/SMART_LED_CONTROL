@@ -21,7 +21,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 	HAL_ADC_Stop_DMA(hadc);
 }
 
-float calculate_temperature(void)
+float calculate_temperature()
 {
 	float V_Sense, V_Ref;
 	float Temperature;

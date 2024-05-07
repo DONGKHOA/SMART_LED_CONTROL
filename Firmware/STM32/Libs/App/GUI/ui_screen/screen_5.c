@@ -33,7 +33,7 @@ void screen_5(EventBits_t uxBits)
 
 	if (bit_map_screen_5.frame == 1)
 	{
-		GraphicsRoundedRectangle(35, 82, 170, 30, 5, BLACK);
+		GraphicsRoundedRectangle(95, 82, 60, 30, 5, BLACK);
 		bit_map_screen_5.frame = 0;
 	}
 
@@ -56,6 +56,8 @@ void screen_5(EventBits_t uxBits)
 		bit_map_screen_5.key = 0;
 	}
 
+	bitsScreen5 = uxBits;
+
 	if (uxBits & CONNECT_MQTT_UNSUCCESSFUL_BIT)
 	{
 		strcpy(text_sc5, "re-enter MQTT");
@@ -67,6 +69,5 @@ void screen_5(EventBits_t uxBits)
 		strcpy(text_sc5, "Connect Wifi!");
 		bit_map_screen_5.text = 1;
 	}
-
-	bitsScreen5 = uxBits;
+	
 }

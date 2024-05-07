@@ -41,6 +41,7 @@ void check_event_screen_4(screen_state_t *screen)
 				if(led_state == LED_ON)
 				{
 					bit_map_screen_4.ON = 1; // if Button on
+					
 				}
 				else
 				{

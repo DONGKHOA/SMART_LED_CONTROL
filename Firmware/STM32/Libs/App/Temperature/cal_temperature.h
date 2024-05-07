@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-float calculate_temperature(void);
+float calculate_temperature();
 
 /***********************************************************/
 #endif /* INC_CAL_TEMPERATURE_H_ */

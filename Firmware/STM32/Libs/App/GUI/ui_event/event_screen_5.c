@@ -6,12 +6,13 @@
 #include "Keypad/keypad_MQTT.h"
 #include "string.h"
 #include "main.h"
+#include "screen.h"
 
 /*********************
  *      DEFINES
  *********************/
 
-#define START_COORDINATE		37
+#define START_COORDINATE		100
 #define OFFSET_X 15
 #define OFFSET_Y 90
 #define MIN_LENGTH_MQTT 15
@@ -22,8 +23,8 @@
 
 static const char character_key[13] = { '1', '2', '3',
                                        '4', '5', '6', '7',
-                                       '8', '9', 'x','0', 'v', '.'};
-uint8_t MQTT[16];
+                                       '8', '9', 'x','0', 'v'};
+uint8_t MQTT[4];
 uint8_t MQTT_pos = 0;
 
 /**********************
@@ -84,11 +85,11 @@ void check_event_screen_5(screen_state_t *screen)
                     xEventGroupSetBits(event_uart_tx, CONNECT_MQTT_BIT);
                     memset(MQTT, '\0', sizeof(MQTT));
                 }
-            else
-            {
-                bit_map_screen_5.text = 1;
-                strcpy(text_sc5, "error code");
-            }
+                else
+                {
+                    bit_map_screen_5.text = 1;
+                    strcpy(text_sc5, "error code");
+                }
             }
 
             else

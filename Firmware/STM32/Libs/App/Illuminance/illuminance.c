@@ -16,9 +16,10 @@ extern ADC_HandleTypeDef hadc2;
  *  STATIC PROTOTYPE FUNCTION
  ******************************/
 
-static float voltage_adc();
-static float illuminance_adc();
-static int16_t myRound(double x);
+ float voltage_adc();
+ float illuminance_adc();
+ int16_t Ev;
+ int16_t myRound(double x);
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -47,7 +48,6 @@ uint8_t illuminance_signal(int16_t Ev)
 
 int16_t adjust_Ev()
 {
-	int16_t Ev;
     Ev = myRound((double)illuminance_adc() / 10) * 10;
     if (Ev < LOW_THRESHOLD) {
         Ev = LOW_THRESHOLD;
@@ -68,7 +68,7 @@ int16_t adjust_Ev()
  * @return The function `voltage_adc()` is returning a floating-point value representing the voltage
  * read from an ADC (Analog-to-Digital Converter) after calibration and conversion.
  */
-static float voltage_adc()
+float voltage_adc()
 {
 	float volt;
 	int16_t var;
@@ -85,7 +85,7 @@ static float voltage_adc()
  * 
  * @return The function `illuminance_adc()` is returning the calculated illuminance value `Ev_before`.
  */
-static float illuminance_adc()
+float illuminance_adc()
 {
 	float Ev_before;
 	float R = voltage_adc() * 10; // I=100uA, (The unit of R is KOhm)
@@ -106,7 +106,7 @@ static float illuminance_adc()
  * @return The function `myRound` takes a `double` input `x`, rounds it to the nearest integer, and
  * returns the result as a 16-bit signed integer (`int16_t`).
  */
-static int16_t myRound(double x)
+int16_t myRound(double x)
 {
     if (x >= 0) {
         return (int16_t)(x + 0.5);
