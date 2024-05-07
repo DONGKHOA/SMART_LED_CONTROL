@@ -65,6 +65,7 @@
 #define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
 #define SEND_MQTT_SUBSCRIBE                     (1 << 6)
 
+
 /**********************
  *      TYPEDEFS
  **********************/
