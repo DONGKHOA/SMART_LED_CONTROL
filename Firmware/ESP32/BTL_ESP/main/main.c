@@ -259,7 +259,7 @@ static uint8_t processingSSID(char *src, uint8_t numSSID, uint8_t page)
  * @param replace The `replace` parameter in the `configIP_MQTT` function is a string that will be
  * appended to the modified `ip_buffer` before being copied to the `ip_mqtt` parameter.
  */
-static void configIP_MQTT(char * ip_ssid, char *ip_mqtt, char * replace)
+static void     (char * ip_ssid, char *ip_mqtt, char * replace)
 {
     char ip_buffer[20];
     memset(ip_buffer, 0, 20);

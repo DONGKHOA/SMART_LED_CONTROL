@@ -44,7 +44,7 @@ char bufferEffectScreen2[174];
  *  EXTERN VARIABLES
  **********************/
 
-extern uint8_t buffer_uart_rx[RX_BUFFER_SIZE + 1];
+extern char buffer_uart_rx[RX_BUFFER_SIZE + 1];
 extern EventGroupHandle_t event_uart_rx;
 extern EventGroupHandle_t event_uart_tx;
 extern TimerHandle_t timer_request_scan_wifi;
@@ -185,6 +185,14 @@ void screen_2(EventBits_t uxBits)
 			GraphicsLargeString(167, 298, "NEXT->", WHITE);
 			GraphicsLargeString(11, 298, "<-BACK", BLACK);
 		}
+
+		if (bit_map_screen_2.WIFI_Connected == 1)
+		{
+			GraphicsFilledRectangle(15, 54, 200, 25, BLACK);
+			GraphicsLargeString(32, 57, ssid_connect, WHITE); // in ssid connected
+		}
+		else
+			GraphicsFilledRectangle(15, 54, 200, 25, WHITE);
 	 }
 
 	if (bit_map_screen_2.screen == 1)
@@ -225,18 +233,9 @@ void screen_2(EventBits_t uxBits)
 		}
 	}
 
-	if (bit_map_screen_2.WIFI_Connected == 1)
-	{
-		GraphicsFilledRectangle(15, 54, 200, 25, BLACK);
-		GraphicsLargeString(32, 57, ssid_connect, WHITE); // in ssid connected
-	}
-	else
-		GraphicsFilledRectangle(15, 54, 200, 25, WHITE); 
-
-
 	if (uxBits & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
-		bit_map_screen_2.WIFI_Connected = 1;
+		strcpy(ssid_connect,buffer_uart_rx);
 	}
 	
 	if (state_wifi == 0)

@@ -74,7 +74,7 @@ void screen_4(EventBits_t uxBits)
 		sprintf(buffer_Lux_screen4, "%d", lux);
 		GraphicsLargeString(190, 290, "LUX", BLACK);
 		GraphicsLargeString(198, 275, buffer_Lux_screen4, BLACK);
-		bit_map_screen_4.LUX = 0;
+		//bit_map_screen_4.LUX = 0;
 	}
 	if(bit_map_screen_4.Temperature == 1)
 	{
@@ -83,6 +83,6 @@ void screen_4(EventBits_t uxBits)
 		sprintf(buffer_temperature_screen4, "%.2f", Temperature);
 		GraphicsLargeString(32, 290, "TEMPERATURE", BLACK);
 		GraphicsLargeString(66, 275, buffer_temperature_screen4, BLACK);
-		bit_map_screen_4.Temperature = 0;
+		//bit_map_screen_4.Temperature = 0;
 	}
 }

@@ -237,7 +237,7 @@ int main(void)
 	event_uart_tx = xEventGroupCreate();
 	event_uart_rx = xEventGroupCreate();
 
-	timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdFALSE, (void *)0, timerRequestScanWifi);
+	timer_request_scan_wifi = xTimerCreate("timer scan", TIME_REQUEST_SCAN, pdTRUE, (void *)0, timerRequestScanWifi);
 	timer_refresh_display = xTimerCreate("timer refresh", TIME_REFRESH_DISPLAY, pdTRUE, 0, timerRefreshDisplayCb);
 	timer_wait_off_screen = xTimerCreate("timer wait", TIME_WAIT, pdFALSE, (void *)0, vBacklightTimerCb);
 	timer_read_temp = xTimerCreate("timer read", TIME_READ, pdTRUE, (void *)0, TempReadingCb);
@@ -643,7 +643,14 @@ static void Screen_Task(void *pvParameters)
               REFRESH_DISPLAY_BIT,
 			  pdTRUE, pdFALSE, portMAX_DELAY);
     if ((uxBits & CONNECT_WIFI_UNSUCCESSFUL_BIT) == CONNECT_WIFI_UNSUCCESSFUL_BIT)
+    {
     	bit_map_screen_2.WIFI_Connected = 0;
+    }
+
+	if (uxBits & CONNECT_WIFI_SUCCESSFUL_BIT)
+	{
+		bit_map_screen_2.WIFI_Connected = 1;
+	}
     if (uxBits != 0)
     {
       if (flag_is_touch == 1)
@@ -814,13 +821,13 @@ static void UartRx_Task(void *pvParameters)
 					break;
 
 				case HEADING_RECEIVE_CONNECT_WIFI:
-					if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
-					{
-					  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
-					}
-					else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+					if (memcmp(buffer_uart_rx, "FAILED ", strlen(buffer_uart_rx) + 1) == 0)
 					{
 					  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_UNSUCCESSFUL_BIT);
+					}
+					else
+					{
+					  xEventGroupSetBits(event_uart_rx, CONNECT_WIFI_SUCCESSFUL_BIT);
 					}
 					break;
 
