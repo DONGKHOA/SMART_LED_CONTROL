@@ -21,6 +21,7 @@
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_wifi.h"
+#include "rom/ets_sys.h"
 
 #include "wifi.h"
 #include "gpio.h"
@@ -44,9 +45,6 @@
 #define TIME_MQTT_SUBSCRIBE                     1000
 #define TIME_REQUEST_SCAN                       3000
 
-#define MQTT_PUBLISH                            0
-#define MQTT_SUBSCRIBE                          1
-
 #define SSID_IN_PAGE                            5
 
 // UART RX EVENT 
@@ -59,7 +57,7 @@
 #define CONNECT_MQTT_BIT                        (1 << 6)
 
 // UART TX EVENT 
-#define SCAN_WIFI_BIT	                          (1 << 0)
+#define SCAN_WIFI_BIT	                        (1 << 0)
 #define SEND_CONNECT_WIFI_SUCCESSFUL_BIT        (1 << 1)
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_REFUSE_CONNECT_MQTT_BIT            (1 << 3)
@@ -74,10 +72,10 @@
 typedef enum 
 {
     HEADING_WIFI = 0x01,
-    HEADING_TAB_PAGE,
-    HEADING_CONNECT_WIFI,
-    HEADING_CONNECT_MQTT,
-    HEADING_MQTT_PUBLISH,
+    HEADING_TAB_PAGE,       // 2
+    HEADING_CONNECT_WIFI,   // 3
+    HEADING_CONNECT_MQTT,   // 4
+    HEADING_MQTT_PUBLISH,   // 5
 } uart_rx_heading_t;
 
 typedef enum
@@ -88,30 +86,38 @@ typedef enum
     HEADING_MQTT_SUBSCRIBE,
 } uart_tx_heading_t;
 
+typedef enum
+{
+    MQTT_PUBLISH,
+    MQTT_SUBSCRIBE,
+} mqtt_command_t;
+
 /*********************
  *   INLINE FUNCTION
  *********************/
 
 static inline void getSSID_PASS(uint8_t * data, uint8_t *ssid, uint8_t * pass)
 {
-    uint8_t i = 0;
-    uint8_t position = 0;
-
-    for (; *(data + i) != '\r'; i++)
-    {
-        *(ssid + position) = *(data + i);
-        position++;
-    }
-
-    *(ssid + position) = '\0';
-    position = 0;
-
-    for (; *(data + i) != '\n'; i++)
-    {
-        *(pass + position) = *(data + i);
-        position++;
-    }
-    *(pass + position) = '\0';
+	char buffer[64];
+    memcpy(buffer, data, strlen((char *) data));
+    uint8_t arg_position = 0;
+    
+	// cut string
+	char *temp_token = strtok(buffer, "\r");
+	while (temp_token != NULL)
+	{
+        if (arg_position == 0)
+        {
+            memcpy(ssid, temp_token, strlen((char *)temp_token) + 1);
+        }
+        else if (arg_position == 1)
+        {
+            memcpy(pass, temp_token, strlen((char *)temp_token) + 1);
+            break;
+        }
+        arg_position++;
+		temp_token = strtok(NULL, "\r");
+	}
 }
 
 static inline int8_t matchingWIFIScan(char * data, uint8_t * ssid, uint8_t *pass)
@@ -145,7 +151,6 @@ static inline int8_t matchingWIFIScan(char * data, uint8_t * ssid, uint8_t *pass
 static inline void processingDataMQTTPublish(char * data, char *state_led, 
                 char * state_auto, char *lux, char * temperature)
 {
-    char *arg_list[4];
     char buffer[1024];
     memcpy(buffer, data, strlen((char *) data));
     uint8_t arg_position = 0;
@@ -155,17 +160,27 @@ static inline void processingDataMQTTPublish(char * data, char *state_led,
     char *temp_token = strtok(buffer, "\r");
     while(temp_token != NULL)
     {
-        arg_list[arg_position]= temp_token;
+        // arg_list[arg_position]= temp_token;
+        if (arg_position == 0)
+        {
+            memcpy(state_led, temp_token, strlen((char *)temp_token) + 1);
+        }
+        else if (arg_position == 1)
+        {
+            memcpy(state_auto, temp_token, strlen((char *)temp_token) + 1);
+        }
+        else if (arg_position == 2)
+        {
+            memcpy(lux, temp_token, strlen((char *)temp_token) + 1);
+        }
+        else if (arg_position == 3)
+        {
+            memcpy(temperature, temp_token, strlen((char *)temp_token) + 1);
+        }
         arg_position++;
+        
         temp_token = strtok(NULL, "\r");
     }
-
-    // Store data in array
-
-    memcpy(state_led, arg_list[0], strlen((char *)arg_list[0]) + 1);
-    memcpy(state_auto, arg_list[1], strlen((char *)arg_list[1]) + 1);
-    memcpy(lux, arg_list[2], strlen((char *)arg_list[2]) + 1);
-    memcpy(temperature, arg_list[3], strlen((char *)arg_list[3]) + 1);
 }
 
 /*********************
