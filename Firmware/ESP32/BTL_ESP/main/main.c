@@ -762,7 +762,7 @@ static void startMQTTControlDataTask(void *arg)
                         printf("%s\n", state_auto_nodered);
                     }
 
-                    sprintf(buffer_uart_tx, "%s\r%s", state_led, state_auto_nodered);
+                    sprintf(buffer_uart_tx, "%s\r%s\r", state_led, state_auto_nodered);
                     xEventGroupSetBits(event_uart_tx_heading,
                                     SEND_MQTT_SUBSCRIBE);
                 }
