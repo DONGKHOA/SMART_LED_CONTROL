@@ -15,7 +15,7 @@
 #define START_COORDINATE		100
 #define OFFSET_X 15
 #define OFFSET_Y 90
-#define MIN_LENGTH_MQTT 15
+#define MIN_LENGTH_MQTT 4
 
 /**********************
  *  STATIC VARIABLES

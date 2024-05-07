@@ -8,7 +8,7 @@
  *********************/
 
 #define turnOnLight() 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET)
-#define turnOffLight() 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET)
+#define turnOffLight() 	    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET)
 
 /**********************
  *   GLOBAL FUNCTIONS

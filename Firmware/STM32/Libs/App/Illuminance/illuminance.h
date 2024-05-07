@@ -5,7 +5,9 @@
 #include <stdint.h>
 
 uint8_t illuminance_signal(int16_t Ev);
-int16_t adjust_Ev();
+int16_t adjust_Ev(float Ev_before);
+float illuminance_adc(float volt);
+float voltage_adc();
 
 /***********************************************************/
 
