@@ -45,7 +45,7 @@ void screen_3(EventBits_t uxBits)
 
 	if (bit_map_screen_3.text == 1)
 	{
-		GraphicsFilledRectangle(45, 50, 150, 20, WHITE);
+		GraphicsFilledRectangle(45, 50, 200, 20, WHITE);
 		GraphicsLargeString(45, 56, text, BLACK);
 		bit_map_screen_3.text = 0;
 	}

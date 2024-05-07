@@ -879,7 +879,7 @@ static void ControlLed_Task(void *pvParameters)
 			}
 		}
 
-		ret = xQueueReceive(queue_control_led, &check_state_led, 5000);
+		ret = xQueueReceive(queue_control_led, &check_state_led, 1000);
 
 		if (ret == pdPASS)
 		{
