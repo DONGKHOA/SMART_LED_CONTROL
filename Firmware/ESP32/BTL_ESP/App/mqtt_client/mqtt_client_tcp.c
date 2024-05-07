@@ -26,8 +26,7 @@
 /**********************
  *  EXTERN VARIABLES
  **********************/
-
-extern SemaphoreHandle_t mqtt_semaphore;
+extern QueueHandle_t mqtt_topic_queue;
 
 /**********************
  *     VARIABLES
@@ -67,9 +66,25 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+            char topic[10];
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+
             sprintf(data_mqtt, "%.*s", event->data_len, event->data);
+            sprintf(topic, "%.*s", event->topic_len, event->topic);
+
+            if (strcmp(topic, "led") == 0)
+            {
+                MQTT_Topic_t mqtt_topic_command = TOPIC_LED;
+                xQueueSend(mqtt_topic_queue, &mqtt_topic_command, 0);
+            }
+            
+            if (strcmp(topic, "state_auto_nodered") == 0)
+            {
+                MQTT_Topic_t mqtt_topic_command = TOPIC_AUTO;
+                xQueueSend(mqtt_topic_queue, &mqtt_topic_command, 0);
+            }
+
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGE(TAG, "MQTT_EVENT_DISCONNECTED");

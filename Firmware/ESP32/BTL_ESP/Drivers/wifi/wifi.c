@@ -12,6 +12,7 @@
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_log.h"
+#include "esp_netif_ip_addr.h"
 #include "nvs_flash.h"
 #include "nvs.h"
 
@@ -46,6 +47,12 @@ static EventGroupHandle_t s_wifi_event_group;
 static char ssid_name[1024];
 
 /**********************
+ *  EXTERN VARIABLES
+ **********************/
+
+extern char ip_ssid_connected[20];
+
+/**********************
  *   STATIC FUNCTIONS
  **********************/
 
@@ -76,6 +83,10 @@ static void event_handler(void *arg, esp_event_base_t event_base,
         state_connected_wifi = CONNECT_OK;
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+
+        sprintf(ip_ssid_connected, IPSTR, IP2STR(&event->ip_info.ip));
+        printf("ip : %s\n", ip_ssid_connected);
+
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
     }
 }
