@@ -161,7 +161,6 @@ static inline void processingDataMQTTPublish(char * data, char *state_led,
     char *temp_token = strtok(buffer, "\r");
     while(temp_token != NULL)
     {
-        // arg_list[arg_position]= temp_token;
         if (arg_position == 0)
         {
             memcpy(state_led, temp_token, strlen((char *)temp_token) + 1);

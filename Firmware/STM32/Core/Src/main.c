@@ -253,7 +253,6 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-//	xTimerStart(timer_request_mqtt_Pub, 0);
 //
   vTaskStartScheduler();
   while (1)
@@ -834,19 +833,64 @@ static void UartRx_Task(void *pvParameters)
 				case HEADING_RECEIVE_CONNECT_MQTT:
 					if (memcmp(buffer_uart_rx, "TRUE", strlen(buffer_uart_rx) + 1) == 0)
 					{
+						xTimerStart(timer_request_mqtt_Pub, 0);
 					  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
 					}
 					else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
 					{
+						xTimerStop(timer_request_mqtt_Pub, 0);
 					  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
 					}
 					else if (memcmp(buffer_uart_rx, "REFUSE", strlen(buffer_uart_rx) + 1) == 0)
 					{
+						xTimerStop(timer_request_mqtt_Pub, 0);
 					  xEventGroupSetBits(event_uart_rx, REFUSE_CONNECT_MQTT_BIT);
 					}
 					break;
 
 				case HEADING_MQTT_SUBSCRIBE:
+				    uint8_t arg_position = 0;
+
+				    // cut string
+				    control_led_t led_state;
+				    control_auto_t auto_state;
+				    char *temp_token = strtok(buffer_uart_rx, "\r");
+				    while(temp_token != NULL)
+				    {
+				        if (arg_position == 0)
+				        {
+				        	if (memcmp(buffer_uart_rx, "OFF", strlen(buffer_uart_rx) + 1) == 0)
+				        	{
+				        		led_state = LED_OFF;
+				        		xQueueSend(queue_control_led, &led_state, 0);
+				        		bit_map_screen_4.OFF = 1; // if Button off
+				        	}
+				        	else
+				        	{
+				        		led_state = LED_ON;
+				        		xQueueSend(queue_control_led, &led_state, 0);
+				        		bit_map_screen_4.ON = 1; // if Button on
+				        	}
+				        }
+				        else if (arg_position == 1)
+				        {
+				        	if (memcmp(buffer_uart_rx, "OFF", strlen(buffer_uart_rx) + 1) == 0)
+				        	{
+				        		auto_state = AUTO_OFF;
+				        		xQueueSend(queue_control_auto, &auto_state, 0);
+				        		bit_map_screen_4.off_auto = 1;
+				        	}
+				        	else
+				        	{
+				        		auto_state = AUTO_ON;
+				        		xQueueSend(queue_control_auto, &auto_state, 0);
+				        		bit_map_screen_4.on_auto = 1;
+				        	}
+				        }
+				        arg_position++;
+
+				        temp_token = strtok(NULL, "\r");
+				    }
 					xEventGroupSetBits(event_uart_rx, HEADING_MQTT_SUBSCRIBE);
 					break;
 
