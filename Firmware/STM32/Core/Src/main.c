@@ -122,8 +122,8 @@ TimerHandle_t timer_request_scan_wifi;
 TimerHandle_t timer_wait_off_screen;
 TimerHandle_t timer_request_mqtt_Pub;
 
-static control_led_t check_state_led;
-static control_auto_t check_state_auto;
+static control_led_t check_state_led = LED_OFF;
+static control_auto_t check_state_auto = AUTO_OFF;
 
  int16_t lux = 0;
  int16_t value_adc;
@@ -170,7 +170,8 @@ void vBacklightTimerCb(TimerHandle_t xTimer)
 
 void timerRequestmqttPub(TimerHandle_t xTimer)
 {
-	temperature_sensor_enable(value_adc, &hadc1);
+	// temperature_sensor_enable(value_adc, &hadc1);
+  xEventGroupSetBits(event_uart_tx, MQTT_PUBLISH_BIT);
 }
 /* USER CODE END 0 */
 
@@ -332,7 +333,7 @@ static void MX_ADC1_Init(void)
   */
   hadc1.Instance = ADC1;
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
@@ -699,6 +700,23 @@ static void transmitdata(uart_tx_heading_t heading, char *data)
 	UARTWrite("\n", 1);
 }
 
+static void processingDataMQTTPublish()
+{
+	  char state_led[4], state_auto[4];
+	  if (check_state_led == LED_ON) strcpy(state_auto, "ON");
+	  else strcpy(state_led, "OFF");
+
+	  if (check_state_auto == AUTO_ON) strcpy(state_auto, "ON");
+	  else strcpy(state_auto, "OFF");
+		temperature_sensor_enable(value_adc, &hadc1);
+		Temperature = calculate_temperature(value_adc);
+		float volt = voltage_adc();
+		float ev_before = illuminance_adc(volt);
+	  lux = adjust_Ev(ev_before);
+
+	  sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, lux, Temperature);
+}
+
 static void UartTx_Task(void *pvParameters)
 {
 	memset(buffer_uart_tx, '\0', sizeof(buffer_uart_tx));
@@ -745,23 +763,12 @@ static void UartTx_Task(void *pvParameters)
 
 		if (uxBits & CONNECT_MQTT_BIT) // send ip of mqtt from event_screen_5
 		{
-		  memcpy(buffer_uart_tx, MQTT, sizeof(MQTT));
 		  transmitdata(HEADING_CONNECT_MQTT, (char *)buffer_uart_tx);
 		}
 
 		if (uxBits & MQTT_PUBLISH_BIT)
 		{
-		  char state_led[4], state_auto[4];
-		  if (check_state_led == LED_ON) strcpy(state_auto, "ON");
-		  else strcpy(state_auto, "OFF");
-
-		  if (check_state_auto == AUTO_ON) strcpy(state_auto, "ON");
-		  else strcpy(state_auto, "OFF");
-
-		//  Temperature = calculate_temperature(value_adc);
-		  lux = adjust_Ev();
-
-		  sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, lux, Temperature);
+			processingDataMQTTPublish();
 		  transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
 		}
 
@@ -836,7 +843,7 @@ static void UartRx_Task(void *pvParameters)
 						xTimerStart(timer_request_mqtt_Pub, 0);
 					  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_SUCCESSFUL_BIT);
 					}
-					else if (memcmp(buffer_uart_rx, "FALSE", strlen(buffer_uart_rx) + 1) == 0)
+					else if (memcmp(buffer_uart_rx, "FAILED", strlen(buffer_uart_rx) + 1) == 0)
 					{
 						xTimerStop(timer_request_mqtt_Pub, 0);
 					  xEventGroupSetBits(event_uart_rx, CONNECT_MQTT_UNSUCCESSFUL_BIT);
@@ -923,10 +930,12 @@ static void ControlLed_Task(void *pvParameters)
 			}
 		}
 
-		ret = xQueueReceive(queue_control_led, &check_state_led, 5000);
+		ret = xQueueReceive(queue_control_led, &check_state_led, 1000);
 
 		if (ret == pdPASS)
 		{
+			if (check_state_auto == AUTO_ON) continue;
+
 			if (check_state_led == LED_ON)	turnOnLight();
 			else turnOffLight();
 		}

@@ -7,16 +7,18 @@
 #include "Icon/icon.h"
 #include "illuminance.h"
 #include "cal_temperature.h"
+#include "read_adc.h"
 #include "main.h"
 
 
 field_bit_screen4_t bit_map_screen_4;
 extern int16_t lux;
+extern int16_t value_adc;
 extern float Temperature;
+extern ADC_HandleTypeDef hadc1;
 
 void screen_4(EventBits_t uxBits)
 {
-	adjust_Ev();
 	if (bit_map_screen_4.screen == 1)
 	{
 		GraphicsClear(WHITE);
@@ -69,20 +71,26 @@ void screen_4(EventBits_t uxBits)
 
 	if(bit_map_screen_4.LUX == 1)
 	{
-		lux = adjust_Ev();
-		char buffer_Lux_screen4[4];
+		float volt = voltage_adc();
+		float ev_before = illuminance_adc(volt);
+	  lux = adjust_Ev(ev_before);
+		char buffer_Lux_screen4[17];
 		sprintf(buffer_Lux_screen4, "%d", lux);
 		GraphicsLargeString(190, 290, "LUX", BLACK);
 		GraphicsLargeString(198, 275, buffer_Lux_screen4, BLACK);
-		//bit_map_screen_4.LUX = 0;
+		vTaskDelay(100);
+		GraphicsFilledRectangle(190, 270, 50, 17, WHITE);
 	}
 	if(bit_map_screen_4.Temperature == 1)
 	{
-		Temperature = calculate_temperature();
+		temperature_sensor_enable(value_adc, &hadc1);
+		Temperature = calculate_temperature(value_adc);
 		char buffer_temperature_screen4[7];
 		sprintf(buffer_temperature_screen4, "%.2f", Temperature);
 		GraphicsLargeString(32, 290, "TEMPERATURE", BLACK);
 		GraphicsLargeString(66, 275, buffer_temperature_screen4, BLACK);
-		//bit_map_screen_4.Temperature = 0;
+		vTaskDelay(100);
+		GraphicsFilledRectangle(60, 270, 70, 17, WHITE);
+
 	}
 }

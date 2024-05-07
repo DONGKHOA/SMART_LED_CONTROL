@@ -1,7 +1,7 @@
 #include "illuminance.h"
 #include "calibrate_adc.h"
 #include "read_adc.h"
-
+#include "math.h"
 
 /*********************
  *      DEFINES
@@ -15,10 +15,6 @@ extern ADC_HandleTypeDef hadc2;
 /******************************
  *  STATIC PROTOTYPE FUNCTION
  ******************************/
-
- float voltage_adc();
- float illuminance_adc();
- int16_t Ev;
  int16_t myRound(double x);
 
 /**********************
@@ -46,9 +42,9 @@ uint8_t illuminance_signal(int16_t Ev)
 	}
 }
 
-int16_t adjust_Ev()
+int16_t adjust_Ev(float Ev_before)
 {
-    Ev = myRound((double)illuminance_adc() / 10) * 10;
+    int16_t Ev = round((double) Ev_before / 10) * 10;
     if (Ev < LOW_THRESHOLD) {
         Ev = LOW_THRESHOLD;
     } else if (Ev > HIGH_THRESHOLD) {
@@ -85,10 +81,10 @@ float voltage_adc()
  * 
  * @return The function `illuminance_adc()` is returning the calculated illuminance value `Ev_before`.
  */
-float illuminance_adc()
+float illuminance_adc(float volt)
 {
 	float Ev_before;
-	float R = voltage_adc() * 10; // I=100uA, (The unit of R is KOhm)
+	float R = volt * 10; // I=100uA, (The unit of R is KOhm)
 	Ev_before = R - 4.6974;
 	Ev_before = Ev_before / (-1.02 * 10e-4);
 	Ev_before = Ev_before / 5;
