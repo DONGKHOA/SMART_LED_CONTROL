@@ -22,11 +22,13 @@
  *********************/
 
 #define TAG  "MQTT"
+#define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 4)
 
 /**********************
  *  EXTERN VARIABLES
  **********************/
 extern QueueHandle_t mqtt_topic_queue;
+extern EventGroupHandle_t event_uart_tx_heading;
 
 /**********************
  *     VARIABLES
@@ -55,6 +57,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
+            xEventGroupSetBits(event_uart_tx_heading,
+                    SEND_CONNECT_MQTT_SUCCESSFUL_BIT);
             state_connect_mqtt = 1;
             break;
         case MQTT_EVENT_SUBSCRIBED:

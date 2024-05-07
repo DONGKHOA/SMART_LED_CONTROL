@@ -410,11 +410,13 @@ static void startUartTxTask(void *arg)
 
         if (uxBits & SEND_CONNECT_MQTT_SUCCESSFUL_BIT)
         {
+            strcpy(buffer_uart_tx, "TRUE");
             transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
         }
 
         if (uxBits & SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT)
         {
+            strcpy(buffer_uart_tx, "FAILED");
             transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
         }
 
@@ -672,6 +674,7 @@ static void startMQTTConnectTask(void *arg)
             if (WIFI_state_connect() == CONNECT_OK)
             {
                 char buffer_connect[4];
+                printf("%s\n",buffer_uart_rx);
                 sprintf(buffer_connect, "%.*s", strlen(buffer_uart_rx), buffer_uart_rx);
                 configIP_MQTT(ip_ssid_connected, ip_config, buffer_connect);
                 sprintf(url_mqtt, "mqtt://%.*s:1883", strlen(ip_config), ip_config);
@@ -710,7 +713,7 @@ static void startMQTTControlDataTask(void *arg)
             {
                 is_publish = 0;
                 xTimerStop(mqtt_subscribe_timer, 0);
-                strcpy(buffer_uart_tx, "FAILED");
+                
                 xEventGroupSetBits(event_uart_tx_heading,
                                    SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT);
                 continue;
