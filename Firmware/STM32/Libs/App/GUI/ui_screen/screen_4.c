@@ -71,9 +71,6 @@ void screen_4(EventBits_t uxBits)
 
 	if(bit_map_screen_4.LUX == 1)
 	{
-		float volt = voltage_adc();
-		float ev_before = illuminance_adc(volt);
-	  lux = adjust_Ev(ev_before);
 		char buffer_Lux_screen4[17];
 		sprintf(buffer_Lux_screen4, "%d", lux);
 		GraphicsLargeString(190, 290, "LUX", BLACK);
@@ -83,8 +80,6 @@ void screen_4(EventBits_t uxBits)
 	}
 	if(bit_map_screen_4.Temperature == 1)
 	{
-		temperature_sensor_enable(value_adc, &hadc1);
-		Temperature = calculate_temperature(value_adc);
 		char buffer_temperature_screen4[7];
 		sprintf(buffer_temperature_screen4, "%.2f", Temperature);
 		GraphicsLargeString(32, 290, "TEMPERATURE", BLACK);

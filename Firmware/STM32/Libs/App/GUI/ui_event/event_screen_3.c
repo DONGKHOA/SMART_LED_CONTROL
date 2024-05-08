@@ -34,9 +34,12 @@ extern int16_t x;
 extern int16_t y;
 extern uint8_t flag_is_touch;
 
-extern uint8_t buffer_uart_tx[RX_BUFFER_SIZE + 1];
+extern char buffer_uart_tx[RX_BUFFER_SIZE + 1];
+extern char buffer_uart_rx[RX_BUFFER_SIZE + 1];
 extern EventGroupHandle_t event_uart_rx;
 extern EventGroupHandle_t event_uart_tx;
+
+extern TimerHandle_t timer_request_scan_wifi;
 
 extern char text[18];
 extern EventBits_t bitsScreen3;
@@ -133,7 +136,9 @@ void check_event_screen_3(screen_state_t *screen)
 
 	if (bitsScreen3 & CONNECT_WIFI_SUCCESSFUL_BIT)
 	{
-		strcpy(ssid_connect, ssid);
+		sprintf(ssid_connect, "%s", ssid);
+//		strcpy(ssid_connect,ssid);
+		xTimerStart(timer_request_scan_wifi, 0);
 		bit_map_screen_2.screen = 1;
 		bit_map_screen_2.ret = 1;
 		bit_map_screen_2.on_off_wifi = 1;

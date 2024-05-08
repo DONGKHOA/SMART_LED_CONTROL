@@ -83,6 +83,8 @@ UART_HandleTypeDef huart4;
 
 extern float Temperature;
 extern int16_t Ev;
+extern control_led_t led_state;
+extern control_auto_t auto_state;
 extern uint8_t MQTT[15];
 extern uint8_t MQTT_pos;
 
@@ -150,6 +152,23 @@ static void ControlLed_Task(void *pvParameters);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void processingDataMQTTPublish()
+{
+	  char state_led[4], state_auto[4];
+	  if (check_state_led == LED_ON) strcpy(state_led, "ON");
+	  else strcpy(state_led, "OFF");
+
+	  if (check_state_auto == AUTO_ON) strcpy(state_auto, "ON");
+	  else strcpy(state_auto, "OFF");
+		temperature_sensor_enable(value_adc, &hadc1);
+		Temperature = calculate_temperature(value_adc);
+		float volt = voltage_adc();
+		float ev_before = illuminance_adc(volt);
+	  lux = adjust_Ev(ev_before);
+
+	  sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, lux, Temperature);
+}
+
 void timerRequestScanWifi(TimerHandle_t xTimer)
 {
 	xEventGroupSetBits(event_uart_tx, ON_WIFI_BIT);
@@ -170,7 +189,7 @@ void vBacklightTimerCb(TimerHandle_t xTimer)
 
 void timerRequestmqttPub(TimerHandle_t xTimer)
 {
-	// temperature_sensor_enable(value_adc, &hadc1);
+	processingDataMQTTPublish();
   xEventGroupSetBits(event_uart_tx, MQTT_PUBLISH_BIT);
 }
 /* USER CODE END 0 */
@@ -428,7 +447,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -653,6 +672,12 @@ static void Screen_Task(void *pvParameters)
 	}
     if (uxBits != 0)
     {
+		float volt = voltage_adc();
+		float ev_before = illuminance_adc(volt);
+		lux = adjust_Ev(ev_before);
+
+		temperature_sensor_enable(value_adc, &hadc1);
+		Temperature = calculate_temperature(value_adc);
       if (flag_is_touch == 1)
       {
         xTimerReset( timer_wait_off_screen, 0 );   // reset Timer
@@ -700,22 +725,7 @@ static void transmitdata(uart_tx_heading_t heading, char *data)
 	UARTWrite("\n", 1);
 }
 
-static void processingDataMQTTPublish()
-{
-	  char state_led[4], state_auto[4];
-	  if (check_state_led == LED_ON) strcpy(state_auto, "ON");
-	  else strcpy(state_led, "OFF");
 
-	  if (check_state_auto == AUTO_ON) strcpy(state_auto, "ON");
-	  else strcpy(state_auto, "OFF");
-		temperature_sensor_enable(value_adc, &hadc1);
-		Temperature = calculate_temperature(value_adc);
-		float volt = voltage_adc();
-		float ev_before = illuminance_adc(volt);
-	  lux = adjust_Ev(ev_before);
-
-	  sprintf((char *)buffer_uart_tx, "%s\r%s\r%d\r%.2f\r", state_led, state_auto, lux, Temperature);
-}
 
 static void UartTx_Task(void *pvParameters)
 {
@@ -768,7 +778,7 @@ static void UartTx_Task(void *pvParameters)
 
 		if (uxBits & MQTT_PUBLISH_BIT)
 		{
-			processingDataMQTTPublish();
+
 		  transmitdata(HEADING_MQTT_PUBLISH, (char *)buffer_uart_tx);
 		}
 
@@ -859,14 +869,12 @@ static void UartRx_Task(void *pvParameters)
 				    uint8_t arg_position = 0;
 
 				    // cut string
-				    control_led_t led_state;
-				    control_auto_t auto_state;
 				    char *temp_token = strtok(buffer_uart_rx, "\r");
 				    while(temp_token != NULL)
 				    {
 				        if (arg_position == 0)
 				        {
-				        	if (memcmp(buffer_uart_rx, "OFF", strlen(buffer_uart_rx) + 1) == 0)
+				        	if (memcmp(temp_token, "OFF", strlen(temp_token) + 1) == 0)
 				        	{
 				        		led_state = LED_OFF;
 				        		xQueueSend(queue_control_led, &led_state, 0);
@@ -881,7 +889,7 @@ static void UartRx_Task(void *pvParameters)
 				        }
 				        else if (arg_position == 1)
 				        {
-				        	if (memcmp(buffer_uart_rx, "OFF", strlen(buffer_uart_rx) + 1) == 0)
+				        	if (memcmp(temp_token, "OFF", strlen(temp_token) + 1) == 0)
 				        	{
 				        		auto_state = AUTO_OFF;
 				        		xQueueSend(queue_control_auto, &auto_state, 0);
@@ -925,8 +933,18 @@ static void ControlLed_Task(void *pvParameters)
 		{
 			if (check_state_auto == AUTO_ON)
 			{
-				if(autocontrol_mode() == 1) check_state_led = LED_ON;
-				else check_state_led = LED_OFF;
+				if(autocontrol_mode() == 1)
+				{
+					bit_map_screen_4.ON = 1;
+					check_state_led = LED_ON;
+					led_state = LED_ON;
+				}
+				else
+				{
+					bit_map_screen_4.OFF = 1;
+					check_state_led = LED_OFF;
+					led_state = LED_OFF;
+				}
 			}
 		}
 
@@ -934,8 +952,6 @@ static void ControlLed_Task(void *pvParameters)
 
 		if (ret == pdPASS)
 		{
-			if (check_state_auto == AUTO_ON) continue;
-
 			if (check_state_led == LED_ON)	turnOnLight();
 			else turnOffLight();
 		}

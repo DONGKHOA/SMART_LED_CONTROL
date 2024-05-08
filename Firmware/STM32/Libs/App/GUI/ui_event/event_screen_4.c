@@ -33,19 +33,23 @@ void check_event_screen_4(screen_state_t *screen)
 			}
 			else if (touch == ICON_CONTROL) /*Turn on the light or turn off the light if icon_control is pressed and display the led status*/
 			{
-				if (led_state == LED_OFF) led_state = LED_ON;
-				else led_state = LED_OFF;
-
-				xQueueSend(queue_control_led, &led_state, 0);
-
-				if(led_state == LED_ON)
+				if(auto_state == AUTO_OFF)
 				{
-					bit_map_screen_4.ON = 1; // if Button on
 					
-				}
-				else
-				{
-					bit_map_screen_4.OFF = 1; // if Button off
+					if (led_state == LED_OFF) led_state = LED_ON;
+					else led_state = LED_OFF;
+
+					xQueueSend(queue_control_led, &led_state, 0);
+
+					if(led_state == LED_ON)
+					{
+						bit_map_screen_4.ON = 1; // if Button on
+
+					}
+					else
+					{
+						bit_map_screen_4.OFF = 1; // if Button off
+					}
 				}
 			}
 			else /*Automatically turn on or off the light according to brightness if pressed icon_auto*/

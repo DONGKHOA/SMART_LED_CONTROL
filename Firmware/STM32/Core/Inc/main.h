@@ -69,7 +69,7 @@ void Error_Handler(void);
 #define TIME_REQUEST_SCAN                 5000
 #define TIME_REFRESH_DISPLAY              50
 #define TIME_WAIT                         30000
-#define TIME_READ						    1000
+#define TIME_READ						    5000
 
 //coordinate screen
 #define RESET_COORDINATE                  1000
