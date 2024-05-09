@@ -27,6 +27,8 @@ static char url_mqtt[30] = "mqtt://172.16.0.181:1883";
 static MQTT_Client_Data_t mqtt_client_0;
 static uint8_t is_publish = 0;
 static char ip_config[32];
+char state_led[10] = "OFF";
+char state_auto_nodered[10] = "OFF";
 
 static char  ssid1[32];
 static char  ssid2[32];
@@ -399,7 +401,6 @@ static void startUartTxTask(void *arg)
 
         if (uxBits & SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT)
         {
-            printf("12\n");
             transmissionFrameData(HEADING_SEND_CONNECT_WIFI, buffer_uart_tx);
         }
 
@@ -422,7 +423,7 @@ static void startUartTxTask(void *arg)
 
         if (uxBits & SEND_MQTT_SUBSCRIBE)
         {
-            transmissionFrameData(HEADING_SEND_CONNECT_MQTT, buffer_uart_tx);
+            transmissionFrameData(HEADING_MQTT_SUBSCRIBE, buffer_uart_tx);
         }
 
         memset((void *)buffer_uart_tx, '\0', sizeof(buffer_uart_tx));
@@ -628,6 +629,7 @@ static void startWifiConnectTask(void *arg)
                 }
 
                 strcpy(buffer_uart_tx, (const char *)ssid);
+                printf("connect\n");
                 xEventGroupSetBits(event_uart_tx_heading,
                                    SEND_CONNECT_WIFI_SUCCESSFUL_BIT);
             }
@@ -741,14 +743,12 @@ static void startMQTTControlDataTask(void *arg)
             }
             else if (buffer == MQTT_SUBSCRIBE)
             {
-                static char state_led[10] = "OFF";
-                static char state_auto_nodered[10] = "OFF";
 
                 BaseType_t ret_val;
                 MQTT_Topic_t mqtt_topic_command;
 
-                esp_mqtt_client_subscribe_single(mqtt_client_0.client, "led", 0);
                 esp_mqtt_client_subscribe_single(mqtt_client_0.client, "state_auto_nodered", 0);
+                esp_mqtt_client_subscribe_single(mqtt_client_0.client, "led", 0);
                 
                 ret_val = xQueueReceive(mqtt_topic_queue, &mqtt_topic_command, 1000/ portTICK_PERIOD_MS);
                
@@ -756,15 +756,15 @@ static void startMQTTControlDataTask(void *arg)
                 {
                     if (mqtt_topic_command == TOPIC_LED)
                     {
-                        strcpy(state_led, data_mqtt);
+                        // strcpy(state_led, data_mqtt);
                         printf("%s\n", state_led);
                     }
-                    else if (mqtt_topic_command == TOPIC_AUTO)
+
+                    if (mqtt_topic_command == TOPIC_AUTO)
                     {
-                        strcpy(state_auto_nodered, data_mqtt);
+                        // strcpy(state_auto_nodered, data_mqtt);
                         printf("%s\n", state_auto_nodered);
                     }
-
                     sprintf(buffer_uart_tx, "%s\r%s\r", state_led, state_auto_nodered);
                     xEventGroupSetBits(event_uart_tx_heading,
                                     SEND_MQTT_SUBSCRIBE);

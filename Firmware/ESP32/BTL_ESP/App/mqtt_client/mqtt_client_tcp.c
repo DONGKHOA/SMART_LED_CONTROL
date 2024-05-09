@@ -30,6 +30,9 @@
 extern QueueHandle_t mqtt_topic_queue;
 extern EventGroupHandle_t event_uart_tx_heading;
 
+extern char state_led[10];
+extern char state_auto_nodered[10];
+
 /**********************
  *     VARIABLES
  **********************/
@@ -70,23 +73,29 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
             break;
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-            char topic[10];
-            printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
-            printf("DATA=%.*s\r\n", event->data_len, event->data);
+            char topic[20];
+            // printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
+            // printf("DATA=%.*s\r\n", event->data_len, event->data);
 
             sprintf(data_mqtt, "%.*s", event->data_len, event->data);
             sprintf(topic, "%.*s", event->topic_len, event->topic);
-
-            if (strcmp(topic, "led") == 0)
+            printf("%s\n",topic);
+            if (memcmp(topic, "led", strlen(topic) + 1) == 0)
             {
+                printf("%s\n",data_mqtt);
                 MQTT_Topic_t mqtt_topic_command = TOPIC_LED;
+                strcpy(state_led, data_mqtt);
                 xQueueSend(mqtt_topic_queue, &mqtt_topic_command, 0);
+                memset((void *)data_mqtt, '\0', sizeof(data_mqtt));
             }
             
-            if (strcmp(topic, "state_auto_nodered") == 0)
+            if (memcmp(topic, "state_auto_nodered", strlen(topic) + 1) == 0)
             {
+                printf("%s\n",data_mqtt);
                 MQTT_Topic_t mqtt_topic_command = TOPIC_AUTO;
+                strcpy(state_auto_nodered, data_mqtt);
                 xQueueSend(mqtt_topic_queue, &mqtt_topic_command, 0);
+                memset((void *)data_mqtt, '\0', sizeof(data_mqtt));
             }
 
             break;

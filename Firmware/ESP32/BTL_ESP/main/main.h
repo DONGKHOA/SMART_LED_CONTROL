@@ -42,7 +42,7 @@
 
 #define MIN_STACK_SIZE                          1024
 
-#define TIME_MQTT_SUBSCRIBE                     1000
+#define TIME_MQTT_SUBSCRIBE                     2000
 #define TIME_REQUEST_SCAN                       3000
 
 #define SSID_IN_PAGE                            5
@@ -62,9 +62,8 @@
 #define SEND_CONNECT_WIFI_UNSUCCESSFUL_BIT      (1 << 2)
 #define SEND_REFUSE_CONNECT_MQTT_BIT            (1 << 3)
 #define SEND_CONNECT_MQTT_SUCCESSFUL_BIT        (1 << 4)
-#define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
 #define SEND_MQTT_SUBSCRIBE                     (1 << 6)
-
+#define SEND_CONNECT_MQTT_UNSUCCESSFUL_BIT      (1 << 5)
 
 /**********************
  *      TYPEDEFS
