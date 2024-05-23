@@ -1,6 +1,10 @@
 #ifndef APP_AUTO_LED_AUTO_LED_H_
 #define APP_AUTO_LED_AUTO_LED_H_
 
+/*********************
+ *      INCLUDES
+ *********************/
+
 #include "stm32f1xx_hal.h"
 
 /*********************

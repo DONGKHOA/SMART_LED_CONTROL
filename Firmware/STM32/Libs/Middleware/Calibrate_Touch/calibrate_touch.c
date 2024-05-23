@@ -1,30 +1,25 @@
-/*
- *
- *   Copyright (c) 2001, Carlos E. Vidales. All rights reserved.
- *
- *   This sample program was written and put in the public domain
- *    by Carlos E. Vidales.  The program is provided "as is"
- *    without warranty of any kind, either expressed or implied.
- *   If you choose to use the program within your own products
- *    you do so at your own risk, and assume the responsibility
- *    for servicing, repairing or correcting the program should
- *    it prove defective in any manner.
- *   You may copy and distribute the program's source code in any
- *    medium, provided that you also include in each copy an
- *    appropriate copyright notice and disclaimer of warranty.
- *   You may also modify this program and distribute copies of
- *    it provided that you include prominent notices stating
- *    that you changed the file(s) and the date of any change,
- *    and that you do not charge any royalties or licenses for
- *    its use.
- *
- *
- *   File Name:  calibrate.c
- *
- */
+/*********************
+ *      INCLUDES
+ *********************/
 
 #include "calibrate_touch.h"
 
+/**
+ * The function `setCalibrationMatrix` calculates a calibration matrix based on input points for
+ * display and screen coordinates.
+ * 
+ * @param displayPtr The `displayPtr` parameter is a pointer to an array of `POINT_T` structures. Each
+ * `POINT_T` structure represents a point on the display screen.
+ * @param screenPtr The `screenPtr` parameter in the `setCalibrationMatrix` function represents an
+ * array of 3 points on the screen. Each point contains x and y coordinates. These points are used for
+ * calibration purposes to map the display coordinates to the screen coordinates.
+ * @param matrixPtr The `matrixPtr` parameter is a pointer to a `MATRIX` structure. This structure
+ * likely contains fields for Divider, An, Bn, Cn, Dn, En, and Fn which are used to store calibration
+ * matrix values calculated in the `setCalibrationMatrix` function.
+ * 
+ * @return The function `setCalibrationMatrix` returns the value stored in the variable `retValue`,
+ * which could be either `OK` or `NOT_OK`.
+ */
 int setCalibrationMatrix( POINT_T * displayPtr,
 						  POINT_T * screenPtr,
                           MATRIX * matrixPtr)
@@ -66,7 +61,7 @@ int setCalibrationMatrix( POINT_T * displayPtr,
 
     return( retValue ) ;
 
-} /* end of setCalibrationMatrix() */
+}
 
 
 
@@ -161,4 +156,4 @@ int getDisplayPoint( POINT_T * displayPtr,
 
     return (retValue);
 
-} /* end of getDisplayPoint() */
+}

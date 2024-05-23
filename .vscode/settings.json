@@ -23,7 +23,8 @@
         "stdlib.h": "c",
         "event.h": "c",
         "cal_temperature.h": "c",
-        "icon.h": "c"
+        "icon.h": "c",
+        "calibrate_adc.h": "c"
     },
     "cSpell.words": [
         "Authmode",
